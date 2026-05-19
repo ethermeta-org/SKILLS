@@ -1,0 +1,17 @@
+{
+  "protocol": "profinet",
+  "statusWords": {
+    "LaserReady": "GSD:StatusWord.Bit0 Ready",
+    "LaserOn": "GSD:StatusWord.Bit1 Emission",
+    "ShutterOpen": "GSD:StatusWord.Bit2 Shutter",
+    "Fault": "GSD:StatusWord.Bit7 Fault",
+    "GasOK": "GSD:StatusWord.Bit4 GasFlow",
+    "EmissionEnabled": "GSD:StatusWord.Bit3 EmissionEnabled"
+  },
+  "controlWords": {
+    "RequestEmission": "GSD:ControlWord.Bit0 RequestEmission",
+    "OpenShutter": "GSD:ControlWord.Bit1 OpenShutter",
+    "FaultReset": "GSD:ControlWord.Bit7 FaultReset",
+    "GasEnable": "GSD:ControlWord.Bit4 GasEnable"
+  }
+}

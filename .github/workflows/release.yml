@@ -1,0 +1,109 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run build
+      - name: Package plugin zip
+        run: |
+          mkdir -p release
+          zip -r release/plugin.zip \
+            .claude-plugin \
+            .cursor-plugin \
+            .mcp.json \
+            skills \
+            mcp/laser-welding-server/dist \
+            packages/laser-welding-core/dist \
+            packages/laser-welding-core/data \
+            packages/laser-welding-core/templates \
+            -x "*.DS_Store"
+          cd mcp/laser-welding-server && npm pack --pack-destination ../../release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: release/
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-assets
+          path: release/
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+
+  publish-npm:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run build
+      - name: Publish core
+        run: npm publish -w @ethermeta/lasernexus-core --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish MCP
+        run: npm publish -w @ethermeta/lasernexus --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-marketplace:
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - uses: actions/checkout@v4
+      - run: chmod +x scripts/publish-marketplace.sh
+      - run: ./scripts/publish-marketplace.sh
+        env:
+          SKILLS_MARKETPLACE_TOKEN: ${{ secrets.SKILLS_MARKETPLACE_TOKEN }}

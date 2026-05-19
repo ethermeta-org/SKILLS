@@ -1,0 +1,17 @@
+{
+  "protocol": "opc-ua",
+  "statusWords": {
+    "LaserReady": "ns=2;s=Laser.Status.Ready",
+    "LaserOn": "ns=2;s=Laser.Status.EmissionActive",
+    "ShutterOpen": "ns=2;s=Laser.Status.ShutterOpen",
+    "Fault": "ns=2;s=Laser.Status.Fault",
+    "GasOK": "ns=2;s=Laser.Status.GasFlowOK",
+    "EmissionEnabled": "ns=2;s=Laser.Status.EmissionEnabled"
+  },
+  "controlWords": {
+    "RequestEmission": "ns=2;s=Laser.Control.RequestEmission",
+    "OpenShutter": "ns=2;s=Laser.Control.OpenShutter",
+    "FaultReset": "ns=2;s=Laser.Control.FaultReset",
+    "GasEnable": "ns=2;s=Laser.Control.GasEnable"
+  }
+}

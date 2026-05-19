@@ -1,0 +1,31 @@
+{
+  "name": "@ethermeta/lasernexus",
+  "version": "1.1.0",
+  "description": "MCP server for laser welding skill tools",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "lasernexus": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --watch dist/index.js",
+    "test": "vitest run",
+    "lint": "eslint src tests",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@ethermeta/lasernexus-core": "1.1.0",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/node": "^22.13.10",
+    "eslint": "^9.22.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1",
+    "vitest": "^3.0.8"
+  },
+  "license": "AGPL-3.0-or-later"
+}

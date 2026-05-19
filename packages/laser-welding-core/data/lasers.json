@@ -1,0 +1,525 @@
+[
+  {
+    "brand": "Generic",
+    "modelSeries": "Fiber-1064",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      6
+    ],
+    "applications": [
+      "stainless",
+      "general-fusion"
+    ],
+    "region": "import",
+    "capabilities": [
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "laserType": "fiber-1064",
+    "aliases": {
+      "en": [
+        "fiber-1064"
+      ],
+      "zh": [
+        "\u5149\u7ea41064"
+      ]
+    }
+  },
+  {
+    "brand": "IPG",
+    "modelSeries": "YLS-CUT",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      6
+    ],
+    "applications": [
+      "stainless",
+      "steel",
+      "general-fusion"
+    ],
+    "region": "import",
+    "capabilities": [
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "ipg"
+      ],
+      "zh": []
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "IPG",
+    "modelSeries": "YLPN",
+    "wavelengthNm": 515,
+    "powerRangeKW": [
+      0.5,
+      3
+    ],
+    "applications": [
+      "copper",
+      "battery-tab",
+      "high-reflectivity"
+    ],
+    "region": "import",
+    "capabilities": [
+      "precision-weld",
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "ipg"
+      ],
+      "zh": []
+    },
+    "laserType": "fiber-green"
+  },
+  {
+    "brand": "Raycus",
+    "modelSeries": "RFL-C",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      12
+    ],
+    "applications": [
+      "stainless",
+      "aluminum",
+      "general-fusion"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "raycus"
+      ],
+      "zh": [
+        "\u9510\u79d1"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "Raycus",
+    "modelSeries": "RFL-ABP",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      6
+    ],
+    "applications": [
+      "copper",
+      "wobble",
+      "ring-spot"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "fusion",
+      "precision-weld"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "raycus"
+      ],
+      "zh": [
+        "\u9510\u79d1"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "Oneshare",
+    "modelSeries": "OS-Precision",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      0.5,
+      3
+    ],
+    "applications": [
+      "precision-weld",
+      "battery-tab",
+      "automotive"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "precision-weld",
+      "laser-brazing",
+      "push-pull-wire",
+      "turnkey-automation"
+    ],
+    "processModes": [
+      "fusion",
+      "brazing"
+    ],
+    "aliases": {
+      "en": [
+        "oneshare"
+      ],
+      "zh": [
+        "\u6587\u4eab"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "Oneshare",
+    "modelSeries": "OS-Brazing",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      0.3,
+      2
+    ],
+    "applications": [
+      "brazing",
+      "automotive",
+      "precision-weld"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "laser-brazing",
+      "push-pull-wire",
+      "turnkey-automation"
+    ],
+    "processModes": [
+      "brazing"
+    ],
+    "aliases": {
+      "en": [
+        "oneshare"
+      ],
+      "zh": [
+        "\u6587\u4eab"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "Amada",
+    "modelSeries": "FLW",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      4
+    ],
+    "applications": [
+      "stainless",
+      "general-fusion",
+      "sheet-metal"
+    ],
+    "region": "import",
+    "capabilities": [
+      "fusion",
+      "precision-weld"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "amada"
+      ],
+      "zh": [
+        "\u5929\u7530"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "Miyachi",
+    "modelSeries": "ML-2000",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      0.1,
+      1
+    ],
+    "applications": [
+      "precision-weld",
+      "electronics",
+      "automotive"
+    ],
+    "region": "import",
+    "capabilities": [
+      "precision-weld",
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "miyachi"
+      ],
+      "zh": [
+        "\u7c73\u4e9a\u57fa"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "Han's Laser",
+    "modelSeries": "G-Series",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      12
+    ],
+    "applications": [
+      "stainless",
+      "aluminum",
+      "general-fusion",
+      "ev-battery"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "fusion",
+      "turnkey-automation"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "hans",
+        "hans-laser"
+      ],
+      "zh": [
+        "\u5927\u65cf",
+        "\u5927\u65cf\u6fc0\u5149"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "Hymson",
+    "modelSeries": "HM-Battery",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      2,
+      8
+    ],
+    "applications": [
+      "ev-battery",
+      "battery-tab",
+      "high-speed-weld"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "fusion",
+      "turnkey-automation"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "hymson"
+      ],
+      "zh": [
+        "\u6d77\u76ee\u661f"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "UWLaser",
+    "modelSeries": "UW-Weld",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      6
+    ],
+    "applications": [
+      "ev-battery",
+      "automotive",
+      "general-fusion"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "fusion",
+      "precision-weld"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "uwlaser",
+        "uw-laser"
+      ],
+      "zh": [
+        "\u8054\u8d62",
+        "\u8054\u8d62\u6fc0\u5149"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "HGTECH",
+    "modelSeries": "MARVEL",
+    "wavelengthNm": 1064,
+    "powerRangeKW": [
+      1,
+      8
+    ],
+    "applications": [
+      "automotive",
+      "3c",
+      "general-fusion"
+    ],
+    "region": "domestic",
+    "capabilities": [
+      "fusion",
+      "turnkey-automation"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "hgtech"
+      ],
+      "zh": [
+        "\u534e\u5de5",
+        "\u534e\u5de5\u6fc0\u5149"
+      ]
+    },
+    "laserType": "fiber-1064"
+  },
+  {
+    "brand": "IPG",
+    "modelSeries": "YLM-GREEN",
+    "wavelengthNm": 515,
+    "powerRangeKW": [
+      0.3,
+      2
+    ],
+    "applications": [
+      "copper",
+      "battery-tab",
+      "micro-weld"
+    ],
+    "region": "import",
+    "capabilities": [
+      "precision-weld",
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "aliases": {
+      "en": [
+        "ipg"
+      ],
+      "zh": []
+    },
+    "laserType": "fiber-green"
+  },
+  {
+    "brand": "Generic",
+    "modelSeries": "2um-Fiber",
+    "wavelengthNm": 2000,
+    "powerRangeKW": [
+      1,
+      4
+    ],
+    "applications": [
+      "polymer",
+      "transmission-weld"
+    ],
+    "region": "import",
+    "capabilities": [
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "laserType": "fiber-2um",
+    "aliases": {
+      "en": [
+        "2um",
+        "thulium"
+      ],
+      "zh": [
+        "2\u5fae\u7c73"
+      ]
+    }
+  },
+  {
+    "brand": "Generic",
+    "modelSeries": "Blue-Diode",
+    "wavelengthNm": 450,
+    "powerRangeKW": [
+      0.2,
+      1
+    ],
+    "applications": [
+      "copper",
+      "precision-weld"
+    ],
+    "region": "import",
+    "capabilities": [
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "laserType": "diode-blue",
+    "aliases": {
+      "en": [
+        "blue"
+      ],
+      "zh": [
+        "\u84dd\u5149"
+      ]
+    }
+  },
+  {
+    "brand": "Generic",
+    "modelSeries": "Diode-980",
+    "wavelengthNm": 980,
+    "powerRangeKW": [
+      0.5,
+      3
+    ],
+    "applications": [
+      "polymer",
+      "brazing"
+    ],
+    "region": "import",
+    "capabilities": [
+      "fusion"
+    ],
+    "processModes": [
+      "fusion"
+    ],
+    "laserType": "diode-semiconductor",
+    "aliases": {
+      "en": [
+        "semiconductor",
+        "diode"
+      ],
+      "zh": [
+        "\u534a\u5bfc\u4f53\u6fc0\u5149"
+      ]
+    }
+  }
+]

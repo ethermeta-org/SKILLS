@@ -1,0 +1,21 @@
+{
+  "name": "laser-welding-skills",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official laser welding skill module for Claude Code, Codex/Open Skills, and MCP",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "mcp/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @ethermeta/lasernexus-core && npm run build -w @ethermeta/lasernexus",
+    "test": "npm run test -w @ethermeta/lasernexus-core && npm run test -w @ethermeta/lasernexus",
+    "lint": "npm run lint -w @ethermeta/lasernexus-core && npm run lint -w @ethermeta/lasernexus",
+    "dev:mcp": "npm run dev -w @ethermeta/lasernexus"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "AGPL-3.0-or-later"
+}

@@ -1,0 +1,84 @@
+{
+  "motionPlatforms": [
+    {
+      "id": "gantry",
+      "aliases": {
+        "en": [
+          "gantry"
+        ],
+        "zh": [
+          "\u9f99\u95e8"
+        ]
+      }
+    },
+    {
+      "id": "single-axis",
+      "aliases": {
+        "en": [
+          "single-axis"
+        ],
+        "zh": [
+          "\u5355\u8f74"
+        ]
+      }
+    },
+    {
+      "id": "galvo-scanner",
+      "aliases": {
+        "en": [
+          "galvo",
+          "scanner"
+        ],
+        "zh": [
+          "\u632f\u955c"
+        ]
+      }
+    }
+  ],
+  "laserHeads": [
+    {
+      "id": "galvo",
+      "compatibleMotion": [
+        "galvo-scanner"
+      ],
+      "aliases": {
+        "en": [
+          "galvo"
+        ],
+        "zh": [
+          "\u632f\u955c\u5934"
+        ]
+      }
+    },
+    {
+      "id": "fixed-focus",
+      "compatibleMotion": [
+        "gantry",
+        "single-axis"
+      ],
+      "aliases": {
+        "en": [
+          "fixed-focus"
+        ],
+        "zh": [
+          "\u5b9a\u7126"
+        ]
+      }
+    },
+    {
+      "id": "single-axis-rotation",
+      "compatibleMotion": [
+        "single-axis",
+        "gantry"
+      ],
+      "aliases": {
+        "en": [
+          "rotation"
+        ],
+        "zh": [
+          "\u5355\u8f74\u65cb\u8f6c"
+        ]
+      }
+    }
+  ]
+}

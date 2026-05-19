@@ -1,0 +1,19 @@
+{
+  "preGasMs": 200,
+  "postGasMs": 500,
+  "defaultShieldGasLpm": 18,
+  "defaultFieldbusProtocol": "opc-ua",
+  "defaultDialect": "gcode",
+  "profiles": {
+    "battery-tab": {
+      "preGasMs": 200,
+      "postGasMs": 500,
+      "application": "battery-tab",
+      "notes": "Copper battery tab: verify 515nm/green, fixturing, and pulse mode with OEM."
+    },
+    "default": {
+      "preGasMs": 200,
+      "postGasMs": 500
+    }
+  }
+}

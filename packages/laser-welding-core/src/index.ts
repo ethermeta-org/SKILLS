@@ -1,0 +1,12 @@
+export { assessMaterial, type MaterialAssessInput } from "./stage1/process-window.js";
+export { recommendHardware, type HardwareRecommendInput } from "./stage2/laser-selector.js";
+export { generateDoeMatrix, type DoeMatrixInput } from "./stage3/doe-matrix.js";
+export { diagnoseDefect, type DefectDiagnoseInput } from "./stage3/defect-expert.js";
+export { generateTrajectory, type TrajectoryInput } from "./stage4/trajectory.js";
+export { mapFieldbus } from "./stage4/fieldbus-models.js";
+export { generateCodesysSt, type CodegenStInput } from "./stage4/codegen/codesys-st.js";
+export { generateCsharp, type CodegenCsharpInput } from "./stage4/codegen/csharp.js";
+export * from "./core/types.js";
+export * from "./core/errors.js";
+export { setDataRoot, getDataRoot } from "./core/data-loader.js";
+export * from "./core/aliases.js";

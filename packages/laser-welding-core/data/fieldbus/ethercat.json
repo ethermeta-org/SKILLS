@@ -1,0 +1,17 @@
+{
+  "protocol": "ethercat",
+  "statusWords": {
+    "LaserReady": "TxPDO 0x6000:01",
+    "LaserOn": "TxPDO 0x6000:02",
+    "ShutterOpen": "TxPDO 0x6000:03",
+    "Fault": "TxPDO 0x6000:08",
+    "GasOK": "TxPDO 0x6000:05",
+    "EmissionEnabled": "TxPDO 0x6000:04"
+  },
+  "controlWords": {
+    "RequestEmission": "RxPDO 0x7000:01",
+    "OpenShutter": "RxPDO 0x7000:02",
+    "FaultReset": "RxPDO 0x7000:08",
+    "GasEnable": "RxPDO 0x7000:05"
+  }
+}

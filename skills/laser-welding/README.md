@@ -1,0 +1,201 @@
+# Laser Welding Skills (Official)
+
+Industrial laser welding decision support for automation and process engineers: material assessment, hardware selection, DOE, defect diagnosis, motion programs, fieldbus mapping, and PLC code generation.
+
+Integrates with **Claude Code** (plugin), **Codex / Open Skills** (`npx skills add`), and **MCP** (Cursor and other MCP clients).
+
+## Features
+
+### Stage 1 — Material & process window
+
+- Metals: aluminum 6061, stainless 304, copper; polymer: PP
+- Properties: melting point, reflectivity, thermal conductivity
+- Heuristic window: power P, speed v, defocus, shield gas type and flow
+
+### Stage 2 — Hardware & optics
+
+- Laser selection: IPG / Raycus power and wavelength (1064 / 515 nm)
+- High-reflectivity: green/blue, wobble, Bessel/annular guidance
+- Optics: spot size estimate, wobble amplitude and frequency
+
+### Stage 3 — Validation & troubleshooting
+
+- DOE: power–speed matrix with line energy J/mm
+- Defects: blowout, lack of fusion, porosity, cracking → quantitative tuning
+
+### Stage 4 — Automation & codegen
+
+- Trajectory: G-code / motion snippets
+- Fieldbus: OPC UA, PROFINET, EtherCAT status/control word templates
+- PLC: CODESYS ST `FB_LaserControl` (PreGas, PostGas, gas-before-light interlocks)
+- C#: matching laser state machine
+
+## Installation
+
+### Claude Code (plugin + MCP)
+
+```bash
+git clone https://github.com/your-org/SKILLS.git
+cd SKILLS
+npm install && npm run build
+claude --plugin-dir .
+```
+
+See [references/claude-code.md](references/claude-code.md).
+
+### Codex / Open Skills
+
+```bash
+npx skills add your-org/SKILLS --skill laser-welding -g -y
+```
+
+Configure MCP — see [references/codex-tools.md](references/codex-tools.md).
+
+### MCP only (Cursor, etc.)
+
+Add to `.cursor/mcp.json` or host MCP config:
+
+```json
+{
+  "mcpServers": {
+    "laser-welding": {
+      "command": "node",
+      "args": ["/path/to/SKILLS/mcp/laser-welding-server/dist/index.js"]
+    }
+  }
+}
+```
+
+Build: `npm install && npm run build` from repository root.
+
+## Quick start
+
+With MCP connected, call **`material_assess`**:
+
+```json
+{
+  "material": "copper",
+  "thicknessMm": 1,
+  "jointType": "battery-tab"
+}
+```
+
+## Usage examples
+
+### Example 1 — 1 mm copper battery tab (selection)
+
+**`material_assess`**
+
+```json
+{
+  "material": "copper",
+  "thicknessMm": 1,
+  "jointType": "battery-tab"
+}
+```
+
+**Sample output (abbreviated)**
+
+```json
+{
+  "materialId": "copper",
+  "thicknessMm": 1,
+  "powerW": 945,
+  "speedMmPerS": 3,
+  "lineEnergyJPerMm": 315,
+  "defocusMm": -0.5,
+  "shieldGasLpm": 20,
+  "gasType": "Ar",
+  "recommendedWavelengthNm": [515, 450],
+  "confidence": "heuristic",
+  "warnings": ["High reflectivity at 1064nm...", "Battery tab: verify polarity..."]
+}
+```
+
+**`hardware_recommend`**
+
+```json
+{
+  "material": "copper",
+  "thicknessMm": 1,
+  "application": "battery-tab"
+}
+```
+
+**Sample output (abbreviated)**
+
+```json
+{
+  "wavelengthNm": 515,
+  "beamDelivery": "wobble",
+  "recommendedBrands": [
+    { "brand": "IPG", "modelSeries": "YLPN", "powerRangeKW": [0.5, 3] }
+  ],
+  "optics": {
+    "wobble": { "amplitudeMm": 0.48, "frequencyHz": 400 }
+  }
+}
+```
+
+### Example 2 — CODESYS `FB_LaserControl` ST
+
+**`codegen_codesys_st`**
+
+```json
+{
+  "profile": "battery-tab",
+  "preGasMs": 200,
+  "postGasMs": 500
+}
+```
+
+**Excerpt**
+
+```iecst
+FUNCTION_BLOCK FB_LaserControl
+...
+    PreGas:
+        Busy := TRUE;
+        tonPreGas(IN := TRUE, PT := PreGasMs);
+        IF tonPreGas.Q AND GasOK THEN
+            state := Ready;
+        END_IF
+    Lasing:
+        RequestEmission := LaserReady AND ShutterOpen AND GasOK AND NOT Fault;
+...
+```
+
+Full block returned in tool JSON `code` field.
+
+## Configuration
+
+[`config/laser-welding.default.json`](config/laser-welding.default.json):
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `preGasMs` | 200 | Gas on before emission (ms) |
+| `postGasMs` | 500 | Gas after emission off (ms) |
+| `defaultShieldGasLpm` | 18 | Typical flow setpoint |
+| `defaultFieldbusProtocol` | opc-ua | Default for `fieldbus_map` |
+| `profiles.battery-tab` | — | Tab welding profile overrides |
+
+## MCP tools
+
+| Tool | Description |
+|------|-------------|
+| `material_assess` | Process window |
+| `hardware_recommend` | Laser & optics |
+| `doe_matrix` | DOE grid |
+| `defect_diagnose` | Defect actions |
+| `trajectory_generate` | G-code |
+| `fieldbus_map` | Protocol mapping |
+| `codegen_codesys_st` | ST function block |
+| `codegen_csharp` | C# controller |
+
+## Disclaimer
+
+Heuristic outputs only. Validate with DOE, trial welds, and equipment manufacturer documentation. Brand names are illustrative, not endorsements.
+
+## License
+
+AGPL-3.0-or-later (see repository root).

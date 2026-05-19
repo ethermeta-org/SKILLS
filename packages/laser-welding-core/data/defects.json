@@ -1,0 +1,169 @@
+[
+  {
+    "id": "blowout-al",
+    "symptom": "blowout",
+    "conditions": [
+      {
+        "field": "material",
+        "op": "eq",
+        "value": "aluminum-6061"
+      }
+    ],
+    "actions": [
+      {
+        "param": "powerW",
+        "deltaPercent": -8,
+        "rationale": "Reduce keyhole instability and spatter on aluminum."
+      },
+      {
+        "param": "speedMmPerS",
+        "deltaPercent": 10,
+        "rationale": "Increase travel speed to lower line energy."
+      },
+      {
+        "param": "shieldGas",
+        "absolute": "Ar",
+        "rationale": "Argon improves pool stability for aluminum."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "spatter"
+      ],
+      "zh": [
+        "飞溅",
+        "炸孔"
+      ]
+    }
+  },
+  {
+    "id": "blowout-cu",
+    "symptom": "blowout",
+    "conditions": [
+      {
+        "field": "material",
+        "op": "eq",
+        "value": "copper"
+      }
+    ],
+    "actions": [
+      {
+        "param": "powerW",
+        "deltaPercent": -5,
+        "rationale": "Copper tabs over-melt easily at high peak power."
+      },
+      {
+        "param": "wobbleAmplitudeMm",
+        "deltaPercent": 15,
+        "rationale": "Slightly increase wobble to spread energy."
+      },
+      {
+        "param": "shieldGas",
+        "absolute": "N2",
+        "rationale": "N2 can reduce oxidation on copper joints (verify with DOE)."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "spatter"
+      ],
+      "zh": [
+        "飞溅",
+        "炸孔"
+      ]
+    }
+  },
+  {
+    "id": "lack-of-fusion",
+    "symptom": "lack_of_fusion",
+    "conditions": [],
+    "actions": [
+      {
+        "param": "powerW",
+        "deltaPercent": 5,
+        "rationale": "Increase line energy for deeper penetration."
+      },
+      {
+        "param": "speedMmPerS",
+        "deltaPercent": -8,
+        "rationale": "Slow travel to raise energy input."
+      },
+      {
+        "param": "defocusMm",
+        "absolute": -0.5,
+        "rationale": "Negative defocus often deepens keyhole (equipment dependent)."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "lack of fusion"
+      ],
+      "zh": [
+        "未熔合",
+        "未焊透"
+      ]
+    }
+  },
+  {
+    "id": "porosity",
+    "symptom": "porosity",
+    "conditions": [],
+    "actions": [
+      {
+        "param": "shieldGasLpm",
+        "deltaPercent": 10,
+        "rationale": "Improve shielding coverage over the pool."
+      },
+      {
+        "param": "powerW",
+        "deltaPercent": -3,
+        "rationale": "Slightly reduce power to stabilize keyhole collapse."
+      },
+      {
+        "param": "shieldGas",
+        "absolute": "N2",
+        "rationale": "Switch to N2 for stainless when porosity from oxidation (verify)."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "pores"
+      ],
+      "zh": [
+        "气孔",
+        "孔隙"
+      ]
+    }
+  },
+  {
+    "id": "cracking",
+    "symptom": "cracking",
+    "conditions": [],
+    "actions": [
+      {
+        "param": "speedMmPerS",
+        "deltaPercent": 15,
+        "rationale": "Faster travel reduces heat input and residual stress."
+      },
+      {
+        "param": "powerW",
+        "deltaPercent": -5,
+        "rationale": "Lower peak power reduces thermal gradient."
+      },
+      {
+        "param": "postGasMs",
+        "deltaPercent": 20,
+        "rationale": "Extend post-gas to protect solidifying weld."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "crack"
+      ],
+      "zh": [
+        "裂纹",
+        "开裂"
+      ]
+    }
+  }
+]

@@ -1,0 +1,116 @@
+#!/usr/bin/env node
+import { parseArgs } from "node:util";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { setDataRoot } from "@ethermeta/lasernexus-core";
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import {
+  materialAssessSchema,
+  hardwareRecommendSchema,
+  doeMatrixSchema,
+  defectDiagnoseSchema,
+  trajectorySchema,
+  fieldbusMapSchema,
+  codegenStSchema,
+  codegenCsharpSchema,
+} from "./tools/schemas.js";
+import {
+  handleMaterialAssess,
+  handleHardwareRecommend,
+  handleDoeMatrix,
+  handleDefectDiagnose,
+  handleTrajectoryGenerate,
+  handleFieldbusMap,
+  handleCodegenSt,
+  handleCodegenCsharp,
+} from "./tools/handlers.js";
+
+import { MCP_TOOLS } from "./tools/list-tools.js";
+
+const PKG_VERSION = JSON.parse(
+  readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../package.json"), "utf-8"),
+) as { version: string };
+
+const server = new Server(
+  { name: "laser-welding", version: PKG_VERSION.version },
+  { capabilities: { tools: {} } },
+);
+
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [...MCP_TOOLS],
+}));
+
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  const { name, arguments: args } = request.params;
+  let content;
+
+  switch (name) {
+    case "material_assess":
+      content = handleMaterialAssess(materialAssessSchema.parse(args ?? {}));
+      break;
+    case "hardware_recommend":
+      content = handleHardwareRecommend(hardwareRecommendSchema.parse(args ?? {}));
+      break;
+    case "doe_matrix":
+      content = handleDoeMatrix(doeMatrixSchema.parse(args ?? {}));
+      break;
+    case "defect_diagnose":
+      content = handleDefectDiagnose(defectDiagnoseSchema.parse(args ?? {}));
+      break;
+    case "trajectory_generate":
+      content = handleTrajectoryGenerate(trajectorySchema.parse(args ?? {}));
+      break;
+    case "fieldbus_map":
+      content = handleFieldbusMap(fieldbusMapSchema.parse(args ?? {}));
+      break;
+    case "codegen_codesys_st":
+      content = handleCodegenSt(codegenStSchema.parse(args ?? {}));
+      break;
+    case "codegen_csharp":
+      content = handleCodegenCsharp(codegenCsharpSchema.parse(args ?? {}));
+      break;
+    default:
+      throw new Error(`Unknown tool: ${name}`);
+  }
+
+  return { content, isError: false };
+});
+
+function runCli(): boolean {
+  const { values } = parseArgs({
+    options: {
+      stdio: { type: "boolean", default: true },
+      "data-dir": { type: "string" },
+      version: { type: "boolean" },
+    },
+    allowPositionals: true,
+  });
+
+  if (values.version) {
+    console.log(PKG_VERSION.version);
+    return false;
+  }
+
+  if (values["data-dir"]) {
+    setDataRoot(values["data-dir"]);
+  }
+
+  return values.stdio !== false;
+}
+
+async function main() {
+  if (!runCli()) return;
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

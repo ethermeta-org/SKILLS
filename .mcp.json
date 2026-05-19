@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "laser-welding": {
+      "command": "npx",
+      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
+    }
+  }
+}

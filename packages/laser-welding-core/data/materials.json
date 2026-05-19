@@ -1,0 +1,266 @@
+[
+  {
+    "id": "aluminum-6061",
+    "name": "Aluminum 6061",
+    "category": "metal",
+    "meltingPointK": 925,
+    "reflectivity1064": 0.92,
+    "reflectivity515": 0.65,
+    "thermalConductivityWmk": 167,
+    "absorptionNotes": "High reflectivity at 1064nm; green/blue or wobble recommended for thin sheets.",
+    "baseLineEnergyJPerMm": 45,
+    "materialFactor": 1.15,
+    "aliases": {
+      "en": [
+        "aluminum",
+        "aluminium",
+        "6061"
+      ],
+      "zh": [
+        "\u94dd",
+        "\u94dd\u5408\u91d1",
+        "6061\u94dd"
+      ]
+    }
+  },
+  {
+    "id": "stainless-304",
+    "name": "Stainless Steel 304",
+    "category": "metal",
+    "meltingPointK": 1673,
+    "reflectivity1064": 0.65,
+    "reflectivity515": 0.55,
+    "thermalConductivityWmk": 16.2,
+    "absorptionNotes": "Well suited to fiber laser 1064nm; N2 shielding common.",
+    "baseLineEnergyJPerMm": 55,
+    "materialFactor": 1.0,
+    "aliases": {
+      "en": [
+        "stainless",
+        "ss304",
+        "304"
+      ],
+      "zh": [
+        "\u4e0d\u9508\u94a2",
+        "304\u4e0d\u9508\u94a2"
+      ]
+    }
+  },
+  {
+    "id": "copper",
+    "name": "Copper",
+    "category": "metal",
+    "meltingPointK": 1358,
+    "reflectivity1064": 0.97,
+    "reflectivity515": 0.72,
+    "thermalConductivityWmk": 401,
+    "absorptionNotes": "Battery tab and busbar: prefer 515nm/450nm or ring beam.",
+    "baseLineEnergyJPerMm": 70,
+    "materialFactor": 1.35,
+    "aliases": {
+      "en": [
+        "cu"
+      ],
+      "zh": [
+        "\u94dc"
+      ]
+    }
+  },
+  {
+    "id": "copper-ofc",
+    "name": "Copper OFC (Purple Copper)",
+    "category": "metal",
+    "meltingPointK": 1358,
+    "reflectivity1064": 0.96,
+    "reflectivity515": 0.7,
+    "thermalConductivityWmk": 401,
+    "absorptionNotes": "OFC purple copper: precision weld; validate green/blue for high reflectivity.",
+    "baseLineEnergyJPerMm": 68,
+    "materialFactor": 1.3,
+    "aliases": {
+      "en": [
+        "copper-ofc",
+        "ofc"
+      ],
+      "zh": [
+        "\u7d2b\u94dc"
+      ]
+    }
+  },
+  {
+    "id": "pp",
+    "name": "Polypropylene",
+    "category": "polymer",
+    "meltingPointK": 433,
+    "reflectivity1064": 0.4,
+    "reflectivity515": 0.35,
+    "reflectivity2000": 0.3,
+    "thermalConductivityWmk": 0.22,
+    "absorptionNotes": "Opaque PP: absorption welding at 2um or diode.",
+    "baseLineEnergyJPerMm": 15,
+    "materialFactor": 0.85,
+    "lightTransmittance": 0.15,
+    "referenceWavelengthNm": 2000,
+    "weldModeDefault": "absorption",
+    "preferredWavelengthNm": [
+      2000,
+      980
+    ],
+    "aliases": {
+      "en": [
+        "polypropylene"
+      ],
+      "zh": [
+        "\u805a\u4e19\u70ef"
+      ]
+    }
+  },
+  {
+    "id": "pa6",
+    "name": "PA6",
+    "category": "engineering-polymer",
+    "meltingPointK": 493,
+    "reflectivity1064": 0.35,
+    "reflectivity515": 0.3,
+    "reflectivity2000": 0.25,
+    "thermalConductivityWmk": 0.25,
+    "absorptionNotes": "Nylon PA6: typically absorption welding.",
+    "baseLineEnergyJPerMm": 18,
+    "materialFactor": 0.9,
+    "lightTransmittance": 0.12,
+    "referenceWavelengthNm": 2000,
+    "weldModeDefault": "absorption",
+    "preferredWavelengthNm": [
+      2000,
+      980
+    ],
+    "aliases": {
+      "en": [
+        "pa6",
+        "nylon6"
+      ],
+      "zh": [
+        "PA6",
+        "\u5c3c\u9f996"
+      ]
+    }
+  },
+  {
+    "id": "pa66",
+    "name": "PA66",
+    "category": "engineering-polymer",
+    "meltingPointK": 533,
+    "reflectivity1064": 0.35,
+    "reflectivity515": 0.3,
+    "reflectivity2000": 0.25,
+    "thermalConductivityWmk": 0.24,
+    "absorptionNotes": "Glass-filled grades lower transmittance.",
+    "baseLineEnergyJPerMm": 20,
+    "materialFactor": 0.92,
+    "lightTransmittance": 0.1,
+    "referenceWavelengthNm": 2000,
+    "weldModeDefault": "absorption",
+    "preferredWavelengthNm": [
+      2000,
+      980
+    ],
+    "aliases": {
+      "en": [
+        "pa66",
+        "nylon66"
+      ],
+      "zh": [
+        "PA66",
+        "\u5c3c\u9f9966",
+        "\u5c3c\u9f99"
+      ]
+    }
+  },
+  {
+    "id": "abs",
+    "name": "ABS",
+    "category": "engineering-polymer",
+    "meltingPointK": 473,
+    "reflectivity1064": 0.38,
+    "reflectivity515": 0.32,
+    "reflectivity2000": 0.28,
+    "thermalConductivityWmk": 0.17,
+    "absorptionNotes": "ABS housings: absorption welding.",
+    "baseLineEnergyJPerMm": 17,
+    "materialFactor": 0.88,
+    "lightTransmittance": 0.08,
+    "referenceWavelengthNm": 2000,
+    "weldModeDefault": "absorption",
+    "preferredWavelengthNm": [
+      2000,
+      980
+    ],
+    "aliases": {
+      "en": [
+        "abs"
+      ],
+      "zh": [
+        "ABS"
+      ]
+    }
+  },
+  {
+    "id": "pc",
+    "name": "Polycarbonate",
+    "category": "engineering-polymer",
+    "meltingPointK": 500,
+    "reflectivity1064": 0.3,
+    "reflectivity515": 0.28,
+    "reflectivity2000": 0.2,
+    "thermalConductivityWmk": 0.2,
+    "absorptionNotes": "Clear PC may need transmission welding with absorptive interface.",
+    "baseLineEnergyJPerMm": 16,
+    "materialFactor": 0.86,
+    "lightTransmittance": 0.5,
+    "referenceWavelengthNm": 2000,
+    "weldModeDefault": "hybrid",
+    "preferredWavelengthNm": [
+      2000
+    ],
+    "aliases": {
+      "en": [
+        "pc",
+        "polycarbonate"
+      ],
+      "zh": [
+        "PC",
+        "\u805a\u78b3\u9178\u916f"
+      ]
+    }
+  },
+  {
+    "id": "pmma",
+    "name": "PMMA",
+    "category": "engineering-polymer",
+    "meltingPointK": 378,
+    "reflectivity1064": 0.25,
+    "reflectivity515": 0.22,
+    "reflectivity2000": 0.15,
+    "thermalConductivityWmk": 0.19,
+    "absorptionNotes": "High transmittance: transmission welding typical.",
+    "baseLineEnergyJPerMm": 14,
+    "materialFactor": 0.82,
+    "lightTransmittance": 0.88,
+    "referenceWavelengthNm": 2000,
+    "weldModeDefault": "transmission",
+    "preferredWavelengthNm": [
+      2000
+    ],
+    "aliases": {
+      "en": [
+        "pmma",
+        "acrylic"
+      ],
+      "zh": [
+        "PMMA",
+        "\u4e9a\u514b\u529b",
+        "\u6709\u673a\u73bb\u7483"
+      ]
+    }
+  }
+]

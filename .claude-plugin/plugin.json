@@ -1,0 +1,28 @@
+{
+  "name": "laser-welding-skills",
+  "description": "Official laser welding skill: material assessment, hardware selection, DOE, defect diagnosis, trajectory and PLC code generation",
+  "version": "1.0.0",
+  "author": {
+    "name": "SKILLS Contributors"
+  },
+  "homepage": "https://github.com/skills/laser-welding-skills",
+  "repository": "https://github.com/skills/laser-welding-skills",
+  "license": "AGPL-3.0-or-later",
+  "keywords": [
+    "laser-welding",
+    "industrial-automation",
+    "codesys",
+    "mcp",
+    "skills",
+    "\u6fc0\u5149\u710a\u63a5",
+    "\u6587\u4eab",
+    "\u5927\u65cf",
+    "\u6d77\u76ee\u661f",
+    "\u8054\u8d62",
+    "\u534e\u5de5\u6fc0\u5149",
+    "brazing",
+    "\u948e\u710a",
+    "lasernexus"
+  ],
+  "skills": "./skills/"
+}
