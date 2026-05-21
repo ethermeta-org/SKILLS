@@ -2,7 +2,7 @@
 
 Industrial laser welding decision support for automation and process engineers: material assessment, hardware selection, DOE, defect diagnosis, motion programs, fieldbus mapping, and PLC code generation.
 
-Integrates with **Claude Code** (plugin), **Codex / Open Skills** (`npx skills add`), and **MCP** (Cursor and other MCP clients).
+Integrates with **Claude Code**, **Codex**, **OpenCode**, and **MCP** clients.
 
 ## Features
 
@@ -32,24 +32,23 @@ Integrates with **Claude Code** (plugin), **Codex / Open Skills** (`npx skills a
 
 ## Installation
 
-### Claude Code (plugin + MCP)
+### Claude Code
 
-```bash
-git clone https://github.com/your-org/SKILLS.git
-cd SKILLS
-npm install && npm run build
-claude --plugin-dir .
-```
+Use this repository as a Claude Code plugin directory. Plugin metadata lives at `.claude-plugin/plugin.json`.
 
 See [references/claude-code.md](references/claude-code.md).
 
-### Codex / Open Skills
+### Codex
 
-```bash
-npx skills add your-org/SKILLS --skill laser-welding -g -y
-```
+Use `.codex-plugin/plugin.json` and `.codex/config.toml`.
 
-Configure MCP — see [references/codex-tools.md](references/codex-tools.md).
+See root `.codex/INSTALL.md` and [references/codex-tools.md](references/codex-tools.md).
+
+### OpenCode
+
+Use `.opencode/plugins/laser-welding.js`.
+
+See root `.opencode/INSTALL.md`.
 
 ### MCP only (Cursor, etc.)
 
@@ -59,14 +58,20 @@ Add to `.cursor/mcp.json` or host MCP config:
 {
   "mcpServers": {
     "laser-welding": {
-      "command": "node",
-      "args": ["/path/to/SKILLS/mcp/laser-welding-server/dist/index.js"]
+      "command": "npx",
+      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
     }
   }
 }
 ```
 
-Build: `npm install && npm run build` from repository root.
+### Build from source
+
+From the repository root:
+
+```bash
+npm install && npm run build
+```
 
 ## Quick start
 

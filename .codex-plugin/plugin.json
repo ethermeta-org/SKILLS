@@ -1,0 +1,50 @@
+{
+  "name": "laser-welding-skills",
+  "version": "1.0.0",
+  "description": "Industrial laser welding process engineering skills: material assessment, hardware selection, DOE, defect diagnosis, motion programs, fieldbus mapping, and PLC/C# code generation.",
+  "author": {
+    "name": "SKILLS Contributors"
+  },
+  "homepage": "https://github.com/ethermeta-org/SKILLS",
+  "repository": "https://github.com/ethermeta-org/SKILLS",
+  "license": "AGPL-3.0-or-later",
+  "keywords": [
+    "laser-welding",
+    "industrial-automation",
+    "codesys",
+    "mcp",
+    "skills",
+    "激光焊接",
+    "文享",
+    "大族",
+    "海目星",
+    "联赢",
+    "华工激光",
+    "brazing",
+    "钎焊",
+    "lasernexus"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Laser Welding Skills",
+    "shortDescription": "Laser welding process engineering, DOE, automation, and code generation",
+    "longDescription": "Use Laser Welding Skills to assess weldability, choose laser and optics hardware, build DOE matrices, diagnose defects, generate trajectories, map fieldbus signals, and generate CODESYS ST or C# laser-control code.",
+    "developerName": "SKILLS Contributors",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me design a laser welding process window.",
+      "Diagnose this laser welding defect and propose DOE next steps.",
+      "Generate a CODESYS laser control function block."
+    ],
+    "websiteURL": "https://github.com/ethermeta-org/SKILLS",
+    "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
+    "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}

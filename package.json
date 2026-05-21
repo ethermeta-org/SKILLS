@@ -2,7 +2,7 @@
   "name": "laser-welding-skills",
   "version": "1.0.0",
   "private": true,
-  "description": "Official laser welding skill module for Claude Code, Codex/Open Skills, and MCP",
+  "description": "Official laser welding skill module for Claude Code, Codex, OpenCode, Cursor, and MCP",
   "type": "module",
   "workspaces": [
     "packages/*",

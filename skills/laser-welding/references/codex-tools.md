@@ -1,4 +1,4 @@
-# Codex / Open Skills tool mapping
+# Codex tool mapping
 
 Skills use MCP tool names. Map to your host as follows:
 
@@ -15,9 +15,7 @@ Skills use MCP tool names. Map to your host as follows:
 
 ## Install skill only
 
-```bash
-npx skills add <org>/SKILLS --skill laser-welding -g -y
-```
+Use the repository-level Codex plugin metadata in `.codex-plugin/plugin.json`, then register the repository `skills` directory with Codex skill discovery. See the root `.codex/INSTALL.md` for the Windows junction setup and MCP configuration.
 
 ## Add MCP (Cursor / Codex config)
 

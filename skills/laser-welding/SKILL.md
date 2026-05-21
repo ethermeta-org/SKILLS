@@ -52,9 +52,10 @@ End-to-end support for laser welding: materials → hardware → validation → 
 
 | Channel | How |
 |---------|-----|
-| Claude Code plugin | `claude --plugin-dir .` |
+| Claude Code plugin | Use `.claude-plugin/plugin.json` from the repository root |
+| Codex plugin | Use `.codex-plugin/plugin.json`; see `.codex/INSTALL.md` |
+| OpenCode plugin | Use `.opencode/plugins/laser-welding.js`; see `.opencode/INSTALL.md` |
 | MCP (npx) | `npx -y @ethermeta/lasernexus --stdio` |
-| Open Skills | `npx skills add <org>/SKILLS --skill laser-welding` |
 
 See [README.md](README.md).
 

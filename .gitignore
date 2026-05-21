@@ -6,3 +6,6 @@ coverage/
 *.log
 plugin.zip
 release/
+.codex/
+.vscode/
+docs/

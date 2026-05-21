@@ -12,8 +12,8 @@ if [[ -z "${SKILLS_MARKETPLACE_TOKEN:-}" ]]; then
   exit 0
 fi
 
-# Placeholder for official marketplace API / CLI when available:
+# Future official marketplace API / CLI integration:
 # npx skills publish --token "$SKILLS_MARKETPLACE_TOKEN" --skill laser-welding --version "${VERSION#v}"
 
-echo "Marketplace publish placeholder completed."
+echo "Marketplace publish hook completed."
 echo "Configure SKILLS_MARKETPLACE_API_URL when the registry API is live."

@@ -46,6 +46,9 @@ jobs:
           zip -r release/plugin.zip \
             .claude-plugin \
             .cursor-plugin \
+            .codex-plugin \
+            .codex \
+            .opencode \
             .mcp.json \
             skills \
             mcp/laser-welding-server/dist \
@@ -80,30 +83,49 @@ jobs:
     needs: build
     permissions:
       contents: read
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
+      - name: Skip npm publish when token is unavailable
+        if: ${{ env.NPM_TOKEN == '' }}
+        run: echo "NPM_TOKEN not set; skipping npm publish."
       - uses: actions/checkout@v4
+        if: ${{ env.NPM_TOKEN != '' }}
       - uses: actions/setup-node@v4
+        if: ${{ env.NPM_TOKEN != '' }}
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
           cache: "npm"
       - run: npm ci
+        if: ${{ env.NPM_TOKEN != '' }}
       - run: npm run build
+        if: ${{ env.NPM_TOKEN != '' }}
       - name: Publish core
+        if: ${{ env.NPM_TOKEN != '' }}
         run: npm publish -w @ethermeta/lasernexus-core --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
       - name: Publish MCP
+        if: ${{ env.NPM_TOKEN != '' }}
         run: npm publish -w @ethermeta/lasernexus --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
 
   publish-marketplace:
     runs-on: ubuntu-latest
     needs: release
+    env:
+      SKILLS_MARKETPLACE_TOKEN: ${{ secrets.SKILLS_MARKETPLACE_TOKEN }}
     steps:
+      - name: Skip marketplace publish when token is unavailable
+        if: ${{ env.SKILLS_MARKETPLACE_TOKEN == '' }}
+        run: echo "SKILLS_MARKETPLACE_TOKEN not set; skipping marketplace publish."
       - uses: actions/checkout@v4
+        if: ${{ env.SKILLS_MARKETPLACE_TOKEN != '' }}
       - run: chmod +x scripts/publish-marketplace.sh
+        if: ${{ env.SKILLS_MARKETPLACE_TOKEN != '' }}
       - run: ./scripts/publish-marketplace.sh
+        if: ${{ env.SKILLS_MARKETPLACE_TOKEN != '' }}
         env:
-          SKILLS_MARKETPLACE_TOKEN: ${{ secrets.SKILLS_MARKETPLACE_TOKEN }}
+          SKILLS_MARKETPLACE_TOKEN: ${{ env.SKILLS_MARKETPLACE_TOKEN }}
