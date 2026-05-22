@@ -28,8 +28,8 @@
 | `packages/laser-welding-core/src/stage2/laser-selector.ts` | motion/head/laserType |
 | `packages/laser-welding-core/src/stage4/trajectory.ts` | motionPlatform hint |
 | `packages/laser-welding-core/src/stage3/doe-matrix.ts` | optional defocus/gap axes |
-| `mcp/laser-welding-server/src/tools/schemas.ts` | zod optional fields |
-| `mcp/laser-welding-server/src/index.ts` | tool descriptions |
+| `mcp/lasernexus/src/tools/schemas.ts` | zod optional fields |
+| `mcp/lasernexus/src/index.ts` | tool descriptions |
 | `packages/laser-welding-core/tests/v2.test.ts` | **new** — focused v2 tests |
 | `skills/laser-welding/references/materials.md` | document plastics + transmittance |
 
@@ -336,9 +336,9 @@ it("recommends fiber-2um for pmma transmission", () => {
 ### Task 9: MCP schemas and tool descriptions
 
 **Files:**
-- Modify: `mcp/laser-welding-server/src/tools/schemas.ts`
-- Modify: `mcp/laser-welding-server/src/index.ts`
-- Test: `mcp/laser-welding-server/tests/handlers.test.ts`
+- Modify: `mcp/lasernexus/src/tools/schemas.ts`
+- Modify: `mcp/lasernexus/src/index.ts`
+- Test: `mcp/lasernexus/tests/handlers.test.ts`
 
 - [ ] **Step 1: Extend zod schemas** (all optional new fields with `.optional()`)
 
@@ -384,7 +384,7 @@ git commit -m "docs: lasernexus v2 materials and MCP parameters"
 
 **Files:**
 - Modify: `packages/laser-welding-core/package.json` → `1.1.0`
-- Modify: `mcp/laser-welding-server/package.json` → `1.1.0`
+- Modify: `mcp/lasernexus/package.json` → `1.1.0`
 
 - [ ] **Step 1: Bump versions**
 

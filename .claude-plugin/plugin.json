@@ -1,7 +1,7 @@
 {
   "name": "laser-welding-skills",
-  "description": "Official laser welding skill: material assessment, hardware selection, DOE, defect diagnosis, trajectory and PLC code generation",
-  "version": "1.0.0",
+  "description": "Official laser welding skill: presales workflow, material assessment, hardware selection, push-pull brazing, brazing wire guidance, DOE, defect diagnosis, trajectory, fieldbus, and solution BOM",
+  "version": "1.1.0",
   "author": {
     "name": "SKILLS Contributors"
   },

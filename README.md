@@ -1,29 +1,110 @@
 # SKILLS — Laser Welding (Lasernexus)
 
-Distribution hub for Lasernexus laser welding skills, MCP tooling, and npm packages. This repository supports Claude Code, Codex, OpenCode, Cursor, and any MCP client that can launch a stdio server.
+**English** | [中文](README-ZH.md)
 
-Lasernexus helps engineering assistants reason through laser welding work: material assessment, hardware and optics selection, DOE planning, defect diagnosis, motion trajectories, fieldbus mapping, and automation code generation. Inputs can be in English or Chinese, and outputs are intended to support real engineering review, not replace DOE, trial welds, or OEM documentation.
+Official laser welding skills for Claude Code, Cursor, Codex/Open Skills, and MCP.
 
-## What is included
-
-- `skills/laser-welding` — primary process engineering skill for materials, equipment, validation, and automation.
-- `skills/laser-welding-brainstorm` — discovery workflow for new laser welding applications and constraints.
-- `skills/laser-welding-write-plan` — structured planning workflow for multi-stage welding work.
-- `skills/laser-welding-execute-plan` — execution workflow that maps plans to MCP tool calls.
-- `skills/laser-welding-verify` — verification checklist for assumptions, outputs, safety, and traceability.
-- `@ethermeta/lasernexus-core` — core TypeScript library, data catalogs, templates, and process heuristics.
-- `@ethermeta/lasernexus` — MCP server CLI that exposes the Lasernexus tools over stdio.
+Lasernexus helps process and automation engineers move from early welding requirements to a presales-grade solution package: material assessment, laser/head selection, push-pull wire-feed brazing, brazing wire family guidance, DOE, defect diagnosis, fieldbus, trajectory hints, BOM, line layout, assumptions, risks, and validation criteria.
 
 ## Features
 
-- Bilingual material inputs: copper / 铜 / 紫铜, aluminum / 铝, stainless steel / 不锈钢, and plastics such as PA6, PA66, PC, and PMMA.
-- Bilingual defect inputs: 飞溅, 气孔, 未熔合, 裂纹, blowout, porosity, lack of fusion, and cracking.
-- OEM family guidance for IPG, Raycus, Oneshare / 文享, Amada / 天田, Miyachi / 米亚基, Han's / 大族, Hymson / 海目星, UWLaser / 联赢, and HGTECH / 华工.
-- Four-stage engineering flow: material and process window, hardware and optics, validation, and automation.
-- Support for laser brazing, push-pull wire, turnkey automation lines, wobble/Bessel options, galvo and gantry motion, OPC UA, PROFINET, EtherCAT, CODESYS ST, and C#.
-- MCP-first operation so clients can call deterministic tools instead of inventing power, speed, timing, or fieldbus details.
+- **Bilingual inputs**: materials such as `copper`, `stainless-304`, `铜`, `不锈钢`; defects such as `spatter`, `porosity`, `飞溅`, `气孔`.
+- **Presales solution workflow**: intake, readiness gates, assumptions, missing inputs, risk level, validation plan, and acceptance criteria.
+- **Push-pull brazing**: wire-feed head, feed mode, feed orientation, nozzle offset, wire speed, preheat, seam tracking, and collision risk.
+- **Brazing wire guidance**: CuSi, AlSi, Ni-based, Cu-based, stainless-filler, and custom families with validation warnings.
+- **OEM candidate families**: IPG, Raycus, Oneshare/文享, Amada/天田, Miyachi/米亚基, Han's/大族, Hymson/海目星, UWLaser/联赢, HGTECH/华工.
+- **MCP tools**: material assessment, hardware recommendation, DOE matrix, defect diagnosis, trajectory, fieldbus, and solution BOM.
 
-## Quick start from source
+## Install
+
+Choose one entry point depending on how you use agents.
+
+### 1. Plugin Install
+
+Use this when your agent client supports local plugin directories, similar to Superpowers-style plugin installation.
+
+```bash
+git clone https://github.com/ethermeta-org/SKILLS.git
+cd SKILLS
+npm install
+npm run build
+```
+
+Claude Code plugin:
+
+```bash
+claude --plugin-dir .
+```
+
+Cursor plugin:
+
+```bash
+# Use this repository as a local Cursor plugin directory.
+# The plugin manifest is .cursor-plugin/plugin.json.
+```
+
+Plugin manifests:
+
+| Client | Manifest | Skills path |
+| --- | --- | --- |
+| Claude Code | `.claude-plugin/plugin.json` | `./skills/` |
+| Cursor | `.cursor-plugin/plugin.json` | `./skills/` |
+
+Release builds package these manifests into `plugin.zip`.
+
+### 2. Codex / Open Skills
+
+```bash
+npx skills add <org>/SKILLS --skill laser-welding -g -y
+```
+
+Then configure MCP if you want tool-backed process and BOM outputs.
+
+### 3. MCP via npm
+
+```bash
+npx -y @ethermeta/lasernexus --stdio
+```
+
+`.cursor/mcp.json` / `.mcp.json` example:
+
+```json
+{
+  "mcpServers": {
+    "lasernexus": {
+      "command": "npx",
+      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
+    }
+  }
+}
+```
+
+Optional custom data catalog:
+
+```bash
+npx -y @ethermeta/lasernexus --stdio --data-dir /path/to/custom/data
+```
+
+Or in MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "lasernexus": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@ethermeta/lasernexus",
+        "--stdio",
+        "--data-dir",
+        "/path/to/lasernexus-data"
+      ]
+    }
+  }
+}
+```
+
+### 4. From Source
 
 ```bash
 git clone https://github.com/ethermeta-org/SKILLS.git
@@ -39,46 +120,6 @@ Run the MCP server from the workspace during development:
 npm run dev:mcp -- --stdio
 ```
 
-## MCP quick start
-
-Run the published MCP server:
-
-```bash
-npx -y @ethermeta/lasernexus --stdio
-```
-
-Generic MCP client configuration:
-
-```json
-{
-  "mcpServers": {
-    "laser-welding": {
-      "command": "npx",
-      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
-    }
-  }
-}
-```
-
-Use a custom data directory for extended material, equipment, or OEM catalogs:
-
-```json
-{
-  "mcpServers": {
-    "laser-welding": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@ethermeta/lasernexus",
-        "--stdio",
-        "--data-dir",
-        "/path/to/lasernexus-data"
-      ]
-    }
-  }
-}
-```
-
 ## Client installation
 
 | Client | Entry point | Notes |
@@ -91,25 +132,33 @@ Use a custom data directory for extended material, equipment, or OEM catalogs:
 | Cursor | `.mcp.json` | Add or copy the MCP server block into Cursor's MCP configuration. |
 | MCP-only | `.mcp.json` | Generic MCP stdio configuration for clients that do not use plugins. |
 
+## Workflow
+
+For new projects, use the staged skills:
+
+1. `laser-welding-brainstorm` — collect requirements, missing inputs, assumptions, and readiness.
+2. `laser-welding-write-plan` — write the staged execution plan.
+3. `laser-welding-execute-plan` — call MCP tools or fallback references.
+4. `laser-welding-verify` — verify disclaimers, units, DOE, BOM, risks, and stop conditions.
+
 ## MCP tools
 
 | Tool | Stage | Purpose |
-|------|-------|---------|
-| `material_assess` | 1 | Assess material and thickness, then return a process window with power, speed, defocus, gas, and related parameters. |
-| `hardware_recommend` | 2 | Recommend laser types, OEM families, optics, motion platforms, brazing options, and turnkey considerations. |
-| `doe_matrix` | 3 | Generate a power-speed DOE grid, with optional defocus and gap axes. |
-| `defect_diagnose` | 3 | Diagnose English or Chinese defect symptoms and suggest likely causes and corrective actions. |
-| `trajectory_generate` | 4 | Generate line, circle, or rectangle motion paths as G-code or Fanuc-style output. |
-| `fieldbus_map` | 4 | Produce OPC UA, PROFINET, or EtherCAT signal maps for laser automation. |
-| `codegen_codesys_st` | 4 | Generate CODESYS Structured Text for `FB_LaserControl` with gas timing and interlocks. |
-| `codegen_csharp` | 4 | Generate a C# laser control state machine. |
+| --- | --- | --- |
+| `material_assess` | 1 | Material pair, coating, process window, weld mode, brazing wire warning |
+| `hardware_recommend` | 2 | Laser type, OEM candidates, head, motion, push-pull head, validation plan |
+| `doe_matrix` | 3 | Power/speed/defocus/gap/wire/preheat/gas/clamp DOE grid |
+| `defect_diagnose` | 3 | Defect-driven tuning actions |
+| `trajectory_generate` | 4 | Motion/G-code hints |
+| `fieldbus_map` | 4 | OPC UA, PROFINET, EtherCAT mapping |
+| `solution_bom` | 4 | BOM, line layout, assumptions, missing inputs, risk, acceptance criteria |
 
 ## Packages
 
 | Package | Location | Purpose |
-|---------|----------|---------|
-| `@ethermeta/lasernexus-core` | `packages/laser-welding-core` | Core library, JSON catalogs, templates, tests, and build output. |
-| `@ethermeta/lasernexus` | `mcp/laser-welding-server` | MCP stdio server and CLI entry point. |
+| --- | --- | --- |
+| `@ethermeta/lasernexus-core` | `packages/laser-welding-core` | Core library, data catalogs, process and solution logic |
+| `@ethermeta/lasernexus` | `mcp/lasernexus` | MCP server CLI (`lasernexus`) |
 
 ## Development
 
@@ -132,7 +181,7 @@ The root workspace builds and tests both npm packages. Keep MCP schemas, handler
 
 ## Release
 
-Versioned release tags publish the distribution artifacts through `.github/workflows/release.yml`. The workflow runs tests, creates a GitHub Release with `plugin.zip`, and publishes the npm packages when `NPM_TOKEN` is configured.
+Release tag `v*` runs lint, tests, build, GitHub Release asset generation (`plugin.zip` and npm tarball), npm publish, and marketplace publishing through `.github/workflows/release.yml`.
 
 Before release:
 
@@ -140,9 +189,15 @@ Before release:
 - Confirm plugin metadata points at the current package names and MCP command.
 - Confirm package versions and generated distribution files are current.
 
+## Versioning And Documentation Sync
+
+See [docs/VERSIONING.md](docs/VERSIONING.md).
+
 ## Safety
 
-Lasernexus outputs are heuristic engineering aids. Always validate parameters with DOE, coupons, trial welds, destructive or nondestructive inspection, safety interlocks, qualified operators, and equipment manufacturer documentation. Brand names are illustrative references to OEM families, not endorsements.
+Lasernexus outputs are heuristic engineering aids. Always validate parameters with DOE, coupons, trial welds, destructive or nondestructive inspection, safety interlocks, qualified operators, and equipment manufacturer documentation. Brand names are candidate examples, not endorsements.
+
+Lasernexus never provides pricing, quotation, cost estimation, simulation, finite element analysis, certified filler wire approval, or production-release promises.
 
 ## License
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { handleMaterialAssess, handleCodegenSt } from "../src/tools/handlers.js";
+import { handleMaterialAssess, handleSolutionBom } from "../src/tools/handlers.js";
 
 describe("MCP handlers", () => {
   it("material_assess returns JSON", () => {
@@ -15,11 +15,9 @@ describe("MCP handlers", () => {
     expect(data.weldMode).toBe("transmission");
   });
 
-  it("codegen_codesys_st includes FB_LaserControl", () => {
-    const content = handleCodegenSt({ profile: "battery-tab" });
-    const text = content[0]?.text ?? "";
-    const data = JSON.parse(text) as { code: string };
-    expect(data.code).toContain("FB_LaserControl");
-    expect(data.code).toContain("PreGas");
+  it("solution_bom returns line items", () => {
+    const content = handleSolutionBom({ material: "copper", thicknessMm: 1 });
+    const data = JSON.parse(content[0]?.text ?? "{}") as { lineItems: unknown[] };
+    expect(data.lineItems.length).toBeGreaterThan(0);
   });
 });

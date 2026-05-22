@@ -17,8 +17,7 @@ import {
   defectDiagnoseSchema,
   trajectorySchema,
   fieldbusMapSchema,
-  codegenStSchema,
-  codegenCsharpSchema,
+  solutionBomSchema,
 } from "./tools/schemas.js";
 import {
   handleMaterialAssess,
@@ -27,8 +26,7 @@ import {
   handleDefectDiagnose,
   handleTrajectoryGenerate,
   handleFieldbusMap,
-  handleCodegenSt,
-  handleCodegenCsharp,
+  handleSolutionBom,
 } from "./tools/handlers.js";
 
 import { MCP_TOOLS } from "./tools/list-tools.js";
@@ -38,7 +36,7 @@ const PKG_VERSION = JSON.parse(
 ) as { version: string };
 
 const server = new Server(
-  { name: "laser-welding", version: PKG_VERSION.version },
+  { name: "lasernexus", version: PKG_VERSION.version },
   { capabilities: { tools: {} } },
 );
 
@@ -69,11 +67,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     case "fieldbus_map":
       content = handleFieldbusMap(fieldbusMapSchema.parse(args ?? {}));
       break;
-    case "codegen_codesys_st":
-      content = handleCodegenSt(codegenStSchema.parse(args ?? {}));
-      break;
-    case "codegen_csharp":
-      content = handleCodegenCsharp(codegenCsharpSchema.parse(args ?? {}));
+    case "solution_bom":
+      content = handleSolutionBom(solutionBomSchema.parse(args ?? {}));
       break;
     default:
       throw new Error(`Unknown tool: ${name}`);

@@ -1,0 +1,27 @@
+{
+  "heads": [
+    {
+      "id": "push-pull-brazing-head",
+      "headType": "push-pull laser brazing head",
+      "feedMode": "push-pull",
+      "orientations": ["front", "rear", "side", "near-coaxial"],
+      "compatibleMotion": ["robot", "gantry-line", "turnkey-line", "gantry", "single-axis"],
+      "coolingRequired": true,
+      "notes": [
+        "Use for stable wire feeding in laser brazing and filler-assisted welding.",
+        "Validate wire nozzle offset, feed angle, TCP access, and fixture clearance."
+      ],
+      "risks": ["TCP interference, wire feeding instability, wetting variation, and fixture access constraints."]
+    },
+    {
+      "id": "manual-assist-wire-head",
+      "headType": "manual-assist wire-feed welding head",
+      "feedMode": "manual-assist",
+      "orientations": ["front", "side"],
+      "compatibleMotion": ["manual", "semi-auto", "gantry", "single-axis"],
+      "coolingRequired": false,
+      "notes": ["Use only for development or low-volume assisted trials."],
+      "risks": ["Operator variation makes it unsuitable for final turnkey recommendations without automation review."]
+    }
+  ]
+}

@@ -1,17 +1,20 @@
 # Lasernexus v2 Design Spec
 
 **Date:** 2026-05-19  
-**Status:** Approved (user confirmed; plastics + transmittance added 2026-05-19)  
-**Scope:** Extend existing 8 MCP tools + core catalogs (backward compatible)
+**Status:** Approved (v2.1 BOM extension 2026-05-19)  
+**Scope:** Extend MCP tools + core catalogs; v2.1 replaces codegen with `solution_bom`
 
 ## Goal
 
-Expand laser welding domain coverage: materials (紫铜 OFC, PA66 等工程塑料), laser sources (半导体/蓝光/绿光/2μm), motion platforms (龙门/单轴/振镜), laser heads (振镜/定焦/单轴旋转), and rich process parameters (功率曲线, 正/负离焦, 熔深, 填丝焊+间隙).
+Expand laser welding domain coverage: materials (紫铜 OFC, PA66 等工程塑料), laser sources (半导体/蓝光/绿光/2μm), motion platforms (龙门/单轴/振镜), laser heads (振镜/定焦/单轴旋转), rich process parameters (功率曲线, 正/负离焦, 熔深, 填丝焊+间隙), and **turnkey line BOM** (组件组成 + 产线布局).
+
+**v2.1:** Customers need solution component composition and BOM lists more than PLC/C# codegen. Remove `codegen_csharp` and `codegen_codesys_st`; add `solution_bom`; extend `hardware_recommend` with `bomSummary` + `lineLayout`.
 
 ## Architecture
 
 - **Data-first catalogs** in `@ethermeta/lasernexus-core`: `materials.json`, `lasers.json`, new `equipment.json`.
-- **Extend** `material_assess`, `hardware_recommend`, `trajectory_generate` (optional `doe_matrix`) schemas; no new MCP server tools in v2.
+- **Extend** `material_assess`, `hardware_recommend`, `trajectory_generate` (optional `doe_matrix`) schemas.
+- **v2.1:** Add MCP tool `solution_bom`; remove `codegen_csharp` and `codegen_codesys_st` (7 tools total).
 - **Aliases** (中英) via existing `aliases.ts` for materials, equipment ids, defocus signs, motion/head terms.
 - All new numeric outputs remain `confidence: heuristic` with existing `DISCLAIMER`.
 
@@ -167,12 +170,53 @@ export interface ProcessParams {
 - Defocus sign positive vs negative explicit in `processParams`
 - Chinese aliases: 龙门, 振镜, 正离焦, 填丝焊
 
-## Out of Scope (v2)
+## v2.1 — BOM / Solution composition
+
+### Catalog: `bom-catalog.json`
+
+Component templates by `category` with `tags` / `excludeTags` for heuristic selection.
+
+### Types
+
+- `BomLineItem`, `LineLayout`, `SolutionBomResult`
+- `HardwareRecommendResult` gains `bomSummary`, `lineLayout`
+
+### MCP: `solution_bom`
+
+Inputs: same as `hardware_recommend` plus optional `fieldbusProtocol`, `includeVision`, `wireFill`, `gapMm`.
+
+Outputs: `lineItems[]`, `lineLayout`, `turnkeyVendors[]` (brands with `turnkey-automation` in lasers.json).
+
+### `hardware_recommend` extended output
+
+- `bomSummary: { itemCount, categories, requiredCount }`
+- `lineLayout` (same builder as `solution_bom`)
+
+### BOM heuristic rules
+
+| Condition | Behavior |
+|-----------|----------|
+| `copper-ofc` / high reflect | Green/blue source, wobble head, enhanced fume |
+| `wantsBrazing` | Wire feeder, preheat station in layout |
+| `wantsTurnkey` | PLC/HMI, fieldbus, integration, multi-station layout |
+| `galvo-scanner` | Galvo motion + head; no gantry axis line |
+| `wireFill` | Wire feeder line item |
+| Polymer transmission | 2μm source, clamp fixture; skip heavy fume |
+
+### Tests
+
+- OFC copper + galvo → green/blue source, no gantry motion item
+- `application: turnkey` / 成套 → integration + plc-hmi + multi station
+- Brazing → wire-feeder + fume-extraction
+- `hardware_recommend.bomSummary.itemCount` === `solution_bom.lineItems.length`
+
+## Out of Scope (v2 / v2.1)
 
 - Arbitrary spline power curves (>3 segments)
 - Real-time OEM API / machine connection
 - HTTP MCP transport
 - FEM or NDT-validated melt depth
+- ERP part numbers, pricing, lead times
 
 ## Spec Self-Review
 

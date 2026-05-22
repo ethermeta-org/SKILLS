@@ -1,4 +1,12 @@
+import { assessMaterial } from "../stage1/process-window.js";
 import { applicationHints } from "../core/aliases.js";
+import { recommendBrazingWire } from "../core/brazing-wire.js";
+import {
+  buildBomLineItems,
+  buildLineLayout,
+  summarizeBom,
+  type BomBuildContext,
+} from "../stage4/bom-builder.js";
 import {
   getMaterialById,
   isHeadCompatible,
@@ -7,15 +15,31 @@ import {
   resolveMotionPlatform,
 } from "../core/data-loader.js";
 import { effectiveTransmittance, resolveWeldMode } from "../core/polymer.js";
+import {
+  buildAcceptanceCriteria,
+  buildAssumptions,
+  buildMissingInputs,
+  buildValidationPlan,
+  inferRiskLevel,
+} from "../core/presales.js";
+import { recommendWireFeedHead } from "../core/wire-feed-head.js";
 import { MaterialNotFoundError, ValidationError } from "../core/errors.js";
 import {
+  type ApplicationScenario,
+  type AutomationLevel,
+  type BrazingWireFamily,
+  type BudgetLevel,
   DISCLAIMER,
+  type DeliveryScope,
   isPolymerCategory,
   type HardwareRecommendResult,
   type LaserHeadId,
   type LaserRecord,
   type LaserType,
   type MotionPlatformId,
+  type QualityTarget,
+  type WireFeedMode,
+  type WireFeedOrientation,
 } from "../core/types.js";
 import { spotDiameterMm } from "../core/units.js";
 import { computeWobble, computeBesselHint } from "./optics.js";
@@ -28,6 +52,36 @@ export interface HardwareRecommendInput {
   laserHead?: string;
   preferredLaserType?: LaserType;
   lightTransmittance?: number;
+  applicationScenario?: ApplicationScenario;
+  deliveryScope?: DeliveryScope;
+  automationLevel?: AutomationLevel;
+  targetTaktSec?: number;
+  annualVolume?: number;
+  partsPerHour?: number;
+  stationCount?: number;
+  preferredBrands?: string[];
+  forbiddenBrands?: string[];
+  budgetLevel?: BudgetLevel;
+  inspectionMethods?: string[];
+  seamTrackingRequired?: boolean;
+  preheatRequired?: boolean;
+  wireFeedMode?: WireFeedMode;
+  wireFeedOrientation?: WireFeedOrientation;
+  wireFeedAngleDeg?: number;
+  wireNozzleOffsetMm?: number;
+  wireSpeedMmPerS?: number;
+  headCoolingRequired?: boolean;
+  collisionEnvelopeNotes?: string;
+  brazingWireFamily?: BrazingWireFamily;
+  baseMaterialB?: string;
+  thicknessBMm?: number;
+  jointType?: string;
+  seamType?: string;
+  seamLengthMm?: number;
+  qualityTargets?: QualityTarget[];
+  sealingRequired?: boolean;
+  coating?: string;
+  surfaceCondition?: string;
 }
 
 function scoreLaser(
@@ -107,6 +161,8 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
 
   const { wantsBrazing, wantsTurnkey } = applicationHints(application);
   const warnings: string[] = [];
+  const forbiddenBrands = new Set((input.forbiddenBrands ?? []).map((b) => b.toLowerCase()));
+  const preferredBrands = new Set((input.preferredBrands ?? []).map((b) => b.toLowerCase()));
   const highReflect = mat.reflectivity1064 > 0.85;
   const isBatteryTab = application === "battery-tab" || application.includes("tab");
   const isPolymer = isPolymerCategory(mat.category);
@@ -162,6 +218,14 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
       "Turnkey automation / line integration: use laser-welding-brainstorm to capture takt time, stations, and fieldbus before final OEM selection.",
     );
   }
+  if (input.forbiddenBrands && input.forbiddenBrands.length > 0) {
+    warnings.push(`Forbidden brands filtered: ${input.forbiddenBrands.join(", ")}.`);
+  }
+  if (input.budgetLevel) {
+    warnings.push(
+      `Budget level '${input.budgetLevel}' is used only as solution complexity guidance; no commercial values are produced.`,
+    );
+  }
 
   if (!motionPlatform && isPolymer && weldMode === "transmission") {
     motionPlatform = "galvo-scanner";
@@ -177,7 +241,7 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
     warnings.push(`Laser head ${laserHead} may be incompatible with motion platform ${motionPlatform}.`);
   }
 
-  const lasers = loadLasers();
+  const lasers = loadLasers().filter((l) => !forbiddenBrands.has(l.brand.toLowerCase()));
   const ranked = lasers
     .map((l) => ({
       laser: l,
@@ -185,13 +249,19 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
     }))
     .filter((x) => x.score > 0 || x.laser.wavelengthNm === wavelengthNm)
     .sort((a, b) => b.score - a.score);
+  const rankedWithPreference = ranked
+    .map((x) => ({
+      ...x,
+      score: x.score + (preferredBrands.has(x.laser.brand.toLowerCase()) ? 1 : 0),
+    }))
+    .sort((a, b) => b.score - a.score);
 
   const recommendedBrands = pickBalancedBrands(
-    ranked.map((x) => x.laser),
+    rankedWithPreference.map((x) => x.laser),
     4,
   );
 
-  const rankedTypes = ranked.slice(0, 6).map((x) => x.laser.laserType);
+  const rankedTypes = rankedWithPreference.slice(0, 6).map((x) => x.laser.laserType);
   const recommendedLaserTypes = [
     ...new Set([...preferredLaserTypes, ...rankedTypes]),
   ].slice(0, 4) as LaserType[];
@@ -202,8 +272,60 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
 
   const wobble = beamDelivery === "wobble" ? computeWobble(spotD, mat.id) : undefined;
   const bessel = computeBesselHint(mat.id, input.thicknessMm);
+  const scenario = input.applicationScenario;
+  const wantsWireFeedHead =
+    scenario === "push-pull-brazing" || wantsBrazing || input.wireFeedMode === "push-pull";
 
-  return {
+  const wireFeedHeadRecommendation = wantsWireFeedHead
+    ? recommendWireFeedHead({
+        applicationScenario: scenario,
+        motionPlatform,
+        wireFeedMode: input.wireFeedMode,
+        wireFeedOrientation: input.wireFeedOrientation,
+        headCoolingRequired: input.headCoolingRequired,
+        seamTrackingRequired: input.seamTrackingRequired,
+        preheatRequired: input.preheatRequired,
+        collisionEnvelopeNotes: input.collisionEnvelopeNotes,
+      })
+    : undefined;
+
+  const brazingWireRecommendation =
+    wantsWireFeedHead || scenario === "laser-brazing" || input.brazingWireFamily
+      ? recommendBrazingWire({
+          baseMaterialA: mat.id,
+          baseMaterialB: input.baseMaterialB,
+          applicationScenario: scenario,
+          brazingWireFamily: input.brazingWireFamily,
+          appearancePriority: input.qualityTargets?.includes("appearance"),
+          wettingPriority: scenario === "laser-brazing" || scenario === "push-pull-brazing",
+          strengthPriority: input.qualityTargets?.includes("strength"),
+        })
+      : undefined;
+
+  const presalesCtx = {
+    applicationScenario: scenario,
+    deliveryScope: input.deliveryScope,
+    baseMaterialB: input.baseMaterialB,
+    thicknessBMm: input.thicknessBMm,
+    jointType: input.jointType,
+    seamType: input.seamType,
+    seamLengthMm: input.seamLengthMm,
+    qualityTargets: input.qualityTargets,
+    targetTaktSec: input.targetTaktSec,
+    annualVolume: input.annualVolume,
+    partsPerHour: input.partsPerHour,
+    stationCount: input.stationCount,
+    coating: input.coating,
+    surfaceCondition: input.surfaceCondition,
+    sealingRequired: input.sealingRequired,
+  };
+  const missingInputs = buildMissingInputs(presalesCtx);
+  const assumptions = buildAssumptions(presalesCtx);
+  const riskLevel = inferRiskLevel(missingInputs, assumptions);
+  const validationPlan = buildValidationPlan(presalesCtx);
+  const acceptanceCriteria = buildAcceptanceCriteria(presalesCtx);
+
+  const hwBase = {
     materialId: mat.id,
     thicknessMm: input.thicknessMm,
     application,
@@ -220,8 +342,43 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
       wobble,
       bessel,
     },
-    confidence: "heuristic",
+    assumptions,
+    missingInputs,
+    riskLevel,
+    validationPlan,
+    acceptanceCriteria,
+    wireFeedHeadRecommendation,
+    brazingWireRecommendation,
+    confidence: "heuristic" as const,
     disclaimer: DISCLAIMER,
     warnings,
+  };
+
+  const assess = assessMaterial({
+    material: input.material,
+    thicknessMm: input.thicknessMm,
+    lightTransmittance: input.lightTransmittance,
+    baseMaterialB: input.baseMaterialB,
+    thicknessBMm: input.thicknessBMm,
+    applicationScenario: input.applicationScenario,
+    qualityTargets: input.qualityTargets,
+    coating: input.coating,
+    surfaceCondition: input.surfaceCondition,
+    brazingWireFamily: input.brazingWireFamily,
+  });
+
+  const bomCtx: BomBuildContext = {
+    materialId: mat.id,
+    application,
+    estimatedPowerW: assess.powerW,
+    weldMode: assess.weldMode,
+  };
+
+  const lineItems = buildBomLineItems(hwBase as HardwareRecommendResult, bomCtx);
+
+  return {
+    ...hwBase,
+    bomSummary: summarizeBom(lineItems),
+    lineLayout: buildLineLayout(lineItems, bomCtx),
   };
 }

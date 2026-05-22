@@ -1,7 +1,7 @@
 {
   "name": "@ethermeta/lasernexus-core",
   "version": "1.1.0",
-  "description": "Laser welding process core library: materials, hardware, DOE, defects, codegen",
+  "description": "Laser welding process core library: materials, hardware, DOE, defects, solution BOM",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

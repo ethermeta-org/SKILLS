@@ -5,8 +5,7 @@ import {
   diagnoseDefect,
   generateTrajectory,
   mapFieldbus,
-  generateCodesysSt,
-  generateCsharp,
+  composeSolutionBom,
   LaserWeldingError,
 } from "@ethermeta/lasernexus-core";
 import type { z } from "zod";
@@ -17,8 +16,7 @@ import type {
   defectDiagnoseSchema,
   trajectorySchema,
   fieldbusMapSchema,
-  codegenStSchema,
-  codegenCsharpSchema,
+  solutionBomSchema,
 } from "./schemas.js";
 
 function jsonContent(data: unknown): { type: "text"; text: string }[] {
@@ -81,17 +79,9 @@ export function handleFieldbusMap(args: z.infer<typeof fieldbusMapSchema>) {
   }
 }
 
-export function handleCodegenSt(args: z.infer<typeof codegenStSchema>) {
+export function handleSolutionBom(args: z.infer<typeof solutionBomSchema>) {
   try {
-    return jsonContent(generateCodesysSt(args));
-  } catch (e) {
-    return handleError(e);
-  }
-}
-
-export function handleCodegenCsharp(args: z.infer<typeof codegenCsharpSchema>) {
-  try {
-    return jsonContent(generateCsharp(args));
+    return jsonContent(composeSolutionBom(args));
   } catch (e) {
     return handleError(e);
   }

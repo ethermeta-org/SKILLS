@@ -4,8 +4,14 @@ export { generateDoeMatrix, type DoeMatrixInput } from "./stage3/doe-matrix.js";
 export { diagnoseDefect, type DefectDiagnoseInput } from "./stage3/defect-expert.js";
 export { generateTrajectory, type TrajectoryInput } from "./stage4/trajectory.js";
 export { mapFieldbus } from "./stage4/fieldbus-models.js";
-export { generateCodesysSt, type CodegenStInput } from "./stage4/codegen/codesys-st.js";
-export { generateCsharp, type CodegenCsharpInput } from "./stage4/codegen/csharp.js";
+export { composeSolutionBom, type SolutionBomInput } from "./stage4/solution-bom.js";
+export {
+  buildBomLineItems,
+  buildLineLayout,
+  summarizeBom,
+  turnkeyVendorsFromCatalog,
+  type BomBuildContext,
+} from "./stage4/bom-builder.js";
 export * from "./core/types.js";
 export * from "./core/errors.js";
 export { setDataRoot, getDataRoot } from "./core/data-loader.js";

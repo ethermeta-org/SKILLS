@@ -1,0 +1,7 @@
+[mcp_servers.lasernexus]
+args = [
+    "-y",
+    "@ethermeta/lasernexus",
+    "--stdio",
+]
+command = "npx"

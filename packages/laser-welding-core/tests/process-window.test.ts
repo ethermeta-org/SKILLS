@@ -3,8 +3,6 @@ import { assessMaterial } from "../src/stage1/process-window.js";
 import { recommendHardware } from "../src/stage2/laser-selector.js";
 import { generateDoeMatrix } from "../src/stage3/doe-matrix.js";
 import { diagnoseDefect } from "../src/stage3/defect-expert.js";
-import { generateCodesysSt } from "../src/stage4/codegen/codesys-st.js";
-
 describe("assessMaterial", () => {
   it("returns process window for copper 1mm", () => {
     const r = assessMaterial({ material: "copper", thicknessMm: 1, jointType: "battery-tab" });
@@ -86,12 +84,3 @@ describe("diagnoseDefect Chinese", () => {
   });
 });
 
-describe("generateCodesysSt", () => {
-  it("includes PreGas PostGas and interlocks", () => {
-    const r = generateCodesysSt({ profile: "battery-tab", preGasMs: 200, postGasMs: 500 });
-    expect(r.code).toContain("PreGas");
-    expect(r.code).toContain("PostGas");
-    expect(r.code).toContain("GasOK");
-    expect(r.code).toContain("RequestEmission");
-  });
-});

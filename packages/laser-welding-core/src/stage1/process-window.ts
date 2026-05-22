@@ -2,10 +2,14 @@ import { getMaterialById } from "../core/data-loader.js";
 import { MaterialNotFoundError, ValidationError } from "../core/errors.js";
 import { effectiveTransmittance, resolveWeldMode } from "../core/polymer.js";
 import { buildProcessParams } from "../core/process-params.js";
+import { recommendBrazingWire } from "../core/brazing-wire.js";
 import {
+  type ApplicationScenario,
+  type BrazingWireFamily,
   DISCLAIMER,
   isPolymerCategory,
   type ProcessWindowResult,
+  type QualityTarget,
   type WeldMode,
 } from "../core/types.js";
 import { lineEnergyDensityJPerMm, powerFromLineEnergy } from "../core/units.js";
@@ -20,6 +24,20 @@ export interface MaterialAssessInput {
   wireDiameterMm?: number;
   targetPenetrationDepthMm?: number;
   lightTransmittance?: number;
+  baseMaterialB?: string;
+  thicknessBMm?: number;
+  coating?: string;
+  surfaceCondition?: string;
+  applicationScenario?: ApplicationScenario;
+  qualityTargets?: QualityTarget[];
+  targetStrengthN?: number;
+  targetShearN?: number;
+  targetResistanceMicroOhm?: number;
+  sealingRequired?: boolean;
+  appearanceGrade?: string;
+  brazingWireFamily?: BrazingWireFamily;
+  wireMaterialGrade?: string;
+  fluxRequired?: boolean;
 }
 
 export function assessMaterial(input: MaterialAssessInput): ProcessWindowResult {
@@ -32,6 +50,31 @@ export function assessMaterial(input: MaterialAssessInput): ProcessWindowResult 
   if (!mat) throw new MaterialNotFoundError(input.material);
 
   const warnings: string[] = [];
+  const materialPairWarnings: string[] = [];
+  const baseMaterialB = input.baseMaterialB ? getMaterialById(input.baseMaterialB) : undefined;
+  if (input.baseMaterialB && baseMaterialB && baseMaterialB.id !== mat.id) {
+    materialPairWarnings.push(
+      `Dissimilar material pair ${mat.id} / ${baseMaterialB.id}: validate metallurgical compatibility, cracking risk, and customer acceptance method.`,
+    );
+  }
+  if (input.baseMaterialB && !baseMaterialB) {
+    materialPairWarnings.push(
+      `Second material ${input.baseMaterialB} is not in the catalog; treat pair compatibility as high risk.`,
+    );
+  }
+  if (input.coating) {
+    warnings.push(
+      `coating/plating provided (${input.coating}): validate burn-off, reflectivity, fumes, and wetting behavior.`,
+    );
+  }
+  if (input.surfaceCondition) {
+    warnings.push(
+      `surface condition provided (${input.surfaceCondition}): confirm cleaning, oxide, and oil control before DOE.`,
+    );
+  }
+  if (input.fluxRequired) {
+    warnings.push("Flux use requested: confirm residue, corrosion, cleaning, and customer process constraints.");
+  }
   const isPolymer = isPolymerCategory(mat.category);
   const transmittance = effectiveTransmittance(mat.lightTransmittance, input.lightTransmittance);
   let weldMode: WeldMode | undefined;
@@ -110,6 +153,25 @@ export function assessMaterial(input: MaterialAssessInput): ProcessWindowResult 
     }
   }
 
+  const wantsBrazing =
+    input.applicationScenario === "laser-brazing" ||
+    input.applicationScenario === "push-pull-brazing" ||
+    Boolean(input.brazingWireFamily);
+  const brazingWireRecommendation = wantsBrazing
+    ? recommendBrazingWire({
+        baseMaterialA: mat.id,
+        baseMaterialB: baseMaterialB?.id ?? input.baseMaterialB,
+        applicationScenario: input.applicationScenario,
+        brazingWireFamily: input.brazingWireFamily,
+        wireMaterialGrade: input.wireMaterialGrade,
+        appearancePriority: input.qualityTargets?.includes("appearance"),
+        wettingPriority:
+          input.applicationScenario === "laser-brazing" ||
+          input.applicationScenario === "push-pull-brazing",
+        strengthPriority: input.qualityTargets?.includes("strength"),
+      })
+    : undefined;
+
   return {
     materialId: mat.id,
     thicknessMm,
@@ -123,6 +185,10 @@ export function assessMaterial(input: MaterialAssessInput): ProcessWindowResult 
     processParams,
     weldMode,
     effectiveTransmittance: isPolymer ? transmittance : undefined,
+    baseMaterialB: baseMaterialB?.id ?? input.baseMaterialB,
+    thicknessBMm: input.thicknessBMm,
+    materialPairWarnings: materialPairWarnings.length > 0 ? materialPairWarnings : undefined,
+    brazingWireRecommendation,
     confidence: "heuristic",
     disclaimer: DISCLAIMER,
     warnings,

@@ -13,3 +13,9 @@
 | pmma | engineering-polymer | ~0.88 | transmission | 2μm typical |
 
 Use MCP `material_assess` with optional `lightTransmittance`, `wireFill`, `gapMm` when available.
+# Presales Material Notes
+
+- Capture material pairs explicitly, even when both sides are the same.
+- Coatings, plating, oxide, oil, and cleaning state can dominate process risk.
+- Dissimilar materials require compatibility warnings and customer acceptance tests.
+- Brazing/filler requests require a wire material family and trial weld validation.

@@ -10,8 +10,7 @@ Skills use MCP tool names. Map to your host as follows:
 | `defect_diagnose` | Call MCP `defect_diagnose` | Use [defects.md](defects.md) |
 | `trajectory_generate` | Call MCP `trajectory_generate` | Generate G-code per user dimensions |
 | `fieldbus_map` | Call MCP `fieldbus_map` | State standard words: LaserReady, LaserOn, ShutterOpen, Fault |
-| `codegen_codesys_st` | Call MCP `codegen_codesys_st` | State PreGas→Ready→Lasing→PostGas interlocks in ST |
-| `codegen_csharp` | Call MCP `codegen_csharp` | Same interlocks in C# |
+| `solution_bom` | Call MCP `solution_bom` | List laser line components, qty, OEM hints, line layout |
 
 ## Install skill only
 
@@ -22,9 +21,9 @@ Use the repository-level Codex plugin metadata in `.codex-plugin/plugin.json`, t
 ```json
 {
   "mcpServers": {
-    "laser-welding": {
+    "lasernexus": {
       "command": "node",
-      "args": ["/absolute/path/to/SKILLS/mcp/laser-welding-server/dist/index.js"]
+      "args": ["/absolute/path/to/SKILLS/mcp/lasernexus/dist/index.js"]
     }
   }
 }
@@ -41,6 +40,7 @@ Build server first: `npm run build` from repository root.
 ## v2 optional fields
 
 - **material_assess**: `lightTransmittance` (0–1), `wireFill`, `gapMm`, `wireDiameterMm`, `targetPenetrationDepthMm`
-- **hardware_recommend**: `motionPlatform` (gantry | single-axis | galvo-scanner), `laserHead`, `lightTransmittance`
+- **hardware_recommend**: `motionPlatform`, `laserHead`, `lightTransmittance` → `bomSummary`, `lineLayout`
+- **solution_bom**: same as hardware + `fieldbusProtocol`, `includeVision`, `wireFill`, `gapMm`
 - **trajectory_generate**: `motionPlatform`
 - **doe_matrix**: `defocusMin`, `defocusMax`, `gapMin`, `gapMax`, `includeGapAxis`

@@ -51,12 +51,12 @@ jobs:
             .opencode \
             .mcp.json \
             skills \
-            mcp/laser-welding-server/dist \
+            mcp/lasernexus/dist \
             packages/laser-welding-core/dist \
             packages/laser-welding-core/data \
             packages/laser-welding-core/templates \
             -x "*.DS_Store"
-          cd mcp/laser-welding-server && npm pack --pack-destination ../../release
+          cd mcp/lasernexus && npm pack --pack-destination ../../release
       - uses: actions/upload-artifact@v4
         with:
           name: release-assets

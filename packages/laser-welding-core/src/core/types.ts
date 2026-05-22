@@ -11,6 +11,62 @@ export type LaserType =
   | "diode-semiconductor";
 export type MotionPlatformId = "gantry" | "single-axis" | "galvo-scanner";
 export type LaserHeadId = "galvo" | "fixed-focus" | "single-axis-rotation";
+export type ApplicationScenario =
+  | "metal-fusion"
+  | "laser-brazing"
+  | "push-pull-brazing"
+  | "polymer-transmission"
+  | "battery-tab"
+  | "busbar"
+  | "seal-welding"
+  | "custom";
+export type DeliveryScope =
+  | "process-package"
+  | "equipment-package"
+  | "presales-solution";
+export type QualityTarget =
+  | "strength"
+  | "sealing"
+  | "conductivity"
+  | "appearance"
+  | "low-spatter"
+  | "low-heat-input";
+export type AutomationLevel =
+  | "manual"
+  | "semi-auto"
+  | "robot"
+  | "gantry-line"
+  | "galvo-line"
+  | "turnkey-line";
+export type WireFeedMode = "push-pull" | "push" | "pull" | "manual-assist";
+export type WireFeedOrientation = "front" | "rear" | "side" | "coaxial" | "near-coaxial";
+export type BrazingWireFamily =
+  | "CuSi"
+  | "AlSi"
+  | "Ni-based"
+  | "Cu-based"
+  | "stainless-filler"
+  | "custom";
+export type RiskLevel = "low" | "medium" | "high";
+export type BudgetLevel = "low" | "mid" | "high";
+
+export interface WireFeedHeadRecommendation {
+  headType: string;
+  feedMode: WireFeedMode;
+  orientation: WireFeedOrientation;
+  compatibleMotion: MotionPlatformId[];
+  coolingRequired: boolean;
+  notes: string[];
+  risks: string[];
+}
+
+export interface BrazingWireRecommendation {
+  family: BrazingWireFamily;
+  compatibleMaterials: string[];
+  notes: string[];
+  risks: string[];
+  validation: string[];
+}
 
 export interface MaterialRecord {
   id: string;
@@ -66,9 +122,56 @@ export interface ProcessWindowResult {
   processParams?: ProcessParams;
   weldMode?: WeldMode;
   effectiveTransmittance?: number;
+  baseMaterialB?: string;
+  thicknessBMm?: number;
+  materialPairWarnings?: string[];
+  brazingWireRecommendation?: BrazingWireRecommendation;
   confidence: "heuristic";
   disclaimer: string;
   warnings: string[];
+}
+
+export type BomCategory =
+  | "laser-source"
+  | "beam-delivery"
+  | "welding-head"
+  | "motion"
+  | "cooling"
+  | "gas-delivery"
+  | "fume-extraction"
+  | "wire-feeder"
+  | "plc-hmi"
+  | "fieldbus"
+  | "safety"
+  | "fixture"
+  | "vision-qa"
+  | "integration";
+
+export interface BomLineItem {
+  id: string;
+  category: BomCategory;
+  name: { en: string; zh: string };
+  qty: number;
+  unit: "set" | "ea" | "line";
+  required: boolean;
+  oemHint?: string;
+  specs?: Record<string, string | number>;
+  notes?: string;
+}
+
+export interface LineLayout {
+  workflow: string[];
+  stations?: Array<{
+    id: string;
+    name: { en: string; zh: string };
+    componentIds: string[];
+  }>;
+}
+
+export interface BomSummary {
+  itemCount: number;
+  categories: BomCategory[];
+  requiredCount: number;
 }
 
 export interface HardwareRecommendResult {
@@ -88,6 +191,34 @@ export interface HardwareRecommendResult {
     wobble?: { amplitudeMm: number; frequencyHz: number };
     bessel?: { applicable: boolean; notes: string; annularRatio?: string };
   };
+  bomSummary: BomSummary;
+  lineLayout: LineLayout;
+  assumptions?: string[];
+  missingInputs?: string[];
+  riskLevel?: RiskLevel;
+  validationPlan?: string[];
+  acceptanceCriteria?: string[];
+  wireFeedHeadRecommendation?: WireFeedHeadRecommendation;
+  brazingWireRecommendation?: BrazingWireRecommendation;
+  confidence: "heuristic";
+  disclaimer: string;
+  warnings: string[];
+}
+
+export interface SolutionBomResult {
+  materialId: string;
+  thicknessMm: number;
+  application: string;
+  lineItems: BomLineItem[];
+  lineLayout: LineLayout;
+  turnkeyVendors?: string[];
+  assumptions: string[];
+  missingInputs: string[];
+  riskLevel: RiskLevel;
+  validationPlan: string[];
+  acceptanceCriteria: string[];
+  wireFeedHeadRecommendation?: WireFeedHeadRecommendation;
+  brazingWireRecommendation?: BrazingWireRecommendation;
   confidence: "heuristic";
   disclaimer: string;
   warnings: string[];
@@ -101,6 +232,11 @@ export interface DoeMatrixResult {
     lineEnergyJPerMm: number;
     defocusMm?: number;
     gapMm?: number;
+    wireSpeedMmPerS?: number;
+    wireFeedAngleDeg?: number;
+    preheatPowerW?: number;
+    shieldGasLpm?: number;
+    clampForceN?: number;
   }>;
   csv: string;
   confidence: "heuristic";
@@ -133,14 +269,6 @@ export interface FieldbusMapResult {
   protocol: string;
   statusWords: Record<string, string>;
   controlWords: Record<string, string>;
-  confidence: "heuristic";
-  disclaimer: string;
-}
-
-export interface CodegenResult {
-  language: "st" | "csharp";
-  code: string;
-  profile: string;
   confidence: "heuristic";
   disclaimer: string;
 }

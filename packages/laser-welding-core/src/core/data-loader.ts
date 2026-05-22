@@ -3,11 +3,17 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AliasMap } from "./aliases.js";
 import { matchesAlias, resolveMaterialId } from "./aliases.js";
-import type { LaserRecord, MaterialRecord } from "./types.js";
+import type {
+  BrazingWireFamily,
+  LaserRecord,
+  MaterialRecord,
+  MotionPlatformId,
+  WireFeedMode,
+  WireFeedOrientation,
+} from "./types.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let dataRoot = join(__dirname, "../../data");
-const templateRoot = join(__dirname, "../../templates");
 
 export function setDataRoot(root: string): void {
   dataRoot = root;
@@ -60,11 +66,6 @@ export function loadFieldbus(protocol: string): {
   return loadJson(join("fieldbus", file));
 }
 
-export function loadTemplateSync(name: string): string {
-  return readFileSync(join(templateRoot, name), "utf-8");
-}
-
-
 export interface EquipmentCatalog {
   motionPlatforms: Array<{ id: string; aliases?: AliasMap }>;
   laserHeads: Array<{ id: string; compatibleMotion: string[]; aliases?: AliasMap }>;
@@ -72,6 +73,38 @@ export interface EquipmentCatalog {
 
 export function loadEquipment(): EquipmentCatalog {
   return loadJson<EquipmentCatalog>("equipment.json");
+}
+
+export interface BrazingWireCatalog {
+  families: Array<{
+    family: BrazingWireFamily;
+    compatibleMaterials: string[];
+    notes: string[];
+    risks: string[];
+  }>;
+}
+
+export function loadBrazingWires(): BrazingWireCatalog {
+  return loadJson<BrazingWireCatalog>("brazing-wires.json");
+}
+
+export interface WireFeedHeadCatalog {
+  heads: Array<{
+    id: string;
+    headType: string;
+    feedMode: WireFeedMode;
+    orientations: WireFeedOrientation[];
+    compatibleMotion: Array<
+      MotionPlatformId | "robot" | "gantry-line" | "turnkey-line" | "manual" | "semi-auto"
+    >;
+    coolingRequired: boolean;
+    notes: string[];
+    risks: string[];
+  }>;
+}
+
+export function loadWireFeedHeads(): WireFeedHeadCatalog {
+  return loadJson<WireFeedHeadCatalog>("wire-feed-heads.json");
 }
 
 export function resolveMotionPlatform(input: string): string | undefined {

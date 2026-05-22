@@ -11,3 +11,6 @@ When MCP `material_assess` is unavailable:
 7. Gas: stainless → N₂; copper/aluminum → Ar; document in output.
 
 Mark result `confidence: heuristic` and `source: fallback-doc`.
+# Push-Pull Brazing DOE Axes
+
+For push-pull brazing, validate power, speed, defocus, gap, wire speed, wire angle, preheat power, shielding gas, and clamp force. These are DOE starting points only, not production release settings.

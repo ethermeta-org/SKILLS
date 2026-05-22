@@ -13,6 +13,16 @@ export interface DoeMatrixInput {
   speedMin: number;
   speedMax: number;
   gridSize?: number;
+  wireSpeedMin?: number;
+  wireSpeedMax?: number;
+  wireFeedAngleMin?: number;
+  wireFeedAngleMax?: number;
+  preheatPowerMin?: number;
+  preheatPowerMax?: number;
+  shieldGasMin?: number;
+  shieldGasMax?: number;
+  clampForceMin?: number;
+  clampForceMax?: number;
 }
 
 export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
@@ -23,6 +33,14 @@ export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
 
   const matrix: DoeMatrixResult["matrix"] = [];
   let idx = 0;
+  const interpolate = (
+    min: number | undefined,
+    max: number | undefined,
+    ratio: number,
+  ): number | undefined => {
+    if (min === undefined || max === undefined) return undefined;
+    return Math.round((min + (max - min) * ratio) * 100) / 100;
+  };
 
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
@@ -46,6 +64,12 @@ export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
         const gt = n === 1 ? 0 : i / (n - 1);
         row.gapMm = Math.round((input.gapMin + (input.gapMax - input.gapMin) * gt) * 100) / 100;
       }
+      const axisT = n === 1 ? 0 : (i + j) / (2 * (n - 1));
+      row.wireSpeedMmPerS = interpolate(input.wireSpeedMin, input.wireSpeedMax, axisT);
+      row.wireFeedAngleDeg = interpolate(input.wireFeedAngleMin, input.wireFeedAngleMax, axisT);
+      row.preheatPowerW = interpolate(input.preheatPowerMin, input.preheatPowerMax, axisT);
+      row.shieldGasLpm = interpolate(input.shieldGasMin, input.shieldGasMax, axisT);
+      row.clampForceN = interpolate(input.clampForceMin, input.clampForceMax, axisT);
       matrix.push(row);
     }
   }
@@ -53,11 +77,22 @@ export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
   let header = "sampleId,powerW,speedMmPerS,lineEnergyJPerMm";
   if (input.defocusMin !== undefined) header += ",defocusMm";
   if (input.includeGapAxis) header += ",gapMm";
+  if (input.wireSpeedMin !== undefined && input.wireSpeedMax !== undefined) header += ",wireSpeedMmPerS";
+  if (input.wireFeedAngleMin !== undefined && input.wireFeedAngleMax !== undefined)
+    header += ",wireFeedAngleDeg";
+  if (input.preheatPowerMin !== undefined && input.preheatPowerMax !== undefined) header += ",preheatPowerW";
+  if (input.shieldGasMin !== undefined && input.shieldGasMax !== undefined) header += ",shieldGasLpm";
+  if (input.clampForceMin !== undefined && input.clampForceMax !== undefined) header += ",clampForceN";
   const rows = matrix.map(
     (r) => {
       let line = `${r.sampleId},${r.powerW},${r.speedMmPerS},${r.lineEnergyJPerMm}`;
       if (r.defocusMm !== undefined) line += `,${r.defocusMm}`;
       if (r.gapMm !== undefined) line += `,${r.gapMm}`;
+      if (r.wireSpeedMmPerS !== undefined) line += `,${r.wireSpeedMmPerS}`;
+      if (r.wireFeedAngleDeg !== undefined) line += `,${r.wireFeedAngleDeg}`;
+      if (r.preheatPowerW !== undefined) line += `,${r.preheatPowerW}`;
+      if (r.shieldGasLpm !== undefined) line += `,${r.shieldGasLpm}`;
+      if (r.clampForceN !== undefined) line += `,${r.clampForceN}`;
       return line;
     },
   );

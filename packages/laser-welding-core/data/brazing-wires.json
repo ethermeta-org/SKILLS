@@ -1,0 +1,40 @@
+{
+  "families": [
+    {
+      "family": "CuSi",
+      "compatibleMaterials": ["steel", "stainless-304", "galvanized-steel"],
+      "notes": [
+        "Common family for brazing-style joining where wetting and bead appearance matter.",
+        "Validate coating behavior, corrosion requirements, and customer material standard."
+      ],
+      "risks": ["Coating burn-off, wetting instability, and appearance variation require trial weld validation."]
+    },
+    {
+      "family": "AlSi",
+      "compatibleMaterials": ["aluminum-6061", "aluminum"],
+      "notes": [
+        "Common family for aluminum brazing-style applications.",
+        "Surface oxide and cleaning state strongly affect wetting."
+      ],
+      "risks": ["Oxide layer and heat input sensitivity can cause lack of wetting or collapse."]
+    },
+    {
+      "family": "Ni-based",
+      "compatibleMaterials": ["stainless-304", "nickel-alloy", "high-temperature-alloy"],
+      "notes": ["Candidate family for corrosion or temperature-driven applications where compatible."],
+      "risks": ["Final grade depends on corrosion, temperature, and customer standard requirements."]
+    },
+    {
+      "family": "Cu-based",
+      "compatibleMaterials": ["copper", "copper-ofc", "brass"],
+      "notes": ["Candidate family for copper-family filler applications."],
+      "risks": ["High thermal conductivity and reflectivity require careful power and preheat validation."]
+    },
+    {
+      "family": "stainless-filler",
+      "compatibleMaterials": ["stainless-304"],
+      "notes": ["Filler family for stainless applications where filler welding is intended rather than brazing."],
+      "risks": ["Clarify whether the process is fusion welding with filler or brazing before final selection."]
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "components": [
+    {
+      "id": "laser-fiber-1064",
+      "category": "laser-source",
+      "name": { "en": "Fiber laser source (1064 nm)", "zh": "光纤激光器 (1064 nm)" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["laser-fiber-1064"]
+    },
+    {
+      "id": "laser-fiber-2um",
+      "category": "laser-source",
+      "name": { "en": "Fiber laser source (2 μm)", "zh": "光纤激光器 (2 μm)" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["laser-fiber-2um"]
+    },
+    {
+      "id": "laser-green",
+      "category": "laser-source",
+      "name": { "en": "Green fiber laser module (515 nm)", "zh": "绿光光纤激光模块 (515 nm)" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["laser-fiber-green"]
+    },
+    {
+      "id": "laser-blue",
+      "category": "laser-source",
+      "name": { "en": "Blue diode laser module (450 nm)", "zh": "蓝光半导体激光模块 (450 nm)" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["laser-diode-blue"]
+    },
+    {
+      "id": "laser-diode",
+      "category": "laser-source",
+      "name": { "en": "Diode laser source (915–980 nm)", "zh": "半导体激光器 (915–980 nm)" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["laser-diode-semiconductor"]
+    },
+    {
+      "id": "beam-fiber-qbh",
+      "category": "beam-delivery",
+      "name": { "en": "Process fiber + QBH connector", "zh": "传能光纤 + QBH 接头" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["beam-fiber", "beam-wobble", "beam-galvo"]
+    },
+    {
+      "id": "beam-wobble-module",
+      "category": "beam-delivery",
+      "name": { "en": "Wobble / scan oscillator module", "zh": "摆动 / 扫描振荡模块" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["beam-wobble"]
+    },
+    {
+      "id": "head-fixed-focus",
+      "category": "welding-head",
+      "name": { "en": "Fixed-focus welding head", "zh": "定焦焊接头" },
+      "qty": 1,
+      "unit": "ea",
+      "required": true,
+      "tags": ["head-fixed-focus"]
+    },
+    {
+      "id": "head-galvo",
+      "category": "welding-head",
+      "name": { "en": "Galvo scanner welding head", "zh": "振镜焊接头" },
+      "qty": 1,
+      "unit": "ea",
+      "required": true,
+      "tags": ["head-galvo"]
+    },
+    {
+      "id": "head-rotation",
+      "category": "welding-head",
+      "name": { "en": "Single-axis rotation welding head", "zh": "单轴旋转焊接头" },
+      "qty": 1,
+      "unit": "ea",
+      "required": false,
+      "tags": ["head-single-axis-rotation"]
+    },
+    {
+      "id": "motion-gantry",
+      "category": "motion",
+      "name": { "en": "Gantry motion system (X-Y-Z)", "zh": "龙门运动系统 (X-Y-Z)" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["motion-gantry"]
+    },
+    {
+      "id": "motion-single-axis",
+      "category": "motion",
+      "name": { "en": "Single-axis motion stage", "zh": "单轴运动平台" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["motion-single-axis"]
+    },
+    {
+      "id": "motion-galvo-stage",
+      "category": "motion",
+      "name": { "en": "Galvo scanner stage", "zh": "振镜扫描平台" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["motion-galvo-scanner"]
+    },
+    {
+      "id": "chiller",
+      "category": "cooling",
+      "name": { "en": "Laser chiller / cooling unit", "zh": "激光冷水机" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["always"]
+    },
+    {
+      "id": "gas-delivery",
+      "category": "gas-delivery",
+      "name": { "en": "Shield gas manifold + flow meter", "zh": "保护气路 + 流量计" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["metal"]
+    },
+    {
+      "id": "fume-standard",
+      "category": "fume-extraction",
+      "name": { "en": "Fume extraction / dust collector", "zh": "除尘 / 排烟系统" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["metal", "brazing"]
+    },
+    {
+      "id": "fume-enhanced",
+      "category": "fume-extraction",
+      "name": { "en": "High-capacity fume extraction (reflective metals)", "zh": "大功率除尘系统（高反材料）" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["high-reflect"]
+    },
+    {
+      "id": "wire-feeder",
+      "category": "wire-feeder",
+      "name": { "en": "Push-pull wire feeder", "zh": "推拉丝送丝机" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["brazing", "wire-fill"]
+    },
+    {
+      "id": "head-push-pull-brazing",
+      "category": "welding-head",
+      "name": { "en": "Push-pull laser brazing head", "zh": "推拉丝激光钎焊头" },
+      "qty": 1,
+      "unit": "ea",
+      "required": true,
+      "tags": ["head-push-pull", "brazing", "wire-fill"]
+    },
+    {
+      "id": "wire-consumable-family",
+      "category": "wire-feeder",
+      "name": { "en": "Brazing / filler wire material family", "zh": "钎焊 / 填丝焊丝材料族" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["brazing-wire", "brazing", "wire-fill"]
+    },
+    {
+      "id": "preheat-module",
+      "category": "beam-delivery",
+      "name": { "en": "Preheat module", "zh": "预热模块" },
+      "qty": 1,
+      "unit": "set",
+      "required": false,
+      "tags": ["preheat"]
+    },
+    {
+      "id": "seam-tracking",
+      "category": "vision-qa",
+      "name": { "en": "Seam tracking sensor", "zh": "焊缝跟踪传感器" },
+      "qty": 1,
+      "unit": "set",
+      "required": false,
+      "tags": ["seam-tracking"]
+    },
+    {
+      "id": "plc-hmi",
+      "category": "plc-hmi",
+      "name": { "en": "PLC + HMI station", "zh": "PLC + 人机界面站" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["turnkey"]
+    },
+    {
+      "id": "fieldbus-gateway",
+      "category": "fieldbus",
+      "name": { "en": "Fieldbus gateway + safety I/O", "zh": "总线网关 + 安全 IO" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["turnkey", "fieldbus"]
+    },
+    {
+      "id": "safety-interlock",
+      "category": "safety",
+      "name": { "en": "Laser safety interlock + light curtain + E-stop", "zh": "激光安全联锁 + 光栅 + 急停" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["always"]
+    },
+    {
+      "id": "fixture-clamp",
+      "category": "fixture",
+      "name": { "en": "Welding fixture + clamping", "zh": "焊接夹具 + 压紧" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["always"]
+    },
+    {
+      "id": "fixture-transmission",
+      "category": "fixture",
+      "name": { "en": "Transmission weld clamp (transparent stack)", "zh": "透射焊压合夹具（透光叠层）" },
+      "qty": 1,
+      "unit": "set",
+      "required": true,
+      "tags": ["polymer-transmission"]
+    },
+    {
+      "id": "vision-qa",
+      "category": "vision-qa",
+      "name": { "en": "Weld vision / power monitoring", "zh": "焊缝视觉 / 功率监测" },
+      "qty": 1,
+      "unit": "set",
+      "required": false,
+      "tags": ["vision"]
+    },
+    {
+      "id": "line-integration",
+      "category": "integration",
+      "name": { "en": "Line integration + MES interface", "zh": "产线集成 + MES 接口" },
+      "qty": 1,
+      "unit": "line",
+      "required": true,
+      "tags": ["turnkey"]
+    }
+  ]
+}

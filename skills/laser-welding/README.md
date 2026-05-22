@@ -1,6 +1,6 @@
 # Laser Welding Skills (Official)
 
-Industrial laser welding decision support for automation and process engineers: material assessment, hardware selection, DOE, defect diagnosis, motion programs, fieldbus mapping, and PLC code generation.
+Industrial laser welding decision support for automation and process engineers: material assessment, hardware selection, DOE, defect diagnosis, motion programs, fieldbus mapping, and turnkey solution BOM.
 
 Integrates with **Claude Code**, **Codex**, **OpenCode**, and **MCP** clients.
 
@@ -23,12 +23,11 @@ Integrates with **Claude Code**, **Codex**, **OpenCode**, and **MCP** clients.
 - DOE: power–speed matrix with line energy J/mm
 - Defects: blowout, lack of fusion, porosity, cracking → quantitative tuning
 
-### Stage 4 — Automation & codegen
+### Stage 4 — Automation & BOM
 
 - Trajectory: G-code / motion snippets
 - Fieldbus: OPC UA, PROFINET, EtherCAT status/control word templates
-- PLC: CODESYS ST `FB_LaserControl` (PreGas, PostGas, gas-before-light interlocks)
-- C#: matching laser state machine
+- Solution BOM: component list (laser, motion, head, cooling, gas, safety, integration) + line layout
 
 ## Installation
 
@@ -57,7 +56,7 @@ Add to `.cursor/mcp.json` or host MCP config:
 ```json
 {
   "mcpServers": {
-    "laser-welding": {
+    "lasernexus": {
       "command": "npx",
       "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
     }
@@ -142,35 +141,20 @@ With MCP connected, call **`material_assess`**:
 }
 ```
 
-### Example 2 — CODESYS `FB_LaserControl` ST
+### Example 2 — Turnkey solution BOM
 
-**`codegen_codesys_st`**
+**`solution_bom`**
 
 ```json
 {
-  "profile": "battery-tab",
-  "preGasMs": 200,
-  "postGasMs": 500
+  "material": "copper",
+  "thicknessMm": 1.2,
+  "application": "laser-brazing-push-pull",
+  "motionPlatform": "gantry"
 }
 ```
 
-**Excerpt**
-
-```iecst
-FUNCTION_BLOCK FB_LaserControl
-...
-    PreGas:
-        Busy := TRUE;
-        tonPreGas(IN := TRUE, PT := PreGasMs);
-        IF tonPreGas.Q AND GasOK THEN
-            state := Ready;
-        END_IF
-    Lasing:
-        RequestEmission := LaserReady AND ShutterOpen AND GasOK AND NOT Fault;
-...
-```
-
-Full block returned in tool JSON `code` field.
+Returns `lineItems` (component id, category, qty, OEM hints) and `lineLayout` (workflow + stations for turnkey lines).
 
 ## Configuration
 
@@ -194,8 +178,7 @@ Full block returned in tool JSON `code` field.
 | `defect_diagnose` | Defect actions |
 | `trajectory_generate` | G-code |
 | `fieldbus_map` | Protocol mapping |
-| `codegen_codesys_st` | ST function block |
-| `codegen_csharp` | C# controller |
+| `solution_bom` | Turnkey component BOM + line layout |
 
 ## Disclaimer
 
