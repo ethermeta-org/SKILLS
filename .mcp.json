@@ -2,7 +2,7 @@
   "mcpServers": {
     "lasernexus": {
       "command": "npx",
-      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
+      "args": ["-y", "@ethermeta/lasernexus", "mcp"]
     }
   }
 }

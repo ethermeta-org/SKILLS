@@ -23,7 +23,7 @@ Use the repository-level Codex plugin metadata in `.codex-plugin/plugin.json`, t
   "mcpServers": {
     "lasernexus": {
       "command": "node",
-      "args": ["/absolute/path/to/SKILLS/mcp/lasernexus/dist/index.js"]
+      "args": ["/absolute/path/to/SKILLS/mcp/lasernexus/dist/index.js", "mcp"]
     }
   }
 }

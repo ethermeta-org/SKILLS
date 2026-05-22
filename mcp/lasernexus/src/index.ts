@@ -77,10 +77,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   return { content, isError: false };
 });
 
+function printUsage(): void {
+  console.error(`Usage:
+  lasernexus mcp [--data-dir <path>]
+  lasernexus --version`);
+}
+
 function runCli(): boolean {
-  const { values } = parseArgs({
+  const { positionals, values } = parseArgs({
     options: {
-      stdio: { type: "boolean", default: true },
       "data-dir": { type: "string" },
       version: { type: "boolean" },
     },
@@ -92,11 +97,17 @@ function runCli(): boolean {
     return false;
   }
 
+  const command = positionals[0];
+  if (command !== "mcp") {
+    printUsage();
+    process.exit(1);
+  }
+
   if (values["data-dir"]) {
     setDataRoot(values["data-dir"]);
   }
 
-  return values.stdio !== false;
+  return true;
 }
 
 async function main() {

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Industrial laser welding process engineering skills: material assessment, hardware selection, DOE, defect diagnosis, motion programs, fieldbus mapping, and PLC/C# code generation.",
   "author": {
-    "name": "SKILLS Contributors"
+    "name": "文享(上海)智能科技有限公司",
+    "email": "admin@oneshare.com.cn"
   },
   "homepage": "https://github.com/ethermeta-org/SKILLS",
   "repository": "https://github.com/ethermeta-org/SKILLS",

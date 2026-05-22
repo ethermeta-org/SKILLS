@@ -63,7 +63,7 @@ Then configure MCP if you want tool-backed process and BOM outputs.
 ### 3. MCP via npm
 
 ```bash
-npx -y @ethermeta/lasernexus --stdio
+npx -y @ethermeta/lasernexus mcp
 ```
 
 `.cursor/mcp.json` / `.mcp.json` example:
@@ -73,7 +73,7 @@ npx -y @ethermeta/lasernexus --stdio
   "mcpServers": {
     "lasernexus": {
       "command": "npx",
-      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
+      "args": ["-y", "@ethermeta/lasernexus", "mcp"]
     }
   }
 }
@@ -82,7 +82,7 @@ npx -y @ethermeta/lasernexus --stdio
 Optional custom data catalog:
 
 ```bash
-npx -y @ethermeta/lasernexus --stdio --data-dir /path/to/custom/data
+npx -y @ethermeta/lasernexus mcp --data-dir /path/to/custom/data
 ```
 
 Or in MCP client configuration:
@@ -95,7 +95,7 @@ Or in MCP client configuration:
       "args": [
         "-y",
         "@ethermeta/lasernexus",
-        "--stdio",
+        "mcp",
         "--data-dir",
         "/path/to/lasernexus-data"
       ]
@@ -117,7 +117,7 @@ npm test
 Run the MCP server from the workspace during development:
 
 ```bash
-npm run dev:mcp -- --stdio
+npm run dev:mcp -- mcp
 ```
 
 ## Client installation
@@ -157,8 +157,8 @@ For new projects, use the staged skills:
 
 | Package | Location | Purpose |
 | --- | --- | --- |
-| `@ethermeta/lasernexus-core` | `packages/laser-welding-core` | Core library, data catalogs, process and solution logic |
-| `@ethermeta/lasernexus` | `mcp/lasernexus` | MCP server CLI (`lasernexus`) |
+| [`@ethermeta/lasernexus-core`](packages/laser-welding-core/README.md) | `packages/laser-welding-core` | Core library, data catalogs, process and solution logic |
+| [`@ethermeta/lasernexus`](mcp/lasernexus/README.md) | `mcp/lasernexus` | MCP server CLI (`lasernexus`) |
 
 ## Development
 
@@ -174,7 +174,7 @@ npm install
 npm run build
 npm test
 npm run lint
-npm run dev:mcp -- --stdio
+npm run dev:mcp -- mcp
 ```
 
 The root workspace builds and tests both npm packages. Keep MCP schemas, handlers, and tool listings in sync when changing tool behavior.
@@ -188,6 +188,16 @@ Before release:
 - Confirm `npm run build`, `npm test`, and `npm run lint` pass.
 - Confirm plugin metadata points at the current package names and MCP command.
 - Confirm package versions and generated distribution files are current.
+
+Local npm publish to [@ethermeta](https://www.npmjs.com/org/ethermeta) (after `npm login` or `NPM_TOKEN`):
+
+```bash
+./scripts/publish-npm.sh --check-versions
+./scripts/publish-npm.sh --dry-run
+./scripts/publish-npm.sh
+./scripts/publish-npm.sh --core       # core only
+./scripts/publish-npm.sh --mcp        # MCP only (--lasernexus alias; publish core to npm first)
+```
 
 ## Versioning And Documentation Sync
 

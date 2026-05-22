@@ -1,6 +1,6 @@
 {
   "name": "@ethermeta/lasernexus-core",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Laser welding process core library: materials, hardware, DOE, defects, solution BOM",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,7 +13,9 @@
   },
   "files": [
     "dist",
-    "data"
+    "data",
+    "README.md",
+    "README-ZH.md"
   ],
   "scripts": {
     "build": "tsc",
@@ -30,6 +32,39 @@
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
+  },
+  "author": {
+    "name": "文享(上海)智能科技有限公司",
+    "email": "admin@oneshare.com.cn"
+  },
+  "homepage": "https://github.com/ethermeta-org/SKILLS#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethermeta-org/SKILLS.git",
+    "directory": "packages/laser-welding-core"
+  },
+  "bugs": {
+    "url": "https://github.com/ethermeta-org/SKILLS/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "laser-welding",
+    "lasernexus",
+    "industrial-automation",
+    "brazing",
+    "激光焊接",
+    "钎焊",
+    "process-window",
+    "doe",
+    "defect-diagnosis",
+    "solution-bom",
+    "fieldbus",
+    "typescript-library"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "license": "AGPL-3.0-or-later"
 }

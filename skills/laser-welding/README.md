@@ -58,7 +58,7 @@ Add to `.cursor/mcp.json` or host MCP config:
   "mcpServers": {
     "lasernexus": {
       "command": "npx",
-      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
+      "args": ["-y", "@ethermeta/lasernexus", "mcp"]
     }
   }
 }

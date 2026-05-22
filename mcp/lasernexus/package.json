@@ -1,21 +1,27 @@
 {
   "name": "@ethermeta/lasernexus",
-  "version": "1.1.0",
+  "version": "2.0.1",
   "description": "MCP server for laser welding skill tools",
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
     "lasernexus": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "README-ZH.md"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "node --watch dist/index.js",
+    "pretest": "npm run build",
     "test": "vitest run",
     "lint": "eslint src tests",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ethermeta/lasernexus-core": "1.1.0",
+    "@ethermeta/lasernexus-core": "1.1.1",
     "@modelcontextprotocol/sdk": "^1.12.0",
     "zod": "^3.24.2"
   },
@@ -26,6 +32,39 @@
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
+  },
+  "author": {
+    "name": "文享(上海)智能科技有限公司",
+    "email": "admin@oneshare.com.cn"
+  },
+  "homepage": "https://github.com/ethermeta-org/SKILLS#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethermeta-org/SKILLS.git",
+    "directory": "mcp/lasernexus"
+  },
+  "bugs": {
+    "url": "https://github.com/ethermeta-org/SKILLS/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "laser-welding",
+    "lasernexus",
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "industrial-automation",
+    "brazing",
+    "激光焊接",
+    "钎焊",
+    "cli",
+    "material-assess",
+    "hardware-recommend"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "license": "AGPL-3.0-or-later"
 }

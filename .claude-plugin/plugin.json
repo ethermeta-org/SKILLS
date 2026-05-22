@@ -1,9 +1,10 @@
 {
   "name": "laser-welding-skills",
   "description": "Official laser welding skill: presales workflow, material assessment, hardware selection, push-pull brazing, brazing wire guidance, DOE, defect diagnosis, trajectory, fieldbus, and solution BOM",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "author": {
-    "name": "SKILLS Contributors"
+    "name": "文享(上海)智能科技有限公司",
+    "email": "admin@oneshare.com.cn"
   },
   "homepage": "https://github.com/ethermeta-org/SKILLS",
   "repository": "https://github.com/ethermeta-org/SKILLS",

@@ -12,7 +12,8 @@
     "build": "npm run build -w @ethermeta/lasernexus-core && npm run build -w @ethermeta/lasernexus",
     "test": "npm run test -w @ethermeta/lasernexus-core && npm run test -w @ethermeta/lasernexus",
     "lint": "npm run lint -w @ethermeta/lasernexus-core && npm run lint -w @ethermeta/lasernexus",
-    "dev:mcp": "npm run dev -w @ethermeta/lasernexus"
+    "dev:mcp": "npm run dev -w @ethermeta/lasernexus",
+    "publish:npm": "bash scripts/publish-npm.sh"
   },
   "engines": {
     "node": ">=20"

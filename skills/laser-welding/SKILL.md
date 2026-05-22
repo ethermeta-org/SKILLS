@@ -80,7 +80,7 @@ flowchart TD
 | Claude Code plugin | Use `.claude-plugin/plugin.json` from the repository root |
 | Codex plugin | Use `.codex-plugin/plugin.json`; see `.codex/INSTALL.md` |
 | OpenCode plugin | Use `.opencode/plugins/laser-welding.js`; see `.opencode/INSTALL.md` |
-| MCP (npx) | `npx -y @ethermeta/lasernexus --stdio` |
+| MCP (npx) | `npx -y @ethermeta/lasernexus mcp` |
 
 ## Permanent Out Of Scope
 

@@ -2,6 +2,6 @@
 args = [
     "-y",
     "@ethermeta/lasernexus",
-    "--stdio",
+    "mcp",
 ]
 command = "npx"

@@ -51,7 +51,7 @@ Add the MCP server to your OpenCode MCP configuration:
   "mcp": {
     "lasernexus": {
       "type": "local",
-      "command": ["npx", "-y", "@ethermeta/lasernexus", "--stdio"]
+      "command": ["npx", "-y", "@ethermeta/lasernexus", "mcp"]
     }
   }
 }
@@ -106,7 +106,7 @@ Replace `YOUR_USER` with your Windows user name. Forward slashes are accepted by
 If OpenCode cannot start the Lasernexus MCP server, verify that Node.js 20+ is on your PATH and that `npx` can resolve the package:
 
 ```powershell
-npx -y @ethermeta/lasernexus --help
+npx -y @ethermeta/lasernexus --version
 ```
 
 If your network blocks registry access, install or mirror the MCP package according to your organization's package policy, then update the MCP command to the approved executable.

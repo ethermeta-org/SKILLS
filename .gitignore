@@ -1,3 +1,6 @@
+# Local publish auth (scripts/publish-npm.sh writes this when NPM_TOKEN is set)
+.npmrc
+
 node_modules/
 dist/
 *.tsbuildinfo
@@ -10,3 +13,4 @@ release/
 .vscode/
 docs/
 .idea/
+.claude/

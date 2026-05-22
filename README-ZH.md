@@ -63,7 +63,7 @@ npx skills add <org>/SKILLS --skill laser-welding -g -y
 ### 3. 通过 npm 使用 MCP
 
 ```bash
-npx -y @ethermeta/lasernexus --stdio
+npx -y @ethermeta/lasernexus mcp
 ```
 
 `.cursor/mcp.json` / `.mcp.json` 示例：
@@ -73,7 +73,7 @@ npx -y @ethermeta/lasernexus --stdio
   "mcpServers": {
     "lasernexus": {
       "command": "npx",
-      "args": ["-y", "@ethermeta/lasernexus", "--stdio"]
+      "args": ["-y", "@ethermeta/lasernexus", "mcp"]
     }
   }
 }
@@ -82,7 +82,26 @@ npx -y @ethermeta/lasernexus --stdio
 可选自定义数据目录：
 
 ```bash
-npx -y @ethermeta/lasernexus --stdio --data-dir /path/to/custom/data
+npx -y @ethermeta/lasernexus mcp --data-dir /path/to/custom/data
+```
+
+或在 MCP 客户端配置中指定：
+
+```json
+{
+  "mcpServers": {
+    "lasernexus": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@ethermeta/lasernexus",
+        "mcp",
+        "--data-dir",
+        "/path/to/lasernexus-data"
+      ]
+    }
+  }
+}
 ```
 
 ### 4. 源码运行
@@ -94,6 +113,24 @@ npm install
 npm run build
 npm test
 ```
+
+开发时从 workspace 启动 MCP：
+
+```bash
+npm run dev:mcp -- mcp
+```
+
+## 客户端安装
+
+| 客户端 | 入口 | 说明 |
+|--------|------|------|
+| Claude Code | `.claude-plugin/plugin.json` | Claude 插件元数据与 MCP 注册 |
+| Codex | `.codex-plugin/plugin.json` | Codex 插件元数据 |
+| Codex | `.codex/config.toml` | 本地 Codex skill 与 MCP 配置 |
+| OpenCode | `.opencode/plugins/laser-welding.js` | OpenCode 插件入口 |
+| OpenCode | `.opencode/INSTALL.md` | OpenCode 安装说明 |
+| Cursor | `.mcp.json` | 将 MCP 服务块复制到 Cursor MCP 配置 |
+| 仅 MCP | `.mcp.json` | 不使用插件时的通用 stdio MCP 配置 |
 
 ## 工作流
 
@@ -118,10 +155,10 @@ npm test
 
 ## 包
 
-| 包 | 用途 |
-| --- | --- |
-| `@ethermeta/lasernexus-core` | 核心库、数据目录、工艺与方案逻辑 |
-| `@ethermeta/lasernexus` | MCP 服务 CLI（`lasernexus`） |
+| 包 | 路径 | 用途 |
+| --- | --- | --- |
+| [`@ethermeta/lasernexus-core`](packages/laser-welding-core/README-ZH.md) | `packages/laser-welding-core` | 核心库、数据目录、工艺与方案逻辑 |
+| [`@ethermeta/lasernexus`](mcp/lasernexus/README-ZH.md) | `mcp/lasernexus` | MCP 服务 CLI（`lasernexus`） |
 
 ## 开发
 
@@ -133,6 +170,16 @@ npm run lint
 ```
 
 发布标签 `v*` 会触发 lint、测试、构建、GitHub Release 资产生成（`plugin.zip` 和 npm tarball）、npm 发布与 marketplace 发布。
+
+本地发布到 npm [@ethermeta](https://www.npmjs.com/org/ethermeta)（需先 `npm login` 或设置 `NPM_TOKEN`）：
+
+```bash
+./scripts/publish-npm.sh --check-versions
+./scripts/publish-npm.sh --dry-run
+./scripts/publish-npm.sh
+./scripts/publish-npm.sh --core
+./scripts/publish-npm.sh --mcp        # 同 --lasernexus；须先在 npm 发布对应版本的 core
+```
 
 ## 版本与文档同步
 
