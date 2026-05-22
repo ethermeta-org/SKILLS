@@ -13,8 +13,7 @@
   },
   "files": [
     "dist",
-    "data",
-    "templates"
+    "data"
   ],
   "scripts": {
     "build": "tsc",

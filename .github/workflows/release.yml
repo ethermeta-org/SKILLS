@@ -39,6 +39,7 @@ jobs:
           node-version: "20"
           cache: "npm"
       - run: npm ci
+      - run: rm -rf packages/laser-welding-core/dist mcp/lasernexus/dist
       - run: npm run build
       - name: Package plugin zip
         run: |
@@ -54,7 +55,6 @@ jobs:
             mcp/lasernexus/dist \
             packages/laser-welding-core/dist \
             packages/laser-welding-core/data \
-            packages/laser-welding-core/templates \
             -x "*.DS_Store"
           cd mcp/lasernexus && npm pack --pack-destination ../../release
       - uses: actions/upload-artifact@v4
@@ -98,6 +98,8 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           cache: "npm"
       - run: npm ci
+        if: ${{ env.NPM_TOKEN != '' }}
+      - run: rm -rf packages/laser-welding-core/dist mcp/lasernexus/dist
         if: ${{ env.NPM_TOKEN != '' }}
       - run: npm run build
         if: ${{ env.NPM_TOKEN != '' }}

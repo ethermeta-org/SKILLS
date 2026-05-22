@@ -82,6 +82,11 @@ export interface HardwareRecommendInput {
   sealingRequired?: boolean;
   coating?: string;
   surfaceCondition?: string;
+  wireFill?: boolean;
+  gapMm?: number;
+  fieldbusProtocol?: "opc-ua" | "profinet" | "ethercat";
+  includeVision?: boolean;
+  mesIntegrationRequired?: boolean;
 }
 
 function scoreLaser(
@@ -223,8 +228,18 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
   }
   if (input.budgetLevel) {
     warnings.push(
-      `Budget level '${input.budgetLevel}' is used only as solution complexity guidance; no commercial values are produced.`,
+      `Budget level '${input.budgetLevel}' adjusts BOM/automation complexity only; no commercial values are produced.`,
     );
+    if (input.budgetLevel === "low" && wantsTurnkey) {
+      warnings.push(
+        "Budget level 'low': turnkey PLC/MES/line-integration items are omitted unless fieldbus or vision are explicitly required.",
+      );
+    }
+    if (input.budgetLevel === "high") {
+      warnings.push(
+        "Budget level 'high': vision QA and automation integration items are included where applicable.",
+      );
+    }
   }
 
   if (!motionPlatform && isPolymer && weldMode === "transmission") {
@@ -372,6 +387,17 @@ export function recommendHardware(input: HardwareRecommendInput): HardwareRecomm
     application,
     estimatedPowerW: assess.powerW,
     weldMode: assess.weldMode,
+    wireFill: input.wireFill,
+    gapMm: input.gapMm,
+    fieldbusProtocol: input.fieldbusProtocol,
+    includeVision: input.includeVision,
+    applicationScenario: input.applicationScenario,
+    wireFeedHeadRequired: Boolean(wireFeedHeadRecommendation),
+    brazingWireRequired: Boolean(brazingWireRecommendation),
+    preheatRequired: input.preheatRequired,
+    seamTrackingRequired: input.seamTrackingRequired,
+    budgetLevel: input.budgetLevel,
+    mesIntegrationRequired: input.mesIntegrationRequired,
   };
 
   const lineItems = buildBomLineItems(hwBase as HardwareRecommendResult, bomCtx);

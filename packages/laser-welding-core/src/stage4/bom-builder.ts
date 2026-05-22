@@ -7,6 +7,7 @@ import {
   type BomCategory,
   type BomLineItem,
   type BomSummary,
+  type BudgetLevel,
   type HardwareRecommendResult,
   type LaserType,
   type LineLayout,
@@ -40,6 +41,8 @@ export interface BomBuildContext {
   brazingWireRequired?: boolean;
   preheatRequired?: boolean;
   seamTrackingRequired?: boolean;
+  budgetLevel?: BudgetLevel;
+  mesIntegrationRequired?: boolean;
 }
 
 function loadBomCatalog(): BomCatalog {
@@ -94,11 +97,16 @@ function collectActiveTags(
 
   if (isMetal) tags.add("metal");
   if (wantsBrazing) tags.add("brazing");
-  if (wantsTurnkey) tags.add("turnkey");
-  if (ctx.fieldbusProtocol || wantsTurnkey) tags.add("fieldbus");
+
+  const budget = ctx.budgetLevel ?? "mid";
+  const allowTurnkey =
+    budget !== "low" &&
+    (wantsTurnkey || budget === "high" || ctx.mesIntegrationRequired === true);
+  if (allowTurnkey) tags.add("turnkey");
+  if (ctx.fieldbusProtocol || allowTurnkey) tags.add("fieldbus");
   if (highReflect) tags.add("high-reflect");
   if (wantsBrazing || ctx.wireFill) tags.add("wire-fill");
-  if (ctx.includeVision) tags.add("vision");
+  if (ctx.includeVision || budget === "high") tags.add("vision");
   if (isPolymer && ctx.weldMode === "transmission") tags.add("polymer-transmission");
   if (ctx.wireFeedHeadRequired) tags.add("head-push-pull");
   if (ctx.brazingWireRequired) tags.add("brazing-wire");
@@ -153,6 +161,29 @@ function pickComponents(activeTags: Set<string>): BomCatalogComponent[] {
   }
 
   return picked;
+}
+
+const LOW_BUDGET_OPTIONAL_IDS = new Set([
+  "vision-qa",
+  "line-integration",
+  "plc-hmi",
+  "fieldbus-gateway",
+  "seam-tracking",
+  "preheat-module",
+]);
+
+function applyBudgetFilter(lineItems: BomLineItem[], ctx: BomBuildContext): BomLineItem[] {
+  const budget = ctx.budgetLevel ?? "mid";
+  if (budget !== "low") return lineItems;
+
+  return lineItems.filter((item) => {
+    if (!LOW_BUDGET_OPTIONAL_IDS.has(item.id)) return true;
+    if (item.id === "fieldbus-gateway" && ctx.fieldbusProtocol) return true;
+    if (item.id === "seam-tracking" && ctx.seamTrackingRequired) return true;
+    if (item.id === "preheat-module" && ctx.preheatRequired) return true;
+    if (item.id === "vision-qa" && ctx.includeVision) return true;
+    return false;
+  });
 }
 
 function toLineItem(
@@ -258,7 +289,7 @@ export function buildBomLineItems(
 ): BomLineItem[] {
   const activeTags = collectActiveTags(hw, ctx);
   const components = pickComponents(activeTags);
-  return components.map((c) => toLineItem(c, hw, ctx));
+  return applyBudgetFilter(components.map((c) => toLineItem(c, hw, ctx)), ctx);
 }
 
 export function summarizeBom(lineItems: BomLineItem[]): BomSummary {

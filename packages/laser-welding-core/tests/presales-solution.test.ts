@@ -181,7 +181,40 @@ describe("presales hardware recommendation", () => {
   });
 });
 
+describe("budgetLevel BOM complexity", () => {
+  const base = {
+    material: "stainless-304",
+    thicknessMm: 1,
+    application: "turnkey-line",
+  };
+
+  it("omits automation stack items for low budget", () => {
+    const low = composeSolutionBom({ ...base, budgetLevel: "low" });
+    const high = composeSolutionBom({ ...base, budgetLevel: "high" });
+    const lowIds = new Set(low.lineItems.map((i) => i.id));
+    const highIds = new Set(high.lineItems.map((i) => i.id));
+    expect(lowIds.has("line-integration")).toBe(false);
+    expect(lowIds.has("plc-hmi")).toBe(false);
+    expect(highIds.has("vision-qa")).toBe(true);
+    expect(high.lineItems.length).toBeGreaterThan(low.lineItems.length);
+  });
+});
+
 describe("presales solution BOM", () => {
+  it("returns conceptual BOM when presales inputs are missing", () => {
+    const result = composeSolutionBom({
+      material: "copper",
+      thicknessMm: 1,
+      deliveryScope: "presales-solution",
+      applicationScenario: "metal-fusion",
+    });
+    expect(result.missingInputs.length).toBeGreaterThan(0);
+    expect(result.riskLevel).toBe("high");
+    expect(result.warnings[0]).toContain("conceptual");
+    expect(result.lineItems.map((i) => i.id)).not.toContain("line-integration");
+    expect(result.lineItems.map((i) => i.id)).not.toContain("plc-hmi");
+  });
+
   it("returns push-pull head, wire consumable, assumptions, risk, validation, and acceptance", () => {
     const result = composeSolutionBom({
       material: "stainless-304",

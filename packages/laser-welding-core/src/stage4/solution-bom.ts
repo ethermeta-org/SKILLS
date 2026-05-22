@@ -19,6 +19,19 @@ import {
   type BomBuildContext,
 } from "./bom-builder.js";
 
+const CONCEPTUAL_BOM_CATEGORIES = new Set([
+  "laser-source",
+  "welding-head",
+  "motion",
+  "beam-delivery",
+  "cooling",
+  "safety",
+  "fixture",
+  "gas-delivery",
+  "wire-feeder",
+  "fume-extraction",
+]);
+
 export interface SolutionBomInput extends HardwareRecommendInput {
   fieldbusProtocol?: "opc-ua" | "profinet" | "ethercat";
   includeVision?: boolean;
@@ -64,13 +77,10 @@ export function composeSolutionBom(input: SolutionBomInput): SolutionBomResult {
     brazingWireRequired: Boolean(hw.brazingWireRecommendation ?? assess.brazingWireRecommendation),
     preheatRequired: input.preheatRequired,
     seamTrackingRequired: input.seamTrackingRequired,
+    budgetLevel: input.budgetLevel,
+    mesIntegrationRequired: input.mesIntegrationRequired,
   };
 
-  const lineItems = buildBomLineItems(hw, ctx);
-  const lineLayout = buildLineLayout(lineItems, ctx);
-  const warnings = [...hw.warnings];
-  const vendors = turnkeyVendorsFromCatalog();
-  const { wantsTurnkey } = applicationHints(input.application ?? hw.application);
   const presalesCtx = {
     applicationScenario: input.applicationScenario,
     deliveryScope: input.deliveryScope,
@@ -93,6 +103,18 @@ export function composeSolutionBom(input: SolutionBomInput): SolutionBomResult {
   const riskLevel = inferRiskLevel(missingInputs, assumptions);
   const validationPlan = buildValidationPlan(presalesCtx);
   const acceptanceCriteria = buildAcceptanceCriteria(presalesCtx);
+
+  let lineItems = buildBomLineItems(hw, ctx);
+  const warnings = [...hw.warnings];
+  if (missingInputs.length > 0 && input.deliveryScope === "presales-solution") {
+    warnings.unshift(
+      "Presales solution incomplete: required inputs are missing. BOM is conceptual (core process equipment only) until intake is complete.",
+    );
+    lineItems = lineItems.filter((item) => CONCEPTUAL_BOM_CATEGORIES.has(item.category));
+  }
+  const lineLayout = buildLineLayout(lineItems, ctx);
+  const vendors = turnkeyVendorsFromCatalog();
+  const { wantsTurnkey } = applicationHints(input.application ?? hw.application);
 
   return {
     materialId: hw.materialId,
