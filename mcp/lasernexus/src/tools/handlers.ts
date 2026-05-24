@@ -1,5 +1,6 @@
 import {
   assessMaterial,
+  recommendProcess,
   recommendHardware,
   generateDoeMatrix,
   diagnoseDefect,
@@ -11,6 +12,7 @@ import {
 import type { z } from "zod";
 import type {
   materialAssessSchema,
+  processRecommendSchema,
   hardwareRecommendSchema,
   doeMatrixSchema,
   defectDiagnoseSchema,
@@ -34,6 +36,14 @@ function handleError(err: unknown): { type: "text"; text: string }[] {
 export function handleMaterialAssess(args: z.infer<typeof materialAssessSchema>) {
   try {
     return jsonContent(assessMaterial(args));
+  } catch (e) {
+    return handleError(e);
+  }
+}
+
+export function handleProcessRecommend(args: z.infer<typeof processRecommendSchema>) {
+  try {
+    return jsonContent(recommendProcess(args));
   } catch (e) {
     return handleError(e);
   }

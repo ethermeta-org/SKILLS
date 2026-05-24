@@ -1,16 +1,19 @@
 # Codex tool mapping
 
-Skills use MCP tool names. Map to your host as follows:
+Skills use structured tool names. Route them internally in your host as follows:
 
-| Skill / MCP tool | Codex with MCP | Codex without MCP |
+| Skill tool | Structured route | Reference route |
 |------------------|----------------|-------------------|
-| `material_assess` | Call MCP `material_assess` | Follow [process-window-heuristics.md](process-window-heuristics.md) |
-| `hardware_recommend` | Call MCP `hardware_recommend` | Read [materials.md](materials.md) + recommend 515 nm for copper tab |
-| `doe_matrix` | Call MCP `doe_matrix` | Build power–speed grid manually from ranges |
-| `defect_diagnose` | Call MCP `defect_diagnose` | Use [defects.md](defects.md) |
-| `trajectory_generate` | Call MCP `trajectory_generate` | Generate G-code per user dimensions |
-| `fieldbus_map` | Call MCP `fieldbus_map` | State standard words: LaserReady, LaserOn, ShutterOpen, Fault |
-| `solution_bom` | Call MCP `solution_bom` | List laser line components, qty, OEM hints, line layout |
+| `process_recommend` | Run `process_recommend` | Combine process-window, equipment, DOE, BOM, risks, validation, and acceptance references |
+| `material_assess` | Run `material_assess` | Follow [process-window-heuristics.md](process-window-heuristics.md) |
+| `hardware_recommend` | Run `hardware_recommend` | Read [materials.md](materials.md) and process-window heuristics; select wavelength/head by material and application assumptions |
+| `doe_matrix` | Run `doe_matrix` | Build a grid only from user-provided, structured, or documented ranges; otherwise ask for ranges or provide qualitative DOE axes only |
+| `defect_diagnose` | Run `defect_diagnose` | Use [defects.md](defects.md) |
+| `trajectory_generate` | Run `trajectory_generate` | Generate G-code only when path geometry is complete; otherwise ask one geometry question |
+| `fieldbus_map` | Run `fieldbus_map` | State standard words: LaserReady, LaserOn, ShutterOpen, Fault |
+| `solution_bom` | Run `solution_bom` | List laser line components, qty, OEM hints, line layout |
+
+For welding/process answers, final answers must not mention tool availability, tool calls, MCP, fallback mode, or internal orchestration. Mention tooling only when the user explicitly asks about integration or setup.
 
 ## Install skill only
 

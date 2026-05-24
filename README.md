@@ -13,7 +13,8 @@ Lasernexus helps process and automation engineers move from early welding requir
 - **Push-pull brazing**: wire-feed head, feed mode, feed orientation, nozzle offset, wire speed, preheat, seam tracking, and collision risk.
 - **Brazing wire guidance**: CuSi, AlSi, Ni-based, Cu-based, stainless-filler, and custom families with validation warnings.
 - **OEM candidate families**: IPG, Raycus, Oneshare/文享, Amada/天田, Miyachi/米亚基, Han's/大族, Hymson/海目星, UWLaser/联赢, HGTECH/华工.
-- **MCP tools**: material assessment, hardware recommendation, DOE matrix, defect diagnosis, trajectory, fieldbus, and solution BOM.
+- **Full process recommendation**: with material, thickness, and welding method as the minimum inputs, returns process parameters, equipment selection, DOE range, BOM configuration, risks, and validation guidance.
+- **MCP tools**: full process recommendation, material assessment, hardware recommendation, DOE matrix, defect diagnosis, trajectory, fieldbus, and solution BOM.
 
 ## Install
 
@@ -129,7 +130,9 @@ npm run dev:mcp -- mcp
 | Codex | `.codex/config.toml` | Local Codex configuration for skill and MCP wiring. |
 | OpenCode | `.opencode/plugins/laser-welding.js` | OpenCode plugin entry point. |
 | OpenCode | `.opencode/INSTALL.md` | OpenCode installation instructions. |
-| Cursor | `.mcp.json` | Add or copy the MCP server block into Cursor's MCP configuration. |
+| Cursor | `.cursor-plugin/plugin.json` | Local plugin: `./scripts/install-cursor-plugin.sh copy`. See [cursor.md](skills/laser-welding/references/cursor.md). |
+| Cursor | `.mcp.json` | Optional: copy `lasernexus` MCP block into Cursor MCP settings. |
+| Cursor | [examples/](examples/README.md) | Copy-paste Agent prompts (EN/ZH) to validate skills. |
 | MCP-only | `.mcp.json` | Generic MCP stdio configuration for clients that do not use plugins. |
 
 ## Workflow
@@ -138,13 +141,71 @@ For new projects, use the staged skills:
 
 1. `laser-welding-brainstorm` — collect requirements, missing inputs, assumptions, and readiness.
 2. `laser-welding-write-plan` — write the staged execution plan.
-3. `laser-welding-execute-plan` — call MCP tools or fallback references.
+3. `laser-welding-execute-plan` — produce process parameters, equipment selection, DOE, BOM, risks, and validation guidance.
 4. `laser-welding-verify` — verify disclaimers, units, DOE, BOM, risks, and stop conditions.
+
+In **Cursor Agent** chat, invoke with `/skill-name` or type `@` and pick the Skill. Markdown links navigate docs; they do not invoke skills.
+
+| Skill | Slash command |
+| --- | --- |
+| Full workflow | `/laser-welding` |
+| Requirements intake | `/laser-welding-brainstorm` |
+| Write plan | `/laser-welding-write-plan` |
+| Execute plan | `/laser-welding-execute-plan` |
+| Verify delivery | `/laser-welding-verify` |
+
+## Prompt examples
+
+Copy into Cursor Agent chat after the slash command (or attach the skill with `@`).
+
+**Workflow start (English):**
+
+```text
+/laser-welding-brainstorm
+New laser welding project: 1 mm copper battery tab to nickel busbar, lap joint, low spatter target.
+Missing: takt, fixture, inspection method. Run readiness gating and list assumptions.
+```
+
+**Workflow start (中文):**
+
+```text
+/laser-welding-brainstorm
+新项目：1mm 铜极耳与镍汇流排搭接激光焊接，目标低飞溅。
+缺失：节拍、夹具、检测方式。请做就绪度门禁并列出假设。
+```
+
+**Simplified full recommendation (English):**
+
+```text
+/laser-welding
+Material: stainless-304, thickness: 1 mm, welding method: fillet.
+Provide process parameters, equipment selection, DOE range, BOM configuration, risks, and validation guidance.
+Present only professional conclusions.
+```
+
+**Single scenario — defect diagnosis (English):**
+
+```text
+/laser-welding-execute-plan
+Heavy spatter and porosity on 1.2 mm stainless-304 butt welds. Provide professional diagnosis, tuning actions, and validation steps.
+```
+
+More prompts:
+
+| Resource | Description |
+| --- | --- |
+| [examples/README.md](examples/README.md) | Index and validation checklist |
+| [examples/workflow-en.md](examples/workflow-en.md) | Full 4-step workflow, English |
+| [examples/workflow-zh.md](examples/workflow-zh.md) | 完整四步流程，中文 |
+| [examples/scenarios-en.md](examples/scenarios-en.md) | Material, defects, brazing, BOM, fieldbus |
+| [examples/scenarios-zh.md](examples/scenarios-zh.md) | 材料、缺陷、钎焊、BOM、总线 |
+| [skills/laser-welding/references/cursor.md](skills/laser-welding/references/cursor.md) | Cursor install and invoke |
 
 ## MCP tools
 
 | Tool | Stage | Purpose |
 | --- | --- | --- |
+| `process_recommend` | 1-4 | Process parameters, equipment selection, DOE, BOM, risks, and validation guidance from minimum project inputs |
 | `material_assess` | 1 | Material pair, coating, process window, weld mode, brazing wire warning |
 | `hardware_recommend` | 2 | Laser type, OEM candidates, head, motion, push-pull head, validation plan |
 | `doe_matrix` | 3 | Power/speed/defocus/gap/wire/preheat/gas/clamp DOE grid |

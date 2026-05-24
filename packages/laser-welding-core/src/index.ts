@@ -6,6 +6,11 @@ export { generateTrajectory, type TrajectoryInput } from "./stage4/trajectory.js
 export { mapFieldbus } from "./stage4/fieldbus-models.js";
 export { composeSolutionBom, type SolutionBomInput } from "./stage4/solution-bom.js";
 export {
+  deriveRecommendationDoeInput,
+  recommendProcess,
+  type RecommendationDoeSeed,
+} from "./stage5/process-recommend.js";
+export {
   buildBomLineItems,
   buildLineLayout,
   summarizeBom,
@@ -14,5 +19,10 @@ export {
 } from "./stage4/bom-builder.js";
 export * from "./core/types.js";
 export * from "./core/errors.js";
+export {
+  getJointProfile,
+  listSupportedWeldingMethods,
+  normalizeWeldingMethod,
+} from "./core/joint-profile.js";
 export { setDataRoot, getDataRoot } from "./core/data-loader.js";
 export * from "./core/aliases.js";

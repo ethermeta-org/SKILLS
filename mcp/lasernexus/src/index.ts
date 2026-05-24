@@ -12,6 +12,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import {
   materialAssessSchema,
+  processRecommendSchema,
   hardwareRecommendSchema,
   doeMatrixSchema,
   defectDiagnoseSchema,
@@ -21,6 +22,7 @@ import {
 } from "./tools/schemas.js";
 import {
   handleMaterialAssess,
+  handleProcessRecommend,
   handleHardwareRecommend,
   handleDoeMatrix,
   handleDefectDiagnose,
@@ -49,6 +51,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   let content;
 
   switch (name) {
+    case "process_recommend":
+      content = handleProcessRecommend(processRecommendSchema.parse(args ?? {}));
+      break;
     case "material_assess":
       content = handleMaterialAssess(materialAssessSchema.parse(args ?? {}));
       break;

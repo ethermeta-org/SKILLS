@@ -2,6 +2,83 @@
 
 export const MCP_TOOLS = [
   {
+    name: "process_recommend",
+    description:
+      "Full laser welding recommendation from simple inputs: process parameters, equipment, DOE, BOM, risks, validation, and acceptance.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        material: { type: "string", description: "e.g. copper, stainless-304, 铜" },
+        thicknessMm: { type: "number" },
+        weldingMethod: { type: "string", description: "e.g. 叠焊, 拼焊, 角焊, lap, butt, fillet" },
+        application: { type: "string" },
+        lightTransmittance: { type: "number", description: "0-1, overrides catalog for plastics" },
+        motionPlatform: { type: "string", enum: ["gantry", "single-axis", "galvo-scanner"] },
+        laserHead: { type: "string", enum: ["galvo", "fixed-focus", "single-axis-rotation"] },
+        preferredLaserType: {
+          type: "string",
+          enum: ["fiber-1064", "fiber-2um", "fiber-green", "diode-blue", "diode-semiconductor"],
+        },
+        fieldbusProtocol: { type: "string", enum: ["opc-ua", "profinet", "ethercat"] },
+        includeVision: { type: "boolean" },
+        seamLengthMm: { type: "number" },
+        targetSpeedMmPerS: { type: "number" },
+        gapMm: { type: "number" },
+        wireFill: { type: "boolean" },
+        wireDiameterMm: { type: "number" },
+        targetPenetrationDepthMm: { type: "number" },
+        baseMaterialB: { type: "string" },
+        thicknessBMm: { type: "number" },
+        coating: { type: "string" },
+        surfaceCondition: { type: "string" },
+        applicationScenario: {
+          type: "string",
+          enum: [
+            "metal-fusion",
+            "laser-brazing",
+            "push-pull-brazing",
+            "polymer-transmission",
+            "battery-tab",
+            "busbar",
+            "seal-welding",
+            "custom",
+          ],
+        },
+        deliveryScope: {
+          type: "string",
+          enum: ["process-package", "equipment-package", "presales-solution"],
+        },
+        qualityTargets: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: ["strength", "sealing", "conductivity", "appearance", "low-spatter", "low-heat-input"],
+          },
+        },
+        targetTaktSec: { type: "number" },
+        partsPerHour: { type: "number" },
+        stationCount: { type: "number" },
+        preferredBrands: { type: "array", items: { type: "string" } },
+        forbiddenBrands: { type: "array", items: { type: "string" } },
+        budgetLevel: {
+          type: "string",
+          enum: ["low", "mid", "high"],
+          description: "Coarse complexity constraint only; never commercial values.",
+        },
+        wireFeedMode: { type: "string", enum: ["push-pull", "push", "pull", "manual-assist"] },
+        wireFeedOrientation: {
+          type: "string",
+          enum: ["front", "rear", "side", "coaxial", "near-coaxial"],
+        },
+        brazingWireFamily: {
+          type: "string",
+          enum: ["CuSi", "AlSi", "Ni-based", "Cu-based", "stainless-filler", "custom"],
+        },
+      },
+      required: ["material", "thicknessMm", "weldingMethod"],
+    },
+  },
+  {
     name: "material_assess",
     description:
       "Stage 1: Process window with processParams (power curve, defocus sign, penetration), weldMode, lightTransmittance for plastics.",

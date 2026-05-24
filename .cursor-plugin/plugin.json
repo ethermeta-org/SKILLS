@@ -16,15 +16,37 @@
     "codesys",
     "mcp",
     "skills",
-    "\u6fc0\u5149\u710a\u63a5",
-    "\u6587\u4eab",
-    "\u5927\u65cf",
-    "\u6d77\u76ee\u661f",
-    "\u8054\u8d62",
-    "\u534e\u5de5\u6fc0\u5149",
+    "激光焊接",
+    "文享",
+    "大族",
+    "海目星",
+    "联赢",
+    "华工激光",
     "brazing",
-    "\u948e\u710a",
+    "钎焊",
     "lasernexus"
   ],
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Laser Welding Skills",
+    "shortDescription": "Laser welding process engineering, DOE, automation, and code generation",
+    "longDescription": "Use Laser Welding Skills to assess weldability, choose laser and optics hardware, build DOE matrices, diagnose defects, generate trajectories, map fieldbus signals, and generate CODESYS ST or C# laser-control code.",
+    "developerName": "SKILLS Contributors",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Help me design a laser welding process window.",
+      "Diagnose this laser welding defect and propose DOE next steps.",
+      "Generate a CODESYS laser control function block."
+    ],
+    "websiteURL": "https://github.com/ethermeta-org/SKILLS",
+    "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
+    "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
 }

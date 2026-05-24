@@ -91,6 +91,43 @@ export const materialAssessSchema = z.object({
   ...presalesFields,
 });
 
+export const processRecommendSchema = z.object({
+  material: z.string().describe("Material id or name, e.g. copper, stainless-304, 铜"),
+  thicknessMm: z.number().positive(),
+  weldingMethod: z.string().describe("e.g. 叠焊, 拼焊, 角焊, lap, butt, fillet"),
+  application: z.string().optional(),
+  lightTransmittance: z.number().min(0).max(1).optional(),
+  motionPlatform: z.enum(["gantry", "single-axis", "galvo-scanner"]).optional(),
+  laserHead: z.enum(["galvo", "fixed-focus", "single-axis-rotation"]).optional(),
+  preferredLaserType: z
+    .enum(["fiber-1064", "fiber-2um", "fiber-green", "diode-blue", "diode-semiconductor"])
+    .optional(),
+  fieldbusProtocol: z.enum(["opc-ua", "profinet", "ethercat"]).optional(),
+  includeVision: z.boolean().optional(),
+  seamLengthMm: z.number().positive().optional(),
+  targetSpeedMmPerS: z.number().positive().optional(),
+  gapMm: z.number().positive().optional(),
+  wireFill: z.boolean().optional(),
+  wireDiameterMm: z.number().positive().optional(),
+  targetPenetrationDepthMm: z.number().positive().optional(),
+  baseMaterialB: z.string().optional(),
+  thicknessBMm: z.number().positive().optional(),
+  coating: z.string().optional(),
+  surfaceCondition: z.string().optional(),
+  applicationScenario: applicationScenarioSchema.optional(),
+  deliveryScope: deliveryScopeSchema.optional(),
+  qualityTargets: z.array(qualityTargetSchema).optional(),
+  targetTaktSec: z.number().positive().optional(),
+  partsPerHour: z.number().positive().optional(),
+  stationCount: z.number().int().positive().optional(),
+  preferredBrands: z.array(z.string()).optional(),
+  forbiddenBrands: z.array(z.string()).optional(),
+  budgetLevel: budgetLevelSchema.optional(),
+  wireFeedMode: wireFeedModeSchema.optional(),
+  wireFeedOrientation: wireFeedOrientationSchema.optional(),
+  brazingWireFamily: brazingWireFamilySchema.optional(),
+});
+
 export const hardwareRecommendSchema = z.object({
   material: z.string(),
   thicknessMm: z.number().positive(),

@@ -2,7 +2,7 @@
 
 Industrial laser welding decision support for automation and process engineers: material assessment, hardware selection, DOE, defect diagnosis, motion programs, fieldbus mapping, and turnkey solution BOM.
 
-Integrates with **Claude Code**, **Codex**, **OpenCode**, and **MCP** clients.
+Integrates with **Claude Code**, **Cursor**, **Codex**, **OpenCode**, and **MCP** clients.
 
 ## Features
 
@@ -37,6 +37,12 @@ Use this repository as a Claude Code plugin directory. Plugin metadata lives at 
 
 See [references/claude-code.md](references/claude-code.md).
 
+### Cursor
+
+Use `.cursor-plugin/plugin.json` and link to `~/.cursor/plugins/local/`.
+
+See [references/cursor.md](references/cursor.md).
+
 ### Codex
 
 Use `.codex-plugin/plugin.json` and `.codex/config.toml`.
@@ -49,7 +55,7 @@ Use `.opencode/plugins/laser-welding.js`.
 
 See root `.opencode/INSTALL.md`.
 
-### MCP only (Cursor, etc.)
+### MCP only
 
 Add to `.cursor/mcp.json` or host MCP config:
 
@@ -85,6 +91,8 @@ With MCP connected, call **`material_assess`**:
 ```
 
 ## Usage examples
+
+**Agent chat prompts (Cursor slash / `@`):** see [examples/README.md](../../examples/README.md) — workflow and scenario prompts in English and Chinese.
 
 ### Example 1 — 1 mm copper battery tab (selection)
 

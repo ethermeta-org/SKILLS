@@ -49,6 +49,40 @@ export type BrazingWireFamily =
   | "custom";
 export type RiskLevel = "low" | "medium" | "high";
 export type BudgetLevel = "low" | "mid" | "high";
+export type WeldingMethod =
+  | "lap"
+  | "butt"
+  | "fillet"
+  | "t-joint"
+  | "edge"
+  | "seal"
+  | "circular";
+
+export interface JointProfile {
+  method: WeldingMethod;
+  displayName: { en: string; zh: string };
+  aliases: string[];
+  jointType: string;
+  defaultSeamType: string;
+  process: {
+    powerFactor: number;
+    speedFactor: number;
+    defocusOffsetMm: number;
+    doePowerSpread: number;
+    doeSpeedSpread: number;
+  };
+  doe: {
+    includeGapAxis: boolean;
+    gapMinMm?: number;
+    gapMaxMm?: number;
+  };
+  equipmentHints: string[];
+  fixtureHints: string[];
+  inspectionHints: string[];
+  risks: string[];
+  validationEmphasis: string[];
+  acceptanceEmphasis: string[];
+}
 
 export interface WireFeedHeadRecommendation {
   headType: string;
@@ -222,6 +256,64 @@ export interface SolutionBomResult {
   confidence: "heuristic";
   disclaimer: string;
   warnings: string[];
+}
+
+export interface ProcessRecommendInput {
+  material: string;
+  thicknessMm: number;
+  weldingMethod: string;
+  baseMaterialB?: string;
+  thicknessBMm?: number;
+  application?: string;
+  applicationScenario?: ApplicationScenario;
+  deliveryScope?: DeliveryScope;
+  qualityTargets?: QualityTarget[];
+  coating?: string;
+  surfaceCondition?: string;
+  lightTransmittance?: number;
+  wireFill?: boolean;
+  gapMm?: number;
+  wireDiameterMm?: number;
+  targetSpeedMmPerS?: number;
+  targetPenetrationDepthMm?: number;
+  targetTaktSec?: number;
+  partsPerHour?: number;
+  stationCount?: number;
+  motionPlatform?: string;
+  laserHead?: string;
+  preferredLaserType?: LaserType;
+  wireFeedMode?: WireFeedMode;
+  wireFeedOrientation?: WireFeedOrientation;
+  brazingWireFamily?: BrazingWireFamily;
+  fieldbusProtocol?: "opc-ua" | "profinet" | "ethercat";
+  includeVision?: boolean;
+  seamLengthMm?: number;
+  preferredBrands?: string[];
+  forbiddenBrands?: string[];
+  budgetLevel?: BudgetLevel;
+}
+
+export interface ProcessRecommendResult {
+  materialId: string;
+  thicknessMm: number;
+  weldingMethod: WeldingMethod;
+  weldingMethodName: { en: string; zh: string };
+  jointType: string;
+  seamType: string;
+  processWindow: ProcessWindowResult;
+  hardware: HardwareRecommendResult;
+  doe: DoeMatrixResult;
+  bom: SolutionBomResult;
+  equipmentHints: string[];
+  fixtureHints: string[];
+  inspectionHints: string[];
+  risks: string[];
+  validationPlan: string[];
+  acceptanceCriteria: string[];
+  assumptions: string[];
+  inputsToConfirm: string[];
+  confidence: "heuristic";
+  disclaimer: string;
 }
 
 export interface DoeMatrixResult {
