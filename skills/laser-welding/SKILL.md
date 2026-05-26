@@ -33,7 +33,13 @@ This is the official workflow router. It decides which stage skill to use, keeps
 - Every numeric recommendation is heuristic and requires DOE and trial weld validation.
 - Brand names are candidate examples, not endorsements.
 - Push-pull brazing must include wire-feed head, feeding geometry, brazing wire family, and validation risks.
+- Motion architecture recommendations must keep multiple candidates when scope allows (for example: gantry, single-axis rotary, industrial robot, collaborative robot) and define switch conditions.
 - A complete solution requires at least `material`, `thicknessMm`, and `weldingMethod`; missing recommended inputs become assumptions and risks.
+
+## Shared Language And Artifact Rules
+
+- Follow `references/shared-rules.md` for language and artifact naming/path rules.
+- In this router skill, artifact type depends on stage output (`brainstorm`, `plan`, `solution-report`, `verification`).
 
 ## Stage Decision Tree
 
@@ -85,6 +91,8 @@ Every stage hands the next stage these fields when known:
 - Required validation evidence
 - Next recommended stage
 
+When stage output is `solution-report`, you MUST trigger one `AskQuestion` interaction for high-impact assumptions before drafting the report body. The interaction is non-blocking in content (the user may skip all), but the interaction step itself is required.
+
 ## When To Stop And Ask For Help
 
 Stop and ask one focused question when:
@@ -135,3 +143,4 @@ Pricing, quotation, cost estimation, simulation, finite element analysis, OEM re
 - [wire-feed-heads.md](references/wire-feed-heads.md)
 - [materials.md](references/materials.md)
 - [process-window-heuristics.md](references/process-window-heuristics.md)
+- [solution-report-template.md](references/solution-report-template.md)

@@ -14,6 +14,11 @@ Use this after intake has established the minimum recommendation inputs. This sk
 
 Planning does not call structured tools. Planning names the tools, references, expected outputs, acceptance criteria, stop conditions, and DOE or trial weld gates that execution must use later.
 
+## Shared Language And Artifact Rules
+
+- Follow `../laser-welding/references/shared-rules.md`.
+- This skill uses artifact type: `plan`.
+
 ## Scope Check
 
 Before writing a plan, check whether the request is one cohesive workflow or multiple independent projects.
@@ -58,6 +63,28 @@ Each task in the plan must be small enough to execute and verify independently:
 - Stop condition
 - DOE or trial weld gate
 
+Preferred granularity:
+
+- One task = one engineering action that can be verified quickly.
+- Avoid merging process, hardware, takt, and BOM decisions in a single task.
+- Ensure every stage includes at least one explicit verification step.
+
+### Motion Architecture Expansion Rule
+
+For hardware planning, do not lock motion to a single default structure. The plan must include at least two candidate motion architectures and their switch conditions, for example:
+
+- Gantry or Cartesian axes for straight seams and high repeatability stations.
+- Single-axis rotary with linear axes for circumferential or shaft-like welds.
+- Industrial six-axis robot for spatial curves and posture-rich trajectories.
+- Collaborative robot for lower takt, high-mix, and human-assisted cells.
+
+For each candidate, include:
+
+- Expected repeatability range and takt fit.
+- Safety envelope and laser protection assumptions.
+- Fixture and calibration dependency.
+- Validation gate that can reject the option early if mismatch is found.
+
 ## Required Content Per Task
 
 Each task includes:
@@ -69,6 +96,25 @@ Each task includes:
 - Acceptance criteria
 - DOE or trial weld gate
 - Verification action
+- Expected section mapping to `references/solution-report-template.md`
+
+## Output Format Rule
+
+Plan output should explicitly map deliverables to these report sections:
+
+1. Project background and goals
+2. Inputs and assumptions
+3. Process parameters
+4. Equipment selection and technical indicators
+5. Takt and capacity assumptions
+6. BOM and integration scope
+7. Risks and mitigations
+8. DOE and validation
+9. Acceptance criteria
+10. Glossary
+11. Conclusion and next actions
+
+If a section is out of scope, mark `N/A` and explain why.
 
 ## Stop Conditions
 

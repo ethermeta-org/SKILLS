@@ -164,6 +164,14 @@ With MCP connected, call **`material_assess`**:
 
 Returns `lineItems` (component id, category, qty, OEM hints) and `lineLayout` (workflow + stations for turnkey lines).
 
+Common `motionPlatform` candidates in solution planning:
+
+- `gantry` (long straight seams, high repeatability)
+- `rotary-single-axis` (circumferential seams with synchronized linear motion)
+- `industrial-robot-6axis` (complex 3D seams and posture control)
+- `collaborative-robot` (flexible mixed-model cells with lower takt)
+- `robot-plus-positioner` (large or multi-angle workpieces)
+
 ## Configuration
 
 [`config/laser-welding.default.json`](config/laser-welding.default.json):

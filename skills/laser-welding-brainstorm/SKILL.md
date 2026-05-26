@@ -14,6 +14,11 @@ Use this before process, equipment, DOE, BOM, or delivery decisions. This skill 
 
 Brainstorm is the start of the workflow for new or underspecified projects. It does not produce a complete solution while required initial recommendation inputs are missing.
 
+## Shared Language And Artifact Rules
+
+- Follow `../laser-welding/references/shared-rules.md`.
+- This skill uses artifact type: `brainstorm`.
+
 ## Hard Gate
 
 Do not produce a complete laser welding solution until these minimum inputs are known:
@@ -93,6 +98,16 @@ For each missing recommended input, either list a conservative assumption or sta
 
 Route ready requirements to `laser-welding-write-plan`. Route missing required inputs back to one-question intake. Route narrow defect-only requests to execution only when material, thickness, and symptom are known.
 
+### Step 6: Stage Confirmation Gates
+
+Before handoff, confirm in three checkpoints:
+
+1. Input confirmation: required fields and key recommended fields are aligned with user intent.
+2. Solution skeleton confirmation: user agrees with delivery scope (process, equipment, takt, BOM, risks, validation).
+3. Risk confirmation: top risks and assumptions are acknowledged before planning.
+
+If any checkpoint is rejected, return to the related earlier step and revise.
+
 ## Readiness Levels
 
 - L0: Missing required inputs; do not produce a complete solution.
@@ -140,6 +155,7 @@ Return to Step 4 when a stated assumption is rejected.
 - Assumptions
 - Key risks
 - Recommended next action
+- Stage confirmation result (input / skeleton / risk)
 
 ## Handoff To Write Plan
 
