@@ -88,7 +88,7 @@ If one or more is missing, ask one missing required question. Use a multiple-cho
 
 ### Step 3: Classify Readiness
 
-Assign one readiness level from L0 to L3. The readiness level controls whether the next output is a question, a concept recommendation, a preliminary solution, or DOE/trial planning.
+Assign one readiness level from L0 to L3. The readiness level controls whether the next output is a question, a concept solution, a preliminary solution, or DOE/trial planning. Readiness assignment must apply all cap rules from Readiness Levels and the Missing-Info Closure Table. If readiness = L0, follow the Question Rule strictly: ask exactly one missing required-for-initial-recommendation input and stop.
 
 ### Step 4: Make Assumptions Explicit
 
@@ -115,6 +115,10 @@ If any checkpoint is rejected, return to the related earlier step and revise.
 - L2: Preliminary solution; major recommended inputs are present.
 - L3: Ready for DOE and trial weld planning.
 
+Additional readiness cap:
+
+- If `isBatteryCopperRing` is true and `ringDiameterMm` is missing, readiness must stay at `L0`.
+
 ## Question Rule
 
 Ask one missing required-for-initial-recommendation question at a time. Missing recommended inputs should not block the recommendation; state assumptions and risk.
@@ -124,6 +128,12 @@ Prefer focused questions:
 - Missing material: ask for material family or grade.
 - Missing thickness: ask for primary thickness in millimeters.
 - Missing welding method: ask for lap, butt, fillet, seal, circular, brazing, or another named joint.
+- If circular/ring welding is identified and `ringDiameterMm` is missing, the next question must ask ring diameter in millimeters.
+
+High-throughput candidate fallback rule:
+
+- Under explicit high-throughput constraints (for example `targetTaktSec = 2s/件`), candidate options must include `振镜+机器人`.
+- In the same response, provide at least one parallel alternative candidate and define a clear switch condition (for example: seam geometry stability, fixture repeatability, or CAPEX/OPEX boundary).
 
 ## When To Stop And Ask For Help
 
@@ -145,7 +155,21 @@ Return to Step 3 when missing recommended inputs are supplied and the readiness 
 
 Return to Step 4 when a stated assumption is rejected.
 
-## Output Template
+## Output Contract
+
+### Strict gate state
+
+- Exactly one question at a time.
+- Include one-sentence reason for why this question is next.
+- Do not lock in a specific head type or final process architecture.
+
+### Candidate state
+
+- Provide >=2 candidates.
+- Every candidate must include a trigger condition for when to choose it.
+- Include at least one DOE/trial-weld risk item.
+
+Minimum fields in either state:
 
 - Scenario and role
 - Readiness level
@@ -156,6 +180,19 @@ Return to Step 4 when a stated assumption is rejected.
 - Key risks
 - Recommended next action
 - Stage confirmation result (input / skeleton / risk)
+
+## Missing-Info Closure Table (Required)
+
+For every missing recommended input, record:
+
+- `owner`: who will provide it
+- `method`: measurement / trial weld / supplier document / site survey
+- `dueDate`: target date
+- `impactIfMissing`: what decision cannot be made reliably
+
+Readiness cap rule:
+
+- If any missing item directly impacts takt or primary quality targets (strength/sealing/conductivity/appearance), readiness cannot exceed `L1`.
 
 ## Handoff To Write Plan
 

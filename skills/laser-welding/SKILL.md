@@ -35,6 +35,9 @@ This is the official workflow router. It decides which stage skill to use, keeps
 - Push-pull brazing must include wire-feed head, feeding geometry, brazing wire family, and validation risks.
 - Motion architecture recommendations must keep multiple candidates when scope allows (for example: gantry, single-axis rotary, industrial robot, collaborative robot) and define switch conditions.
 - A complete solution requires at least `material`, `thicknessMm`, and `weldingMethod`; missing recommended inputs become assumptions and risks.
+- High-risk gate (`isBatteryCopperRing` concept): when the scenario is battery, material is copper (including purple copper), and intent is ring/circular welding, treat this as a gated routing path before any specific head recommendation.
+- For ring welding, `ringDiameterMm` is a required field; keep `thicknessMm` explicit and validated together.
+- Under the battery-copper-ring gate, if `material`, `thicknessMm`, `weldingMethod`, or `ringDiameterMm` (when welding method is ring seam) is missing, ask one focused question each turn and do not finalize head architecture.
 
 ## Shared Language And Artifact Rules
 
@@ -49,6 +52,20 @@ This is the official workflow router. It decides which stage skill to use, keeps
 4. Defect-only request -> use `defect_diagnose` internally, then verify whether the process context is sufficient.
 5. Advanced BOM or line request -> use `hardware_recommend` and `solution_bom` internally when inputs are sufficient.
 6. Before any final answer that claims completeness or readiness -> use `laser-welding-verify`.
+
+## Audience Routing (Decision Pack / RFQ Pack)
+
+Default output mode is `dual-pack` when user does not specify audience.
+
+- `customer-decision`: management-readable feasibility gate and rollout conditions.
+- `vendor-rfq`: supplier-facing technical specification and evidence requirements.
+- `dual-pack`: provide both outputs in one response with clear section split.
+
+Routing hints:
+
+- If user asks "是否适合导入新产线 / can we adopt this process", prioritize `customer-decision`.
+- If user asks "找设备厂商 / technical indicators / 招标参数", prioritize `vendor-rfq`.
+- If user asks both, enforce `dual-pack`.
 
 ## Process Flow
 
@@ -98,6 +115,7 @@ When stage output is `solution-report`, you MUST trigger one `AskQuestion` inter
 Stop and ask one focused question when:
 
 - `material`, `thicknessMm`, or `weldingMethod` is missing for a complete recommendation.
+- In ring seam welding (including battery copper ring), `ringDiameterMm` is missing.
 - The requested scope includes pricing, commercial quotation, simulation, finite element analysis, certified filler approval, or direct production release.
 - The user asks for production readiness without DOE and trial weld evidence.
 - Structured output and user constraints conflict in a way that changes the recommendation.
@@ -119,6 +137,8 @@ Return to `laser-welding-execute-plan` when a plan is still valid but a tool out
 - Omitting brazing wire family in a brazing request.
 - Claiming production readiness without DOE or trial weld evidence.
 - Exposing internal orchestration in a normal professional answer.
+- Recommending a specific head type when `ringDiameterMm` or `thicknessMm` is missing.
+- Giving only a single architecture under high takt requirements.
 
 ## Installation
 

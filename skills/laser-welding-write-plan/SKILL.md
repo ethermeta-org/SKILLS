@@ -162,6 +162,24 @@ Fix issues in the plan before handoff.
 - Task list with stages, tools/references, expected outputs, acceptance criteria, stop conditions, and gates
 - Handoff note for `laser-welding-execute-plan`
 
+## Dual Deliverable Requirement
+
+Every plan must include two deliverables:
+
+1. Decision Pack
+- Feasibility gate: GO / CONDITIONAL GO / NO-GO
+- Blocking items and closure path
+- Milestones and risk checkpoints
+
+2. Vendor RFQ Pack
+- Technical indicators with units and tolerance intent
+- Interface constraints (PLC/fieldbus/safety/utilities)
+- Acceptance test methods and evidence format
+- Supplier submission checklist
+
+Stop condition:
+- Do not enter execution if acceptance evidence format is undefined.
+
 ## Handoff To Execute Plan
 
 Hand off to `laser-welding-execute-plan` only after the self-review passes. Include the plan text, current assumptions, and any stage that must stop if evidence is missing.

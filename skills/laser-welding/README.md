@@ -4,6 +4,26 @@ Industrial laser welding decision support for automation and process engineers: 
 
 Integrates with **Claude Code**, **Cursor**, **Codex**, **OpenCode**, and **MCP** clients.
 
+## Skill roles and differences
+
+This repository provides one router skill and four stage skills. They are complementary and should be used in sequence instead of replacing each other.
+
+| Skill | Primary role | When to use | Output focus | How it differs |
+|------|------|------|------|------|
+| `laser-welding` | Workflow router | New request or mixed-scope request | Stage routing + final professional delivery path | This is the coordinator. It decides whether to run brainstorm, planning, execution, or verification next. |
+| `laser-welding-brainstorm` | Intake and gating | Inputs are incomplete or ambiguous | Readiness level, missing inputs, assumptions, risks, next question/action | It does not produce a full solution when required inputs are missing (`material`, `thicknessMm`, `weldingMethod`). |
+| `laser-welding-write-plan` | Execution planning | Required inputs exist, but no implementation steps yet | Staged plan with tasks, acceptance criteria, stop conditions, and DOE gates | It writes the plan only; it does not execute numeric process or hardware calculations. |
+| `laser-welding-execute-plan` | Plan execution | A written plan already exists | Process/hardware/DOE/BOM solution report mapped to template sections | It executes the plan with traceable evidence and stops when evidence or inputs are insufficient. |
+| `laser-welding-verify` | Delivery gate | Before any readiness/completion claim | Verification result, evidence grade, confidence, and blockers | It is a hard gate. No completion/readiness claim is valid without this step. |
+
+### Fast distinction
+
+- `brainstorm` answers: "Do we have enough information to start?"
+- `write-plan` answers: "What exact staged tasks and gates will we run?"
+- `execute-plan` answers: "What is the concrete engineering recommendation now?"
+- `verify` answers: "Is the current recommendation truly deliverable and compliant?"
+- `laser-welding` answers: "Which of the above should happen next, and in what order?"
+
 ## Features
 
 ### Stage 1 — Material & process window
@@ -41,13 +61,13 @@ See [references/claude-code.md](references/claude-code.md).
 
 Use `.cursor-plugin/plugin.json` and link to `~/.cursor/plugins/local/`.
 
-See [references/cursor.md](references/cursor.md).
+See [references/codex-tools.md](references/codex-tools.md) for Cursor/Codex MCP setup and tool mapping.
 
 ### Codex
 
 Use `.codex-plugin/plugin.json` and `.codex/config.toml`.
 
-See root `.codex/INSTALL.md` and [references/codex-tools.md](references/codex-tools.md).
+See [references/codex-tools.md](references/codex-tools.md) for setup and tool mapping.
 
 ### OpenCode
 
@@ -80,15 +100,51 @@ npm install && npm run build
 
 ## Quick start
 
-With MCP connected, call **`material_assess`**:
+Choose one of the two onboarding paths below.
+
+### Path A: use skills workflow (recommended for end-to-end projects)
+
+1. Start with `laser-welding` and provide at least:
+   - `material`
+   - `thicknessMm`
+   - `weldingMethod`
+2. If required inputs are missing, run `laser-welding-brainstorm` to close the highest-impact gap first.
+3. Once required inputs are complete, run `laser-welding-write-plan` to produce staged tasks, gates, and acceptance criteria.
+4. Run `laser-welding-execute-plan` to generate the solution report (process, hardware, DOE, BOM, risks, validation).
+5. Run `laser-welding-verify` before any completion or readiness claim.
+
+Example request (chat-style):
+
+```text
+Material: copper
+Thickness: 1.0 mm
+Welding method: lap
+Scenario: battery-tab
+Targets: conductivity and low spatter
+Please provide process parameters, equipment recommendation, DOE plan, and BOM.
+```
+
+### Path B: use MCP tools directly (recommended for modular integration)
+
+With MCP connected, call **`material_assess`** first:
 
 ```json
 {
   "material": "copper",
   "thicknessMm": 1,
-  "jointType": "battery-tab"
+  "applicationScenario": "battery-tab",
+  "jointType": "lap"
 }
 ```
+
+Then continue with the typical tool chain:
+
+1. `hardware_recommend` for laser/head/motion candidates
+2. `doe_matrix` for validation ranges and line-energy coverage
+3. `defect_diagnose` when symptom-driven tuning is needed
+4. `solution_bom` for line items and layout
+5. Optional: `trajectory_generate` and `fieldbus_map` for automation details
+6. Optional all-in-one: `process_recommend` for integrated output
 
 ## Usage examples
 
@@ -102,7 +158,8 @@ With MCP connected, call **`material_assess`**:
 {
   "material": "copper",
   "thicknessMm": 1,
-  "jointType": "battery-tab"
+  "applicationScenario": "battery-tab",
+  "jointType": "lap"
 }
 ```
 
@@ -164,13 +221,15 @@ With MCP connected, call **`material_assess`**:
 
 Returns `lineItems` (component id, category, qty, OEM hints) and `lineLayout` (workflow + stations for turnkey lines).
 
-Common `motionPlatform` candidates in solution planning:
+Conceptual motion architecture candidates in solution planning:
 
-- `gantry` (long straight seams, high repeatability)
-- `rotary-single-axis` (circumferential seams with synchronized linear motion)
-- `industrial-robot-6axis` (complex 3D seams and posture control)
-- `collaborative-robot` (flexible mixed-model cells with lower takt)
-- `robot-plus-positioner` (large or multi-angle workpieces)
+- Gantry station (direct enum input: `gantry`)
+- Single-axis rotary plus linear axes (direct enum input: `single-axis`)
+- Scanner-dominant station for fast short seams (direct enum input: `galvo-scanner`)
+- Robot-centric cell for complex 3D posture control (map to a supported enum by station abstraction)
+- Robot plus positioner for large or multi-angle workpieces (map to a supported enum by station abstraction)
+
+For direct MCP calls, pass only accepted `motionPlatform` enum values.
 
 ## Configuration
 
@@ -189,6 +248,7 @@ Common `motionPlatform` candidates in solution planning:
 | Tool | Description |
 |------|-------------|
 | `material_assess` | Process window |
+| `process_recommend` | End-to-end integrated recommendation |
 | `hardware_recommend` | Laser & optics |
 | `doe_matrix` | DOE grid |
 | `defect_diagnose` | Defect actions |

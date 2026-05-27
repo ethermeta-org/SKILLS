@@ -74,6 +74,22 @@ NO COMPLETION OR READINESS CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 - [ ] `polymer-transmission` 的 `3.1` 节仅在适用时渲染；不适用则整体省略（不得 `N/A` 占位）
 - [ ] 省略 `3.1` 时，可选加入审计政策说明：`3.1 节按策略判定不适用（section 3.1 not applicable by policy）`
 
+## Evidence Grade And Confidence (Required)
+
+Tag each key recommendation with:
+
+- `evidenceLevel`
+  - `E1`: measured data / DOE evidence
+  - `E2`: structured tool output + explicit constraints
+  - `E3`: heuristic assumption / reference-only
+- `confidence`: High / Medium / Low
+
+Gate mapping:
+
+- `GO`: all critical decisions have E1/E2 support, no unresolved critical blocker.
+- `CONDITIONAL GO`: partial E2/E3 with explicit closure actions and owners.
+- `NO-GO`: critical blocker unresolved or evidence insufficient for safe progression.
+
 ## 常见失败模式（Common Failures）
 
 | 声称（Claim） | 必要条件（Requires） | 不充分条件（Not Sufficient） |

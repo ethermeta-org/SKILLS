@@ -1,6 +1,6 @@
 # Local publish auth (scripts/publish-npm.sh writes this when NPM_TOKEN is set)
 .npmrc
-
+.agents/
 node_modules/
 dist/
 *.tsbuildinfo
@@ -11,7 +11,9 @@ plugin.zip
 release/
 .codex/
 .vscode/
-docs/
+docs/*
+!docs/skills-quickstart-zh.md
+!docs/skills-quickstart-en.md
 .idea/
 .claude/
 .gitnexus/
