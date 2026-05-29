@@ -23,6 +23,7 @@ This is the official workflow router. It decides which stage skill to use, keeps
 - Material, thickness, joint, coating, or defect process assessment
 - Turnkey automation line, fieldbus, fixture, safety, or BOM request
 - DOE planning or pre-delivery verification
+- Process parameter tuning, monitoring loop, safety interlock, or recipe management request
 
 ## Hard Rules
 
@@ -31,6 +32,8 @@ This is the official workflow router. It decides which stage skill to use, keeps
 - For welding/process answers, final answers must not mention tool availability, tool calls, MCP, fallback mode, or internal orchestration. Mention tooling only when the user explicitly asks about integration or setup.
 - Do not invent process values, PLC timings, OEM-specific settings, certified filler grades, or production release claims.
 - Every numeric recommendation is heuristic and requires DOE and trial weld validation.
+- Treat laser welding parameters as a system: laser energy, optics/focus, motion, scan/wobble, shielding, cooling, monitoring, safety, and recipe control all interact.
+- Tuning order matters: confirm position and joint first, set energy/focus second, then tune shielding/cooling and scan/motion, then freeze the validated recipe.
 - Brand names are candidate examples, not endorsements.
 - Push-pull brazing must include wire-feed head, feeding geometry, brazing wire family, and validation risks.
 - Motion architecture recommendations must keep multiple candidates when scope allows (for example: gantry, single-axis rotary, industrial robot, collaborative robot) and define switch conditions.
@@ -86,9 +89,9 @@ flowchart TD
 | Tool | Stage | Use |
 | --- | --- | --- |
 | `process_recommend` | End-to-end | Simplified input for process parameters, equipment selection, DOE, BOM, risks, validation, and acceptance |
-| `material_assess` | Process | Material pair, coating, initial process window, weld mode, brazing wire family warning |
+| `material_assess` | Process | Material pair, coating, initial process window, parameter families, weld mode, brazing wire family warning |
 | `hardware_recommend` | Solution | Laser, head, wire-feed head, motion, brand filtering, validation plan |
-| `doe_matrix` | Validation | Power, speed, defocus, gap, wire speed, wire angle, preheat, gas, clamp force |
+| `doe_matrix` | Validation | Power, speed, defocus, gap, wire speed, wire angle, preheat, gas, clamp force, pulse, wobble, nozzle, cooling |
 | `defect_diagnose` | Validation | Defect-driven parameter corrections |
 | `trajectory_generate` | Automation | G-code or motion hints |
 | `fieldbus_map` | Automation | OPC UA, PROFINET, EtherCAT mappings |
@@ -105,6 +108,10 @@ Every stage hands the next stage these fields when known:
 - Explicit assumptions
 - Risk level
 - Process mode: fusion, brazing, polymer transmission, seal welding, battery tab, busbar, or custom
+- Parameter families: laser, optics/focus, motion, scan/wobble, shielding gas, cooling/auxiliary
+- Tuning workflow: target/joint -> energy/focus -> shielding/cooling -> scan/motion -> observe/refine -> recipe release
+- Monitoring plan: vision position, seam tracking when needed, power feedback, temperature, reflected light, and spot quality where relevant
+- Safety and recipe controls: interlocks, alarms, locked parameters, operator-editable fields, and review triggers
 - Required validation evidence
 - Next recommended stage
 
@@ -132,6 +139,9 @@ Return to `laser-welding-execute-plan` when a plan is still valid but a tool out
 
 - Producing a complete solution without at least material, thickness, and welding method.
 - Ignoring joint type, coating, fixture, takt, safety, or validation.
+- Treating power, speed, and defocus as isolated values instead of part of the wider parameter system.
+- Tuning scan/wobble before confirming position, focus, and baseline energy.
+- Omitting monitoring, safety interlocks, or recipe locking when the request is production, RFQ, or turnkey oriented.
 - Mixing brazing and fusion welding without declaring the mode.
 - Treating push-pull wire-feed brazing as only a generic wire feeder.
 - Omitting brazing wire family in a brazing request.

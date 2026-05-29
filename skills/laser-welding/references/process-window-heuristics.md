@@ -11,9 +11,52 @@ When structured process assessment output is unavailable:
 7. Gas: stainless -> N2; copper/aluminum -> Ar; document as an assumption.
 
 Mark result `confidence: heuristic` internally and keep provenance out of user-facing answers unless the user explicitly asks.
+
+# Parameter System Taxonomy
+
+When explaining or structuring a process window, group parameters by function instead of listing only power/speed/focus:
+
+1. Laser energy: power, peak power, average power, pulse width, pulse frequency, duty cycle, and power waveform.
+2. Optics and focus: focus position, defocus amount and sign, spot diameter, focal length, field lens focus, and beam quality.
+3. Welding motion: weld speed, positioning speed, acceleration, start delay, end delay, dwell time, and overlap.
+4. Scan and wobble: wobble mode, wobble frequency, wobble amplitude, scan width, X/Y offset, scale factor, rotation angle, field correction, and scan delay.
+5. Shielding gas: gas type, flow, nozzle distance and angle when a shielding nozzle exists, pre-gas, and post-gas. For galvo/field-lens scanner layouts, do not force nozzle distance/angle fields.
+6. Cooling and auxiliary: cooling water temperature, flow, pressure, preheat power, preheat time, and wire retraction where relevant.
+7. Monitoring, safety, and recipe: vision positioning, seam tracking, power feedback, temperature monitoring, spot monitoring, reflected-light monitoring, interlocks, alarms, permissions, and recipe management.
+
+Do not imply all parameters are equally adjustable. Separate primary tuning variables from auxiliary stability variables and locked production recipe variables.
+
+# Tuning Order
+
+Use this sequence unless user evidence shows a different validated plant procedure:
+
+1. Confirm weld target, material pair, thickness, joint form, gap, fixture, and acceptance criteria.
+2. Establish baseline power, speed, focus/defocus, and spot size.
+3. Set shielding gas and cooling before interpreting bead color, porosity, or heat accumulation.
+4. Tune wobble/scan and motion offsets only after position and base energy are stable.
+5. Observe weld depth, width, spatter, oxidation, deformation, temperature, reflected light, and monitor alarms.
+6. Change one key variable at a time, then lock the validated recipe and define edit permissions.
+
+# Parameter Change Effects
+
+Use these qualitative effects when explaining trade-offs. Keep numeric changes tied to structured output, user input, or DOE ranges.
+
+| Parameter | Increase | Decrease |
+| --- | --- | --- |
+| Laser power | More penetration; higher burn-through risk | Less penetration; higher lack-of-fusion risk |
+| Welding speed | Lower heat input; narrower bead | Higher heat input; more deformation/overheat risk |
+| Defocus amount | Lower energy density when spreading spot | Higher energy concentration when moving toward focus |
+| Wobble width | Wider bead; possible lower penetration | Smaller coverage; better concentration |
+| Gas flow | Stronger shielding; too much may disturb pool | Oxidation and porosity risk increase |
+| Pulse frequency | Better spot continuity; heat accumulation may rise | Larger spot spacing; continuity can drop |
+| X/Y offset | More visible path correction | More accurate centerline when corrected toward seam |
+| Cooling flow | More heat removal and equipment stability | Temperature rise and alarm risk increase |
+
 # Push-Pull Brazing DOE Axes
 
 For push-pull brazing, validate power, speed, defocus, gap, wire speed, wire angle, preheat power, shielding gas, and clamp force. These are DOE starting points only, not production release settings.
+
+For general laser welding DOE, include additional axes when the project scope or equipment supports them: pulse frequency, pulse width, duty cycle, wobble amplitude, wobble frequency, scan width, nozzle distance/angle only for nozzle-based shielding, cooling water temperature, cooling flow, and cooling pressure.
 
 # Polymer Transmission: Material-Based Transmittance Estimation
 

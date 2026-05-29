@@ -165,5 +165,137 @@
         "开裂"
       ]
     }
+  },
+  {
+    "id": "burn-through",
+    "symptom": "burn_through",
+    "conditions": [],
+    "actions": [
+      {
+        "param": "powerW",
+        "deltaPercent": -8,
+        "rationale": "Lower power reduces excessive penetration and burn-through risk."
+      },
+      {
+        "param": "speedMmPerS",
+        "deltaPercent": 8,
+        "rationale": "Faster travel reduces heat input per unit length."
+      },
+      {
+        "param": "defocusMm",
+        "absolute": 0.3,
+        "rationale": "Slight positive defocus spreads energy density when penetration is excessive."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "burn through",
+        "over penetration"
+      ],
+      "zh": [
+        "烧穿",
+        "过熔",
+        "熔深过大"
+      ]
+    }
+  },
+  {
+    "id": "thermal-deformation",
+    "symptom": "deformation",
+    "conditions": [],
+    "actions": [
+      {
+        "param": "speedMmPerS",
+        "deltaPercent": 10,
+        "rationale": "Higher welding speed reduces accumulated heat input."
+      },
+      {
+        "param": "wobbleAmplitudeMm",
+        "deltaPercent": 10,
+        "rationale": "Moderate wobble spreads heat when weld width allows it."
+      },
+      {
+        "param": "coolingFlowLpm",
+        "deltaPercent": 15,
+        "rationale": "Improve heat removal after confirming fixture stability."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "warp",
+        "distortion"
+      ],
+      "zh": [
+        "变形",
+        "翘曲",
+        "热变形"
+      ]
+    }
+  },
+  {
+    "id": "oxidation",
+    "symptom": "oxidation",
+    "conditions": [],
+    "actions": [
+      {
+        "param": "shieldGasLpm",
+        "deltaPercent": 12,
+        "rationale": "Increase shielding coverage when the bead shows oxidation."
+      },
+      {
+        "param": "nozzleDistanceMm",
+        "absolute": "8-12",
+        "rationale": "Keep nozzle distance in a stable shielding range before increasing flow further."
+      },
+      {
+        "param": "postGasMs",
+        "deltaPercent": 20,
+        "rationale": "Protect the weld as it solidifies."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "discoloration",
+        "oxide"
+      ],
+      "zh": [
+        "氧化",
+        "发黑",
+        "变色"
+      ]
+    }
+  },
+  {
+    "id": "position-drift",
+    "symptom": "position_drift",
+    "conditions": [],
+    "actions": [
+      {
+        "param": "xOffsetMm",
+        "absolute": "re-center",
+        "rationale": "Correct X/Y offset before changing energy input."
+      },
+      {
+        "param": "visionPosition",
+        "absolute": "enable",
+        "rationale": "Use vision positioning when fixture or incoming part location varies."
+      },
+      {
+        "param": "wobbleWidthMm",
+        "deltaPercent": -10,
+        "rationale": "Avoid using excessive wobble width to hide path-position errors."
+      }
+    ],
+    "aliases": {
+      "en": [
+        "misalignment",
+        "offset"
+      ],
+      "zh": [
+        "定位偏差",
+        "焊偏",
+        "位置偏移"
+      ]
+    }
   }
 ]

@@ -11,6 +11,19 @@ describe("assessMaterial", () => {
     expect(r.recommendedWavelengthNm).toContain(515);
     expect(r.confidence).toBe("heuristic");
   });
+
+  it("groups process parameters by laser, optics, motion, shielding, and cooling families", () => {
+    const r = assessMaterial({ material: "stainless-304", thicknessMm: 1 });
+
+    expect(r.processParams?.laser.powerW).toBe(r.powerW);
+    expect(r.processParams?.laser.averagePowerW).toBe(r.powerW);
+    expect(r.processParams?.optics.defocus.valueMm).toBe(Math.abs(r.defocusMm));
+    expect(r.processParams?.motion.weldSpeedMmPerS).toBe(r.speedMmPerS);
+    expect(r.processParams?.shielding.gasType).toBe(r.gasType);
+    expect(r.processParams?.shielding.flowLpm).toBe(r.shieldGasLpm);
+    expect(r.processParams?.cooling.waterTempC).toBeGreaterThan(0);
+    expect(r.processParams?.cooling.flowLpm).toBeGreaterThan(0);
+  });
 });
 
 describe("recommendHardware", () => {
@@ -37,6 +50,37 @@ describe("generateDoeMatrix", () => {
     });
     expect(r.matrix.length).toBe(9);
     expect(r.csv).toContain("sampleId");
+  });
+
+  it("includes pulse, wobble, nozzle, and cooling axes when provided", () => {
+    const r = generateDoeMatrix({
+      powerMin: 800,
+      powerMax: 1200,
+      speedMin: 3,
+      speedMax: 6,
+      gridSize: 2,
+      pulseFrequencyMin: 100,
+      pulseFrequencyMax: 300,
+      dutyCycleMin: 35,
+      dutyCycleMax: 65,
+      wobbleAmplitudeMin: 0.2,
+      wobbleAmplitudeMax: 0.8,
+      wobbleFrequencyMin: 150,
+      wobbleFrequencyMax: 350,
+      nozzleDistanceMin: 8,
+      nozzleDistanceMax: 14,
+      coolingWaterTempMin: 20,
+      coolingWaterTempMax: 26,
+    });
+
+    expect(r.csv).toContain("pulseFrequencyHz");
+    expect(r.csv).toContain("dutyCyclePct");
+    expect(r.csv).toContain("wobbleAmplitudeMm");
+    expect(r.csv).toContain("wobbleFrequencyHz");
+    expect(r.csv).toContain("nozzleDistanceMm");
+    expect(r.csv).toContain("coolingWaterTempC");
+    expect(r.matrix[0].pulseFrequencyHz).toBe(100);
+    expect(r.matrix.at(-1)?.coolingWaterTempC).toBe(26);
   });
 });
 
@@ -83,4 +127,3 @@ describe("diagnoseDefect Chinese", () => {
     expect(r.actions.length).toBeGreaterThan(0);
   });
 });
-

@@ -139,6 +139,8 @@ export function assessMaterial(input: MaterialAssessInput): ProcessWindowResult 
     defocusMm,
     lineEnergyJPerMm: lineEnergy,
     materialFactor: mat.materialFactor,
+    gasType,
+    shieldGasLpm,
     wireFill: input.wireFill,
     gapMm: input.gapMm,
     wireDiameterMm: input.wireDiameterMm,

@@ -23,6 +23,28 @@ export interface DoeMatrixInput {
   shieldGasMax?: number;
   clampForceMin?: number;
   clampForceMax?: number;
+  pulseFrequencyMin?: number;
+  pulseFrequencyMax?: number;
+  pulseWidthMin?: number;
+  pulseWidthMax?: number;
+  dutyCycleMin?: number;
+  dutyCycleMax?: number;
+  wobbleAmplitudeMin?: number;
+  wobbleAmplitudeMax?: number;
+  wobbleFrequencyMin?: number;
+  wobbleFrequencyMax?: number;
+  scanWidthMin?: number;
+  scanWidthMax?: number;
+  nozzleDistanceMin?: number;
+  nozzleDistanceMax?: number;
+  nozzleAngleMin?: number;
+  nozzleAngleMax?: number;
+  coolingWaterTempMin?: number;
+  coolingWaterTempMax?: number;
+  coolingFlowMin?: number;
+  coolingFlowMax?: number;
+  coolingPressureMin?: number;
+  coolingPressureMax?: number;
 }
 
 export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
@@ -70,6 +92,17 @@ export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
       row.preheatPowerW = interpolate(input.preheatPowerMin, input.preheatPowerMax, axisT);
       row.shieldGasLpm = interpolate(input.shieldGasMin, input.shieldGasMax, axisT);
       row.clampForceN = interpolate(input.clampForceMin, input.clampForceMax, axisT);
+      row.pulseFrequencyHz = interpolate(input.pulseFrequencyMin, input.pulseFrequencyMax, axisT);
+      row.pulseWidthMs = interpolate(input.pulseWidthMin, input.pulseWidthMax, axisT);
+      row.dutyCyclePct = interpolate(input.dutyCycleMin, input.dutyCycleMax, axisT);
+      row.wobbleAmplitudeMm = interpolate(input.wobbleAmplitudeMin, input.wobbleAmplitudeMax, axisT);
+      row.wobbleFrequencyHz = interpolate(input.wobbleFrequencyMin, input.wobbleFrequencyMax, axisT);
+      row.scanWidthMm = interpolate(input.scanWidthMin, input.scanWidthMax, axisT);
+      row.nozzleDistanceMm = interpolate(input.nozzleDistanceMin, input.nozzleDistanceMax, axisT);
+      row.nozzleAngleDeg = interpolate(input.nozzleAngleMin, input.nozzleAngleMax, axisT);
+      row.coolingWaterTempC = interpolate(input.coolingWaterTempMin, input.coolingWaterTempMax, axisT);
+      row.coolingFlowLpm = interpolate(input.coolingFlowMin, input.coolingFlowMax, axisT);
+      row.coolingPressureBar = interpolate(input.coolingPressureMin, input.coolingPressureMax, axisT);
       matrix.push(row);
     }
   }
@@ -83,6 +116,22 @@ export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
   if (input.preheatPowerMin !== undefined && input.preheatPowerMax !== undefined) header += ",preheatPowerW";
   if (input.shieldGasMin !== undefined && input.shieldGasMax !== undefined) header += ",shieldGasLpm";
   if (input.clampForceMin !== undefined && input.clampForceMax !== undefined) header += ",clampForceN";
+  if (input.pulseFrequencyMin !== undefined && input.pulseFrequencyMax !== undefined) header += ",pulseFrequencyHz";
+  if (input.pulseWidthMin !== undefined && input.pulseWidthMax !== undefined) header += ",pulseWidthMs";
+  if (input.dutyCycleMin !== undefined && input.dutyCycleMax !== undefined) header += ",dutyCyclePct";
+  if (input.wobbleAmplitudeMin !== undefined && input.wobbleAmplitudeMax !== undefined)
+    header += ",wobbleAmplitudeMm";
+  if (input.wobbleFrequencyMin !== undefined && input.wobbleFrequencyMax !== undefined)
+    header += ",wobbleFrequencyHz";
+  if (input.scanWidthMin !== undefined && input.scanWidthMax !== undefined) header += ",scanWidthMm";
+  if (input.nozzleDistanceMin !== undefined && input.nozzleDistanceMax !== undefined)
+    header += ",nozzleDistanceMm";
+  if (input.nozzleAngleMin !== undefined && input.nozzleAngleMax !== undefined) header += ",nozzleAngleDeg";
+  if (input.coolingWaterTempMin !== undefined && input.coolingWaterTempMax !== undefined)
+    header += ",coolingWaterTempC";
+  if (input.coolingFlowMin !== undefined && input.coolingFlowMax !== undefined) header += ",coolingFlowLpm";
+  if (input.coolingPressureMin !== undefined && input.coolingPressureMax !== undefined)
+    header += ",coolingPressureBar";
   const rows = matrix.map(
     (r) => {
       let line = `${r.sampleId},${r.powerW},${r.speedMmPerS},${r.lineEnergyJPerMm}`;
@@ -93,6 +142,17 @@ export function generateDoeMatrix(input: DoeMatrixInput): DoeMatrixResult {
       if (r.preheatPowerW !== undefined) line += `,${r.preheatPowerW}`;
       if (r.shieldGasLpm !== undefined) line += `,${r.shieldGasLpm}`;
       if (r.clampForceN !== undefined) line += `,${r.clampForceN}`;
+      if (r.pulseFrequencyHz !== undefined) line += `,${r.pulseFrequencyHz}`;
+      if (r.pulseWidthMs !== undefined) line += `,${r.pulseWidthMs}`;
+      if (r.dutyCyclePct !== undefined) line += `,${r.dutyCyclePct}`;
+      if (r.wobbleAmplitudeMm !== undefined) line += `,${r.wobbleAmplitudeMm}`;
+      if (r.wobbleFrequencyHz !== undefined) line += `,${r.wobbleFrequencyHz}`;
+      if (r.scanWidthMm !== undefined) line += `,${r.scanWidthMm}`;
+      if (r.nozzleDistanceMm !== undefined) line += `,${r.nozzleDistanceMm}`;
+      if (r.nozzleAngleDeg !== undefined) line += `,${r.nozzleAngleDeg}`;
+      if (r.coolingWaterTempC !== undefined) line += `,${r.coolingWaterTempC}`;
+      if (r.coolingFlowLpm !== undefined) line += `,${r.coolingFlowLpm}`;
+      if (r.coolingPressureBar !== undefined) line += `,${r.coolingPressureBar}`;
       return line;
     },
   );

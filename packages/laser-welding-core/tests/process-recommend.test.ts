@@ -98,6 +98,8 @@ describe("recommendation DOE derivation", () => {
     expect(input.wireSpeedMax).toBe(60);
     expect(input.wireFeedAngleMin).toBe(25);
     expect(input.wireFeedAngleMax).toBe(45);
+    expect(input.wobbleAmplitudeMin).toBeGreaterThan(0);
+    expect(input.wobbleFrequencyMin).toBeGreaterThan(0);
   });
 
   it("exports DOE derivation from the package barrel", () => {
@@ -133,6 +135,23 @@ describe("process recommendation", () => {
     expect(result.risks.join(" ")).toContain("burn-through");
     expect(result.validationPlan.join(" ")).toContain("trial weld");
     expect(result.assumptions.length).toBeGreaterThan(0);
+    expect(result.tuningWorkflow.map((step) => step.stage)).toEqual([
+      "target-and-joint",
+      "energy-focus",
+      "shielding-cooling",
+      "scan-motion",
+      "observe-and-refine",
+      "recipe-release",
+    ]);
+    expect(result.monitoringPlan.map((item) => item.signal)).toEqual(
+      expect.arrayContaining(["vision-position", "power-feedback", "temperature", "reflected-light"]),
+    );
+    expect(result.safetyInterlocks.map((item) => item.name)).toEqual(
+      expect.arrayContaining(["door-interlock", "emergency-stop", "cooling-alarm", "gas-pressure-alarm"]),
+    );
+    expect(result.recipeManagement.parametersToLock).toEqual(
+      expect.arrayContaining(["powerW", "speedMmPerS", "defocusMm", "shieldGasLpm"]),
+    );
   });
 
   it("changes visible guidance by welding method", () => {
@@ -196,5 +215,20 @@ describe("process recommendation", () => {
     expect(result.processWindow.effectiveTransmittance).toBe(0.8);
     expect(result.hardware.wavelengthNm).toBe(2000);
     expect(result.hardware.recommendedLaserTypes).toContain("fiber-2um");
+  });
+
+  it("omits nozzle-specific parameters for galvo scanner recommendations", () => {
+    const result = recommendProcess({
+      material: "stainless-304",
+      thicknessMm: 1,
+      weldingMethod: "拼焊",
+      motionPlatform: "galvo-scanner",
+    });
+
+    expect(result.hardware.beamDelivery).toBe("galvo-scanner");
+    expect(result.doe.csv).not.toContain("nozzleDistanceMm");
+    expect(result.doe.csv).not.toContain("nozzleAngleDeg");
+    expect(result.processWindow.processParams?.shielding?.nozzleDistanceMm).toBeUndefined();
+    expect(result.processWindow.processParams?.shielding?.nozzleAngleDeg).toBeUndefined();
   });
 });

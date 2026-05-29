@@ -4,8 +4,8 @@ Skills use structured tool names. Route them internally in your host as follows:
 
 | Skill tool | Structured route | Reference route |
 |------------------|----------------|-------------------|
-| `process_recommend` | Run `process_recommend` | Combine process-window, equipment, DOE, BOM, risks, validation, and acceptance references |
-| `material_assess` | Run `material_assess` | Follow [process-window-heuristics.md](process-window-heuristics.md) |
+| `process_recommend` | Run `process_recommend` | Combine process-window, equipment, DOE, BOM, risks, validation, acceptance, tuning workflow, monitoring, safety, and recipe guidance |
+| `material_assess` | Run `material_assess` | Follow [process-window-heuristics.md](process-window-heuristics.md); surface process parameter families when useful |
 | `hardware_recommend` | Run `hardware_recommend` | Read [materials.md](materials.md) and process-window heuristics; select wavelength/head by material and application assumptions |
 | `doe_matrix` | Run `doe_matrix` | Build a grid only from user-provided, structured, or documented ranges; otherwise ask for ranges or provide qualitative DOE axes only |
 | `defect_diagnose` | Run `defect_diagnose` | Use [defects.md](defects.md) |
@@ -46,4 +46,5 @@ Build server first: `npm run build` from repository root.
 - **hardware_recommend**: `motionPlatform`, `laserHead`, `lightTransmittance` → `bomSummary`, `lineLayout`
 - **solution_bom**: same as hardware + `fieldbusProtocol`, `includeVision`, `wireFill`, `gapMm`
 - **trajectory_generate**: `motionPlatform`
-- **doe_matrix**: `defocusMin`, `defocusMax`, `gapMin`, `gapMax`, `includeGapAxis`
+- **process_recommend**: returns optional `tuningWorkflow`, `monitoringPlan`, `safetyInterlocks`, and `recipeManagement`
+- **doe_matrix**: `defocusMin`, `defocusMax`, `gapMin`, `gapMax`, `includeGapAxis`, plus pulse, wobble, nozzle, cooling, gas, clamp, wire, and preheat axes

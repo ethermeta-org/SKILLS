@@ -141,6 +141,53 @@ export interface ProcessParams {
   defocus: { valueMm: number; sign: DefocusSign };
   penetrationDepthMm: number;
   wireFill?: { gapMm: number; suggestedWireMm: number };
+  laser?: {
+    powerW: number;
+    peakPowerW?: number;
+    averagePowerW?: number;
+    pulseWidthMs?: number;
+    pulseFrequencyHz?: number;
+    dutyCyclePct?: number;
+  };
+  optics?: {
+    defocus: { valueMm: number; sign: DefocusSign };
+    focusPosition: "surface" | "subsurface" | "above-surface";
+    spotDiameterMm?: number;
+    focalLengthMm?: number;
+    beamQualityNote?: string;
+  };
+  motion?: {
+    weldSpeedMmPerS: number;
+    positioningSpeedMmPerS?: number;
+    accelerationMmPerS2?: number;
+    arcStartDelayMs?: number;
+    arcEndDelayMs?: number;
+    dwellTimeMs?: number;
+    overlapMm?: number;
+  };
+  scan?: {
+    wobbleMode?: "none" | "line" | "circle" | "spiral" | "custom";
+    wobbleAmplitudeMm?: number;
+    wobbleFrequencyHz?: number;
+    scanWidthMm?: number;
+    xOffsetMm?: number;
+    yOffsetMm?: number;
+  };
+  shielding?: {
+    gasType: string;
+    flowLpm: number;
+    nozzleDistanceMm?: number;
+    nozzleAngleDeg?: number;
+    preGasMs?: number;
+    postGasMs?: number;
+  };
+  cooling?: {
+    waterTempC?: number;
+    flowLpm?: number;
+    pressureBar?: number;
+    preheatPowerW?: number;
+    preheatTimeMs?: number;
+  };
 }
 
 export interface ProcessWindowResult {
@@ -312,8 +359,56 @@ export interface ProcessRecommendResult {
   acceptanceCriteria: string[];
   assumptions: string[];
   inputsToConfirm: string[];
+  tuningWorkflow?: TuningWorkflowStep[];
+  monitoringPlan?: MonitoringPlanItem[];
+  safetyInterlocks?: SafetyInterlock[];
+  recipeManagement?: RecipeManagement;
   confidence: "heuristic";
   disclaimer: string;
+}
+
+export interface TuningWorkflowStep {
+  stage:
+    | "target-and-joint"
+    | "energy-focus"
+    | "shielding-cooling"
+    | "scan-motion"
+    | "observe-and-refine"
+    | "recipe-release";
+  objective: string;
+  primaryParameters: string[];
+  checks: string[];
+}
+
+export interface MonitoringPlanItem {
+  signal:
+    | "vision-position"
+    | "seam-tracking"
+    | "ccd-health"
+    | "coaxial-monitoring"
+    | "power-feedback"
+    | "temperature"
+    | "spot-quality"
+    | "reflected-light";
+  purpose: string;
+  feedbackAction: string;
+}
+
+export interface SafetyInterlock {
+  name:
+    | "door-interlock"
+    | "emergency-stop"
+    | "cooling-alarm"
+    | "gas-pressure-alarm"
+    | "fault-code";
+  purpose: string;
+  requiredAction: string;
+}
+
+export interface RecipeManagement {
+  parametersToLock: string[];
+  operatorEditableParameters: string[];
+  reviewTriggers: string[];
 }
 
 export interface DoeMatrixResult {
@@ -329,6 +424,17 @@ export interface DoeMatrixResult {
     preheatPowerW?: number;
     shieldGasLpm?: number;
     clampForceN?: number;
+    pulseFrequencyHz?: number;
+    pulseWidthMs?: number;
+    dutyCyclePct?: number;
+    wobbleAmplitudeMm?: number;
+    wobbleFrequencyHz?: number;
+    scanWidthMm?: number;
+    nozzleDistanceMm?: number;
+    nozzleAngleDeg?: number;
+    coolingWaterTempC?: number;
+    coolingFlowLpm?: number;
+    coolingPressureBar?: number;
   }>;
   csv: string;
   confidence: "heuristic";
