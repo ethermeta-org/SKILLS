@@ -105,6 +105,7 @@ export const processRecommendSchema = z.object({
   fieldbusProtocol: z.enum(["opc-ua", "profinet", "ethercat"]).optional(),
   includeVision: z.boolean().optional(),
   seamLengthMm: z.number().positive().optional(),
+  ringDiameterMm: z.number().positive().optional(),
   targetSpeedMmPerS: z.number().positive().optional(),
   gapMm: z.number().positive().optional(),
   wireFill: z.boolean().optional(),
@@ -141,6 +142,7 @@ export const hardwareRecommendSchema = z.object({
   jointType: z.string().optional(),
   seamType: z.string().optional(),
   seamLengthMm: z.number().positive().optional(),
+  ringDiameterMm: z.number().positive().optional(),
   ...presalesFields,
 });
 
@@ -233,5 +235,6 @@ export const solutionBomSchema = z.object({
   jointType: z.string().optional(),
   seamType: z.string().optional(),
   seamLengthMm: z.number().positive().optional(),
+  ringDiameterMm: z.number().positive().optional(),
   ...presalesFields,
 });

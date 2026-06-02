@@ -41,6 +41,9 @@ This is the official workflow router. It decides which stage skill to use, keeps
 - High-risk gate (`isBatteryCopperRing` concept): when the scenario is battery, material is copper (including purple copper), and intent is ring/circular welding, treat this as a gated routing path before any specific head recommendation.
 - For ring welding, `ringDiameterMm` is a required field; keep `thicknessMm` explicit and validated together.
 - Under the battery-copper-ring gate, if `material`, `thicknessMm`, `weldingMethod`, or `ringDiameterMm` (when welding method is ring seam) is missing, ask one focused question each turn and do not finalize head architecture.
+- Gate precedence: missing `material`, `thicknessMm`, or `weldingMethod` blocks all complete recommendations first. Once those are known, circular/ring welding requires `ringDiameterMm` before any final head, motion, BOM, DOE, or process architecture recommendation.
+- When a blocking gate is active, ask exactly one focused user question and stop. Do not call full recommendation tools to produce a complete solution.
+- The focused ring question is: `请提供环焊直径 ringDiameterMm，单位 mm。`
 
 ## Shared Language And Artifact Rules
 

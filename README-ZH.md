@@ -183,6 +183,14 @@ Missing: takt, fixture, inspection method. Run readiness gating and list assumpt
 最终只呈现专业结论。
 ```
 
+**环焊门禁（中文）：**
+
+```text
+/laser-welding
+电池紫铜件环焊，厚度 1mm，目标低飞溅。环径暂未确定。
+请先做门禁判断，不要直接推荐头型。
+```
+
 **单场景 — 缺陷诊断（中文）：**
 
 ```text

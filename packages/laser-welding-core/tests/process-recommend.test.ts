@@ -6,6 +6,7 @@ import {
 } from "../src/core/joint-profile.js";
 import { getMaterialById } from "../src/core/data-loader.js";
 import { estimatePenetrationDepthMm } from "../src/core/process-params.js";
+import { spotDiameterMm } from "../src/core/units.js";
 import * as core from "../src/index.js";
 import {
   deriveRecommendationDoeInput,
@@ -114,6 +115,13 @@ describe("recommendation DOE derivation", () => {
         wantsWireFeed: false,
       }).powerMin,
     ).toBe(400);
+  });
+});
+
+describe("unit helpers", () => {
+  it("returns spot diameter in millimeters", () => {
+    expect(spotDiameterMm(1064, 200, 0.6)).toBeCloseTo(0.45, 2);
+    expect(spotDiameterMm(515, 160, 0.6)).toBeCloseTo(0.17, 2);
   });
 });
 
@@ -230,5 +238,49 @@ describe("process recommendation", () => {
     expect(result.doe.csv).not.toContain("nozzleAngleDeg");
     expect(result.processWindow.processParams?.shielding?.nozzleDistanceMm).toBeUndefined();
     expect(result.processWindow.processParams?.shielding?.nozzleAngleDeg).toBeUndefined();
+  });
+
+  it("blocks circular recommendations until ring diameter is provided", () => {
+    const result = recommendProcess({
+      material: "copper",
+      thicknessMm: 1,
+      weldingMethod: "环焊",
+    });
+
+    expect(result.gateStatus).toBe("blocked");
+    expect(result.missingRequiredInputs).toContain("ringDiameterMm");
+    expect(result.requiredNextQuestion).toContain("ringDiameterMm");
+    expect(result.hardware).toBeUndefined();
+    expect(result.bom).toBeUndefined();
+  });
+
+  it("allows circular recommendations when ring diameter is provided", () => {
+    const result = recommendProcess({
+      material: "copper",
+      thicknessMm: 1,
+      weldingMethod: "环焊",
+      ringDiameterMm: 18,
+    });
+
+    expect(result.gateStatus).toBeUndefined();
+    expect(result.weldingMethod).toBe("circular");
+    expect(result.hardware?.recommendedLaserTypes.length).toBeGreaterThan(0);
+    expect(result.bom?.lineItems.length).toBeGreaterThan(0);
+  });
+
+  it("blocks battery copper ring recommendations without ring diameter", () => {
+    const result = recommendProcess({
+      material: "copper-ofc",
+      thicknessMm: 0.8,
+      weldingMethod: "圆周焊",
+      applicationScenario: "battery-tab",
+      qualityTargets: ["conductivity", "low-spatter"],
+    });
+
+    expect(result.gateStatus).toBe("blocked");
+    expect(result.blockedReason).toContain("ringDiameterMm");
+    expect(result.knownInputs?.material).toBe("copper-ofc");
+    expect(result.knownInputs?.thicknessMm).toBe(0.8);
+    expect(result.knownInputs?.weldingMethod).toBe("circular");
   });
 });

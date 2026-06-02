@@ -11,6 +11,7 @@ import {
   DISCLAIMER,
   type JointProfile,
   type MonitoringPlanItem,
+  type ProcessRecommendGateResult,
   type ProcessRecommendInput,
   type ProcessRecommendResult,
   type ProcessWindowResult,
@@ -165,6 +166,35 @@ function wantsWireFeed(input: ProcessRecommendInput): boolean {
 
 function usesShieldingNozzle(input: ProcessRecommendInput): boolean {
   return input.motionPlatform !== "galvo-scanner" && input.laserHead !== "galvo";
+}
+
+function buildRingDiameterGate(
+  input: ProcessRecommendInput,
+  profile: JointProfile,
+): ProcessRecommendGateResult | undefined {
+  if (profile.method !== "circular" || input.ringDiameterMm != null) return undefined;
+
+  return {
+    materialId: getMaterialById(input.material)?.id,
+    thicknessMm: input.thicknessMm,
+    weldingMethod: profile.method,
+    weldingMethodName: profile.displayName,
+    jointType: profile.jointType,
+    seamType: profile.defaultSeamType,
+    gateStatus: "blocked",
+    blockedReason:
+      "Circular/ring welding requires ringDiameterMm before final head, motion, BOM, DOE, or process architecture recommendation.",
+    requiredNextQuestion: "请提供环焊直径 ringDiameterMm，单位 mm。",
+    missingRequiredInputs: ["ringDiameterMm"],
+    knownInputs: {
+      material: input.material,
+      thicknessMm: input.thicknessMm,
+      weldingMethod: profile.method,
+      applicationScenario: input.applicationScenario,
+    },
+    confidence: "heuristic",
+    disclaimer: DISCLAIMER,
+  };
 }
 
 function applyShieldingNozzleApplicability(
@@ -326,6 +356,8 @@ export function recommendProcess(input: ProcessRecommendInput): ProcessRecommend
   const seamType = profile.defaultSeamType;
   const deliveryScope = input.deliveryScope ?? "presales-solution";
   const application = input.application ?? input.applicationScenario ?? profile.jointType;
+  const gate = buildRingDiameterGate(input, profile);
+  if (gate) return gate;
 
   const processWindow = applyShieldingNozzleApplicability(
     applyJointProcessModifiers(
@@ -363,6 +395,7 @@ export function recommendProcess(input: ProcessRecommendInput): ProcessRecommend
     jointType: profile.jointType,
     seamType,
     seamLengthMm: input.seamLengthMm,
+    ringDiameterMm: input.ringDiameterMm,
     qualityTargets: input.qualityTargets,
     coating: input.coating,
     surfaceCondition: input.surfaceCondition,

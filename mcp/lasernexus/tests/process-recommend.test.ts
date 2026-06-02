@@ -55,6 +55,7 @@ describe("process_recommend MCP tool", () => {
       fieldbusProtocol: "opc-ua",
       includeVision: true,
       seamLengthMm: 10,
+      ringDiameterMm: 18,
       targetSpeedMmPerS: 40,
       gapMm: 0.05,
       wireFill: true,
@@ -89,5 +90,21 @@ describe("process_recommend MCP tool", () => {
     expect(tool?.inputSchema.properties).not.toHaveProperty("wireSpeedMmPerS");
     expect(parsed).not.toHaveProperty("annualVolume");
     expect(() => processRecommendSchema.parse(payload)).not.toThrow();
+  });
+
+  it("returns a blocked gate for circular welds without ring diameter", () => {
+    const content = handleProcessRecommend({
+      material: "copper",
+      thicknessMm: 1,
+      weldingMethod: "环焊",
+    });
+    const data = JSON.parse(content[0]?.text ?? "{}") as {
+      gateStatus?: string;
+      missingRequiredInputs?: string[];
+      hardware?: unknown;
+    };
+    expect(data.gateStatus).toBe("blocked");
+    expect(data.missingRequiredInputs).toContain("ringDiameterMm");
+    expect(data.hardware).toBeUndefined();
   });
 });

@@ -183,6 +183,14 @@ Provide process parameters, equipment selection, DOE range, BOM configuration, r
 Present only professional conclusions.
 ```
 
+**Ring-weld gate (English):**
+
+```text
+/laser-welding
+Battery copper circular weld, 1 mm thickness, low-spatter target. Ring diameter is not confirmed.
+Run the gate first and do not finalize head architecture.
+```
+
 **Single scenario — defect diagnosis (English):**
 
 ```text

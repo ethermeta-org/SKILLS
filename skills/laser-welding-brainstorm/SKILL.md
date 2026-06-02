@@ -43,6 +43,10 @@ If the user provides only a short description, do not silently invent the rest. 
 - `thicknessMm`
 - `weldingMethod`
 
+Conditional required input:
+
+- `ringDiameterMm`: required when `weldingMethod` is circular/ring/环焊/圆周焊.
+
 ### Recommended / High-Confidence Inputs
 
 - `applicationScenario`
@@ -129,6 +133,12 @@ Prefer focused questions:
 - Missing thickness: ask for primary thickness in millimeters.
 - Missing welding method: ask for lap, butt, fillet, seal, circular, brazing, or another named joint.
 - If circular/ring welding is identified and `ringDiameterMm` is missing, the next question must ask ring diameter in millimeters.
+
+Gate precedence:
+
+1. Ask for missing `material`, `thicknessMm`, or `weldingMethod` first.
+2. If those are known and the method is circular/ring welding, ask for `ringDiameterMm`.
+3. Only after the ring diameter is known may the skill provide head, motion, BOM, DOE, or architecture candidates.
 
 High-throughput candidate fallback rule:
 

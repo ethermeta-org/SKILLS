@@ -22,6 +22,7 @@ export const MCP_TOOLS = [
         fieldbusProtocol: { type: "string", enum: ["opc-ua", "profinet", "ethercat"] },
         includeVision: { type: "boolean" },
         seamLengthMm: { type: "number" },
+        ringDiameterMm: { type: "number", description: "Required for circular/ring welds; diameter in mm." },
         targetSpeedMmPerS: { type: "number" },
         gapMm: { type: "number" },
         wireFill: { type: "boolean" },
@@ -136,6 +137,7 @@ export const MCP_TOOLS = [
         material: { type: "string" },
         thicknessMm: { type: "number" },
         application: { type: "string" },
+        ringDiameterMm: { type: "number", description: "Required for circular/ring welds; diameter in mm." },
         motionPlatform: { type: "string", enum: ["gantry", "single-axis", "galvo-scanner"] },
         laserHead: { type: "string", enum: ["galvo", "fixed-focus", "single-axis-rotation"] },
         preferredLaserType: {
@@ -334,6 +336,7 @@ export const MCP_TOOLS = [
         jointType: { type: "string" },
         seamType: { type: "string" },
         seamLengthMm: { type: "number" },
+        ringDiameterMm: { type: "number", description: "Required for circular/ring welds; diameter in mm." },
         qualityTargets: {
           type: "array",
           items: {

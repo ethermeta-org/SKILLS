@@ -78,6 +78,7 @@ export interface HardwareRecommendInput {
   jointType?: string;
   seamType?: string;
   seamLengthMm?: number;
+  ringDiameterMm?: number;
   qualityTargets?: QualityTarget[];
   sealingRequired?: boolean;
   coating?: string;

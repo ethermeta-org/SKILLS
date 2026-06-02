@@ -335,12 +335,36 @@ export interface ProcessRecommendInput {
   fieldbusProtocol?: "opc-ua" | "profinet" | "ethercat";
   includeVision?: boolean;
   seamLengthMm?: number;
+  ringDiameterMm?: number;
   preferredBrands?: string[];
   forbiddenBrands?: string[];
   budgetLevel?: BudgetLevel;
 }
 
-export interface ProcessRecommendResult {
+export interface ProcessRecommendGateResult {
+  materialId?: string;
+  thicknessMm: number;
+  weldingMethod: WeldingMethod;
+  weldingMethodName: { en: string; zh: string };
+  jointType: string;
+  seamType: string;
+  gateStatus: "blocked";
+  blockedReason: string;
+  requiredNextQuestion: string;
+  missingRequiredInputs: string[];
+  knownInputs: {
+    material: string;
+    thicknessMm: number;
+    weldingMethod: WeldingMethod;
+    applicationScenario?: ApplicationScenario;
+  };
+  confidence: "heuristic";
+  disclaimer: string;
+}
+
+export type ProcessRecommendResult = ProcessRecommendFullResult | ProcessRecommendGateResult;
+
+export interface ProcessRecommendFullResult {
   materialId: string;
   thicknessMm: number;
   weldingMethod: WeldingMethod;

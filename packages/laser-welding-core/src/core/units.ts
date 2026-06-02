@@ -18,5 +18,5 @@ export function spotDiameterMm(
   beamDiameterMm: number,
 ): number {
   if (beamDiameterMm <= 0) throw new ValidationError("Beam diameter must be positive");
-  return (1.27 * wavelengthNm * focalLengthMm) / (beamDiameterMm * 1000);
+  return (1.27 * wavelengthNm * focalLengthMm) / (beamDiameterMm * 1_000_000);
 }
