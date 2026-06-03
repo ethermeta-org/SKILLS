@@ -80,6 +80,7 @@ NO COMPLETION OR READINESS CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 - [ ] 当存在 `motionArchitectureCandidates`，候选方案带适用条件、淘汰条件和验证关卡
 - [ ] 普通对话输出风格对齐 `../laser-welding/references/golden-answer-examples.md`
 - [ ] 关键场景可通过 `../laser-welding/references/conversation-replay-cases.md` 的回放检查
+- [ ] 普通聊天默认短版；仅在用户要求 RFQ、BOM、报告、技术要求或“展开”时进入详细表格/完整报告
 
 ## Evidence Grade And Confidence (Required)
 

@@ -13,6 +13,8 @@
 
 - 必需输入缺失时，只问一个最高优先级问题。
 - 必需输入齐全的新项目默认输出 `Decision Pack` + `Engineering / RFQ Pack`。
+- 普通聊天默认短版，不主动展开完整 RFQ 表、BOM 或方案书。
+- 用户明确要求“展开 / RFQ / 技术要求 / BOM / 报告”时，再进入详细输出。
 - 初始建议不得写成可量产 `GO`，除非用户提供 DOE 或试焊证据。
 - 至少给出一个明确下一步动作，而不是只给背景知识。
 - 不包含价格、报价、成本估算、仿真、有限元或直接量产放行。
@@ -37,6 +39,7 @@ Must Avoid:
 - 量产放行承诺
 - 单一设备结论
 - 大段教材式材料介绍
+- 未被要求时输出完整 RFQ 表或长报告
 
 ## Case R2: Missing Material
 
@@ -147,7 +150,27 @@ Must Avoid:
 - 品牌背书
 - 只列设备名称，不列证据要求
 
-## Case R8: User Asks For Production Readiness
+## Case R8: Expand RFQ On Request
+
+Prompt:
+
+> 上面方案可以，展开成供应商 RFQ 技术要求。
+
+Must Include:
+
+- `Engineering / RFQ Pack`
+- 技术指标或响应项表格
+- 打样证据、DOE 数据、验收报告格式
+- 安全、检测、夹具、运动、冷却或保护气接口要求
+- 不重复输出长篇背景知识
+
+Must Avoid:
+
+- 价格、报价或成本估算
+- 重新回到只问基础信息而不展开
+- 完整方案书式冗长叙述
+
+## Case R9: User Asks For Production Readiness
 
 Prompt:
 

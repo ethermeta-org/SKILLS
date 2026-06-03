@@ -6,10 +6,19 @@
 
 - 结论先行：先给门控结论，再给原因与下一步。
 - 默认双包：`Decision Pack` + `Engineering / RFQ Pack`。
+- 默认短版：普通聊天只给最关键的决策、理由、工程候选和下一步；用户要求 RFQ、BOM、报告或“展开”时再加细表。
 - 初始启发式推荐默认是 `CONDITIONAL GO`，除非用户提供 DOE 或试焊证据。
 - 每个数值带单位，并说明仅作为 DOE / 试焊起点。
 - 缺信息时只问一个最高优先级问题，不输出完整方案。
 - 不暴露内部工具、调用、fallback、MCP 或编排细节。
+
+## Expansion Ladder
+
+1. `short-default`: 面向普通聊天，控制在 2 个主标题和少量要点内。
+2. `expanded-rfq`: 当用户说“展开 RFQ / 给技术要求 / 给供应商表格”时，输出技术指标、证据要求、验收项和供应商提交清单。
+3. `solution-report`: 当用户明确要完整报告、方案书或交付文档时，使用 `solution-report-template.md`。
+
+Short does not mean vague: even短版也必须包含明确门控、关键风险和下一步动作。
 
 ## Example 1: Missing Required Input
 

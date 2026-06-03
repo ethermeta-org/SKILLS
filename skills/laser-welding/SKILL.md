@@ -70,6 +70,18 @@ Default output mode is `dual-pack` when the user does not specify audience. Keep
 - If the user asks both, enforce the full `dual-pack` split.
 - For tone and shape, follow `references/golden-answer-examples.md` before expanding into a long report.
 
+## Response Expansion Policy
+
+Default to `short-default` in normal chat: give the decision gate, the 2-4 reasons that matter most, 2-3 engineering candidates or actions, and one next closure step. Do not generate a full solution report on the first answer unless the user explicitly asks for a report, RFQ table, BOM, specification, or full plan.
+
+Use this expansion ladder:
+
+1. `short-default`: compact `Decision Pack` + compact `Engineering / RFQ Pack`.
+2. `expanded-rfq`: detailed supplier-facing table, technical indicators, validation evidence, and submission checklist.
+3. `solution-report`: full report artifact using `references/solution-report-template.md`.
+
+When the answer is short by design, keep enough engineering substance to be useful: no vague "consult supplier" endings. Prefer one concrete next question or next validation action.
+
 ## Process Flow
 
 ```mermaid
@@ -119,7 +131,7 @@ When stage output is `solution-report`, you MUST trigger one `AskQuestion` inter
 
 ## New Project Dual-Pack Output Contract
 
-For a new project recommendation with required inputs present, the final answer should use this default shape unless the user explicitly asks for a different format:
+For a new project recommendation with required inputs present, the final answer should use this compact default shape unless the user explicitly asks for a different format:
 
 1. `Decision Pack`
    - `decisionGate`: `GO`, `CONDITIONAL GO`, or `NO-GO`.
