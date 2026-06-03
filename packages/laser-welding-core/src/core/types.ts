@@ -305,6 +305,61 @@ export interface SolutionBomResult {
   warnings: string[];
 }
 
+export type EvidenceLevel = "E1" | "E2" | "E3";
+export type DecisionGate = "GO" | "CONDITIONAL GO" | "NO-GO";
+export type RecommendationConfidence = "High" | "Medium" | "Low";
+export type RecommendationEvidenceSubject =
+  | "process-window"
+  | "equipment-candidate"
+  | "motion-architecture"
+  | "doe-plan"
+  | "bom-scope"
+  | "validation-plan";
+
+export interface RecommendationEvidence {
+  subject: RecommendationEvidenceSubject;
+  evidenceLevel: EvidenceLevel;
+  confidence: RecommendationConfidence;
+  basis: string[];
+  limits: string[];
+}
+
+export interface MissingInfoClosure {
+  field: string;
+  labelZh: string;
+  owner: "user" | "supplier" | "process-engineer" | "automation-engineer";
+  method:
+    | "measurement"
+    | "trial-weld"
+    | "supplier-document"
+    | "site-survey"
+    | "customer-confirmation";
+  impactIfMissing: string;
+}
+
+export interface DecisionPackRisk {
+  risk: string;
+  impact: string;
+  closureAction: string;
+}
+
+export interface DecisionPack {
+  decisionGate: DecisionGate;
+  decisionSummary: string;
+  recommendedPath: string;
+  topRisks: DecisionPackRisk[];
+  evidenceNeeded: string[];
+  highestImpactQuestion?: string;
+}
+
+export interface MotionArchitectureCandidate {
+  name: string;
+  fitCondition: string;
+  rejectCondition: string;
+  keyRisks: string[];
+  validationGate: string;
+}
+
 export interface ProcessRecommendInput {
   material: string;
   thicknessMm: number;
@@ -383,6 +438,10 @@ export interface ProcessRecommendFullResult {
   acceptanceCriteria: string[];
   assumptions: string[];
   inputsToConfirm: string[];
+  decisionPack?: DecisionPack;
+  recommendationEvidence?: RecommendationEvidence[];
+  missingInfoClosure?: MissingInfoClosure[];
+  motionArchitectureCandidates?: MotionArchitectureCandidate[];
   tuningWorkflow?: TuningWorkflowStep[];
   monitoringPlan?: MonitoringPlanItem[];
   safetyInterlocks?: SafetyInterlock[];

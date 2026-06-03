@@ -12,6 +12,8 @@ Copy-paste prompts to validate skills in **Cursor Agent** chat. Skills are invok
 | [workflow-zh.md](workflow-zh.md) | 完整售前流程四步，中文 |
 | [scenarios-en.md](scenarios-en.md) | Single scenarios: material, defects, brazing, BOM, fieldbus, English |
 | [scenarios-zh.md](scenarios-zh.md) | 单场景：材料、缺陷、钎焊、BOM、总线，中文 |
+| [golden-answer-examples.md](../skills/laser-welding/references/golden-answer-examples.md) | Professional final-answer examples for compact Decision Pack + Engineering / RFQ Pack output |
+| [conversation-replay-cases.md](../skills/laser-welding/references/conversation-replay-cases.md) | Chat replay checks for normal user prompts and anti-regression behavior |
 
 ## Cursor setup
 

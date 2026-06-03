@@ -73,6 +73,13 @@ NO COMPLETION OR READINESS CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 - [ ] 决策章节（`process`/`equipment`/`risk`/`DOE`/`conclusion`）为结论优先
 - [ ] `polymer-transmission` 的 `3.1` 节仅在适用时渲染；不适用则整体省略（不得 `N/A` 占位）
 - [ ] 省略 `3.1` 时，可选加入审计政策说明：`3.1 节按策略判定不适用（section 3.1 not applicable by policy）`
+- [ ] 新项目推荐默认使用双包结构：`Decision Pack` + `Engineering / RFQ Pack`
+- [ ] 决策包包含 `GO` / `CONDITIONAL GO` / `NO-GO`，且初始启发式建议未被误写成可量产 `GO`
+- [ ] 工程/RFQ 包至少包含工艺窗口、设备/运动候选、DOE、BOM 范围、验证与验收
+- [ ] 当存在 `missingInfoClosure`，最终答案用中文业务字段说明缺失输入的关闭方式
+- [ ] 当存在 `motionArchitectureCandidates`，候选方案带适用条件、淘汰条件和验证关卡
+- [ ] 普通对话输出风格对齐 `../laser-welding/references/golden-answer-examples.md`
+- [ ] 关键场景可通过 `../laser-welding/references/conversation-replay-cases.md` 的回放检查
 
 ## Evidence Grade And Confidence (Required)
 

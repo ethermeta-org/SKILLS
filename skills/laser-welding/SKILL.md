@@ -59,19 +59,16 @@ This is the official workflow router. It decides which stage skill to use, keeps
 5. Advanced BOM or line request -> use `hardware_recommend` and `solution_bom` internally when inputs are sufficient.
 6. Before any final answer that claims completeness or readiness -> use `laser-welding-verify`.
 
-## Audience Routing (Decision Pack / RFQ Pack)
+## Audience Routing
 
-Default output mode is `dual-pack` when user does not specify audience.
+Default output mode is `dual-pack` when the user does not specify audience. Keep it compact and professional: decision-makers see the gate first, engineers and suppliers see only the details needed to act.
 
-- `customer-decision`: management-readable feasibility gate and rollout conditions.
-- `vendor-rfq`: supplier-facing technical specification and evidence requirements.
-- `dual-pack`: provide both outputs in one response with clear section split.
-
-Routing hints:
-
-- If user asks "是否适合导入新产线 / can we adopt this process", prioritize `customer-decision`.
-- If user asks "找设备厂商 / technical indicators / 招标参数", prioritize `vendor-rfq`.
-- If user asks both, enforce `dual-pack`.
+- `Decision Pack`: management-readable feasibility gate, confidence, assumptions, risks, and closure actions.
+- `Engineering / RFQ Pack`: supplier-facing process window, equipment and motion candidates, DOE, BOM scope, validation, and acceptance criteria.
+- If the user asks "是否适合导入新产线 / can we adopt this process", put `Decision Pack` first and keep the engineering pack concise.
+- If the user asks "找设备厂商 / technical indicators / 招标参数", put `Engineering / RFQ Pack` first but still include the decision gate.
+- If the user asks both, enforce the full `dual-pack` split.
+- For tone and shape, follow `references/golden-answer-examples.md` before expanding into a long report.
 
 ## Process Flow
 
@@ -119,6 +116,23 @@ Every stage hands the next stage these fields when known:
 - Next recommended stage
 
 When stage output is `solution-report`, you MUST trigger one `AskQuestion` interaction for high-impact assumptions before drafting the report body. The interaction is non-blocking in content (the user may skip all), but the interaction step itself is required.
+
+## New Project Dual-Pack Output Contract
+
+For a new project recommendation with required inputs present, the final answer should use this default shape unless the user explicitly asks for a different format:
+
+1. `Decision Pack`
+   - `decisionGate`: `GO`, `CONDITIONAL GO`, or `NO-GO`.
+   - Initial heuristic recommendations normally start at `CONDITIONAL GO`; use `GO` only when measured DOE or trial-weld evidence supports the critical subjects.
+   - Include confidence, major assumptions, top risks, and missing-info closure actions in Chinese business language.
+2. `Engineering / RFQ Pack`
+   - Include process window, laser/head/motion candidates, DOE scope, BOM scope, validation plan, and acceptance criteria.
+   - When `motionArchitectureCandidates` are available, list at least two candidates where scope allows, with fit conditions, reject conditions, and validation gates.
+   - When `missingInfoClosure` is available, convert it into user-facing closure actions instead of exposing raw field names only.
+
+Do not expose internal structured field names unless they help clarify an RFQ table. Final answers must not mention MCP, tool calls, fallback mode, or internal orchestration.
+
+Use `references/conversation-replay-cases.md` as the regression suite for normal chat behavior. If a proposed response would fail one of those cases, revise before answering.
 
 ## When To Stop And Ask For Help
 
@@ -177,3 +191,5 @@ Pricing, quotation, cost estimation, simulation, finite element analysis, OEM re
 - [materials.md](references/materials.md)
 - [process-window-heuristics.md](references/process-window-heuristics.md)
 - [solution-report-template.md](references/solution-report-template.md)
+- [golden-answer-examples.md](references/golden-answer-examples.md)
+- [conversation-replay-cases.md](references/conversation-replay-cases.md)

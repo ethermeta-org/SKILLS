@@ -2,6 +2,12 @@ import { getJointProfile } from "../core/joint-profile.js";
 import { getMaterialById } from "../core/data-loader.js";
 import { defocusSignFromMm, estimatePenetrationDepthMm } from "../core/process-params.js";
 import {
+  buildDecisionPack,
+  buildMissingInfoClosure,
+  buildMotionArchitectureCandidates,
+  buildRecommendationEvidence,
+} from "../core/recommendation-metadata.js";
+import {
   buildAcceptanceCriteria,
   buildAssumptions,
   buildMissingInputs,
@@ -466,6 +472,38 @@ export function recommendProcess(input: ProcessRecommendInput): ProcessRecommend
     ...buildAcceptanceCriteria(presalesCtx),
     ...bom.acceptanceCriteria,
   ]);
+  const risks = unique([
+    ...profile.risks,
+    ...processWindow.warnings.filter((warning) => !warning.startsWith("Joint risk: ")),
+    ...bom.warnings,
+  ]);
+  const inputsToConfirm = unique(missingInputs.filter((field) => field !== "jointType" && field !== "seamType"));
+  const decisionPack = buildDecisionPack({
+    missingInputs: inputsToConfirm,
+    assumptions,
+    risks,
+    validationPlan,
+  });
+  const recommendationEvidence = buildRecommendationEvidence({
+    missingInputs: inputsToConfirm,
+    assumptions,
+    subjects: [
+      "process-window",
+      "equipment-candidate",
+      "motion-architecture",
+      "doe-plan",
+      "bom-scope",
+      "validation-plan",
+    ],
+  });
+  const missingInfoClosure = buildMissingInfoClosure(inputsToConfirm);
+  const motionArchitectureCandidates = buildMotionArchitectureCandidates({
+    weldingMethod: profile.method,
+    applicationScenario: input.applicationScenario,
+    targetTaktSec: input.targetTaktSec,
+    ringDiameterMm: input.ringDiameterMm,
+    motionPlatform: hardware.motionPlatform,
+  });
 
   return {
     materialId: processWindow.materialId,
@@ -481,15 +519,15 @@ export function recommendProcess(input: ProcessRecommendInput): ProcessRecommend
     equipmentHints: profile.equipmentHints,
     fixtureHints: profile.fixtureHints,
     inspectionHints: profile.inspectionHints,
-    risks: unique([
-      ...profile.risks,
-      ...processWindow.warnings.filter((warning) => !warning.startsWith("Joint risk: ")),
-      ...bom.warnings,
-    ]),
+    risks,
     validationPlan,
     acceptanceCriteria,
     assumptions,
-    inputsToConfirm: unique(missingInputs.filter((field) => field !== "jointType" && field !== "seamType")),
+    inputsToConfirm,
+    decisionPack,
+    recommendationEvidence,
+    missingInfoClosure,
+    motionArchitectureCandidates,
     tuningWorkflow: buildTuningWorkflow(input, profile),
     monitoringPlan: buildMonitoringPlan(input),
     safetyInterlocks: buildSafetyInterlocks(),

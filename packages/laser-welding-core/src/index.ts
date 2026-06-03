@@ -19,6 +19,7 @@ export {
 } from "./stage4/bom-builder.js";
 export * from "./core/types.js";
 export * from "./core/errors.js";
+export * from "./core/recommendation-metadata.js";
 export {
   getJointProfile,
   listSupportedWeldingMethods,
