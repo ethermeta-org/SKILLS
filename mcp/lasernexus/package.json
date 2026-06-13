@@ -31,7 +31,7 @@
     "eslint": "^9.22.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
-    "vitest": "^3.0.8"
+    "vitest": "^4.1.8"
   },
   "author": {
     "name": "文享(上海)智能科技有限公司",
